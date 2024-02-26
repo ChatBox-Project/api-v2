@@ -38,13 +38,13 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
   })
   roles: string[];
 
-  @Column({ type: 'datetime', nullable: true, default: 'LOCALTIMESTAMP' })
+  @Column({ type: 'date', nullable: true })
   verificationExpires: Date;
 
   @Column({ type: 'integer', nullable: false, default: 0 })
   loginAttempts: number;
 
-  @Column({ type: 'datetime', nullable: true, default: 'LOCALTIMESTAMP' })
+  @Column({ type: 'date', nullable: true })
   blockExpires: Date;
 
   constructor(props?: IAccountEntity) {
