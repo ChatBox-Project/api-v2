@@ -18,4 +18,16 @@ export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
   @Index('IX_ChatGroupEntity_GroupLeaderId')
   @Column({ type: 'uuid', nullable: true })
   groupLeaderId: string;
+
+  constructor(props?: IChatGroupEntity) {
+    super();
+    if (props) {
+      this.groupId = props.groupId;
+      this.chatBoxId = props.chatBoxId;
+      this.groupName = props.groupName;
+      this.groupMembers = props.groupMembers;
+      this.groupLeaderId = props.groupLeaderId;
+    }
+    Object.assign(this, props);
+  }
 }
