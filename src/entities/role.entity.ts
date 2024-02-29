@@ -14,4 +14,14 @@ export class RoleEntity extends BaseEntity implements IRole {
   @OneToOne(() => AccountEntity)
   @JoinColumn()
   accountId: AccountEntity;
+
+  constructor(props?: RoleEntity) {
+    super();
+    if (props) {
+      this.roleId = props.roleId;
+      this.roleName = props.roleName;
+      this.accountId = props.accountId;
+    }
+    Object.assign(this, props);
+  }
 }
