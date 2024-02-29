@@ -1,14 +1,15 @@
+import { GroupLeaderPermissionEntity } from '../group-leader-permission.entity';
+import { MessageEntity } from '../message.entity';
+import { UserBaseEntity } from '../user.base.entity';
 import { IBaseEntity } from './base.entity.interface';
-import { IGroupLeaderPermission } from './group-leader-permission.entity.interface';
-import { IUserBaseEntity } from './user.base.entity.interface';
 
 export interface IChatGroupEntity extends IBaseEntity {
-  groupId?: string;
-  chatBoxId?: string;
-  groupName?: string;
+  groupId: string;
+  groupName: string;
   groupMembers?: string[];
-  groupLeaderId: string;
+  groupLeader: string;
 
-  userId: IUserBaseEntity[];
-  groupLeaderPermissionId: IGroupLeaderPermission;
+  user: UserBaseEntity[];
+  groupLeaderPermission: GroupLeaderPermissionEntity;
+  message: MessageEntity[];
 }
