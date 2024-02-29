@@ -60,4 +60,21 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
   @OneToOne(() => GroupLeaderPermission, (gr) => gr.group_leader_permissionId)
   @JoinColumn()
   groupLeaderPermissionId?: GroupLeaderPermission[];
+
+  constructor(props?: UserBaseEntity) {
+    super();
+    if (props) {
+      this.firstName = props.firstName;
+      this.lastName = props.lastName;
+      this.phone = props.phone;
+      this.sex = props.sex;
+      this.avatarUrl = props.avatarUrl;
+      this.birth = props.birth;
+      this.accountId = props.accountId;
+      this.chatBoxId = props.chatBoxId;
+      this.chatGroupId = props.chatGroupId;
+      this.groupLeaderPermissionId = props.groupLeaderPermissionId;
+    }
+    Object.assign(this, props);
+  }
 }
