@@ -5,6 +5,7 @@ import {
   JoinColumn,
   OneToMany,
   OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { IGroupLeaderPermission } from './interfaces/group-leader-permission.entity.interface';
@@ -19,6 +20,7 @@ export class GroupLeaderPermission
 {
   @Index('IX_GroupLeaderPermission_GroupLeaderPermissionId', { unique: true })
   @Column({ name: 'group_leader_permission_id', type: 'varchar', length: 255 })
+  @PrimaryGeneratedColumn('uuid')
   group_leader_permissionId?: string;
 
   @OneToMany(() => UserBaseEntity, (user) => user.groupLeaderPermissionId)
