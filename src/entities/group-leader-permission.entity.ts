@@ -32,4 +32,15 @@ export class GroupLeaderPermission
   @OneToOne(() => PermissionEntity)
   @JoinColumn()
   permissionId: PermissionEntity;
+
+  constructor(props?: GroupLeaderPermission) {
+    super();
+    if (props) {
+      this.group_leader_permissionId = props.group_leader_permissionId;
+      this.leaderId = props.leaderId;
+      this.groupId = props.groupId;
+      this.permissionId = props.permissionId;
+    }
+    Object.assign(this, props);
+  }
 }
