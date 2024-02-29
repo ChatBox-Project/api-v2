@@ -15,28 +15,28 @@ import { MessageEntity } from './message.entity';
 @Entity({ name: 'chat-box' })
 export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
   @Index('IX_ChatBox_ChatBoxId', { unique: true })
-  @PrimaryGeneratedColumn('uuid')
-  @Column({ name: 'chat_box_id', type: 'varchar', length: 255 })
+  @Column({ name: 'chat_box_id', type: 'uuid', length: 255 })
+  @PrimaryGeneratedColumn()
   chatBoxId: string;
 
   @Index('IX_ChatBox_ChatBoxName', { unique: true })
   @Column({ name: 'chat_box_name', type: 'varchar', length: 255 })
   chatBoxName: string;
 
-  @OneToMany(() => UserBaseEntity, (user) => user.chatBoxId)
+  @OneToMany(() => UserBaseEntity, (user) => user.chatBox)
   @JoinColumn()
-  userId: UserBaseEntity;
+  user: UserBaseEntity;
 
-  @ManyToOne(() => MessageEntity, (mess) => mess.chatBoxId)
+  @ManyToOne(() => MessageEntity, (mess) => mess.chatBox)
   @JoinColumn()
-  messageId?: MessageEntity;
+  message?: MessageEntity;
 
   constructor(props?: ChatBoxEntity) {
     super();
     if (props) {
       this.chatBoxId = props.chatBoxId;
       this.chatBoxName = props.chatBoxName;
-      this.userId = props.userId;
+      this.user = props.user;
     }
     Object.assign(this, props);
   }
