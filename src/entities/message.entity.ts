@@ -1,4 +1,11 @@
-import { Column, Entity, Index, JoinColumn, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { IMessage } from './interfaces/message.entity.interface';
 import { ChatBoxEntity } from './chat-box.entity';
@@ -8,8 +15,9 @@ import { IsNotEmpty } from 'class-validator';
 @Entity({ name: 'message' })
 export class MessageEntity extends BaseEntity implements IMessage {
   @Index('IX_Message_MessageId', { unique: true })
-  @Column({ name: 'message_id', type: 'varchar', length: 255 })
+  @Column({ name: 'message_id', type: 'uuid', length: 255 })
   @IsNotEmpty()
+  @PrimaryGeneratedColumn('uuid')
   messageId?: string;
 
   @Index('IX_Message_Sender_id', { unique: true })
