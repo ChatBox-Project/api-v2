@@ -1,7 +1,7 @@
 import { AccountEntity } from './account.entity';
 import { ChatBoxEntity } from './chat-box.entity';
 import { ChatGroupEntity } from './chat-group.entity';
-import { GroupLeaderPermission } from './group-leader-permission.entity';
+import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
 import { MessageEntity } from './message.entity';
 import { PermissionEntity } from './permission.entity';
 import { RoleEntity } from './role.entity';
@@ -10,7 +10,7 @@ import { UserBaseEntity } from './user.base.entity';
 export const entities = [
   AccountEntity,
   ChatBoxEntity,
-  GroupLeaderPermission,
+  GroupLeaderPermissionEntity,
   RoleEntity,
   MessageEntity,
   PermissionEntity,
