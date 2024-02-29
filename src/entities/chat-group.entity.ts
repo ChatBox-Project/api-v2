@@ -6,6 +6,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { IChatGroupEntity } from './interfaces/chat-group.entity.interface';
@@ -17,15 +18,21 @@ import { MessageEntity } from './message.entity';
 export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
   @Index('IX_ChatGroup_GroupId', { unique: true })
   @Column({ name: 'group_id', type: 'varchar', length: 255 })
+  @PrimaryGeneratedColumn('uuid')
   groupId?: string;
+
   @Index('IX_ChatGroup_ChatBoxId', { unique: true })
   @Column({ name: 'chat_box_id', type: 'varchar', length: 255 })
+  @PrimaryGeneratedColumn('uuid')
   chatBoxId?: string;
+
   @Index('IX_ChatGroup_GroupName', { unique: true })
   @Column({ name: 'group_name', type: 'varchar', length: 255 })
   groupName?: string;
+
   @Column({ name: 'group_members', type: 'varchar', length: 255, array: true })
   groupMembers?: string[];
+
   @Column({ name: 'group_leader_id', type: 'varchar', length: 255 })
   groupLeaderId: string;
 
