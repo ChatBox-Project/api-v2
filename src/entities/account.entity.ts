@@ -45,6 +45,7 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
 
   @Column({ name: 'login_attempts', type: 'integer', default: 0 })
   loginAttempts: number;
+
   @Column({
     name: 'block_expires',
     type: 'timestamptz',
@@ -58,7 +59,7 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
 
   @OneToOne(() => UserBaseEntity)
   @JoinColumn()
-  userId: UserBaseEntity;
+  user: UserBaseEntity;
 
   constructor(props?: AccountEntity) {
     super();
@@ -74,7 +75,7 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
       this.loginAttempts = props.loginAttempts;
       this.blockExpires = props.blockExpires;
       this.role = props.role;
-      this.userId = props.userId;
+      this.user = props.user;
     }
     Object.assign(this, props);
   }
