@@ -34,4 +34,18 @@ export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
   @ManyToOne(() => GroupLeaderPermission)
   @JoinColumn()
   groupLeaderPermissionId: GroupLeaderPermission;
+
+  constructor(props?: ChatGroupEntity) {
+    super();
+    if (props) {
+      this.groupId = props.groupId;
+      this.chatBoxId = props.chatBoxId;
+      this.groupName = props.groupName;
+      this.groupMembers = props.groupMembers;
+      this.groupLeaderId = props.groupLeaderId;
+      this.userId = props.userId;
+      this.groupLeaderPermissionId = props.groupLeaderPermissionId;
+    }
+    Object.assign(this, props);
+  }
 }
