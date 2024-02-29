@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { IPermission } from './interfaces/permission.entity.interface';
 import { BaseEntity } from './bases/base.entity';
-import { IGroupLeaderPermission } from './interfaces';
+
 import { IsNotEmpty } from 'class-validator';
-import { GroupLeaderPermission } from './group-leader-permission.entity';
+import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
 
 @Entity({ name: 'permission' })
 export class PermissionEntity extends BaseEntity implements IPermission {
@@ -11,15 +11,18 @@ export class PermissionEntity extends BaseEntity implements IPermission {
   @IsNotEmpty()
   name: string;
 
-  @OneToOne(() => GroupLeaderPermission, (gr) => gr.group_leader_permissionId)
+  @OneToOne(
+    () => GroupLeaderPermissionEntity,
+    (gr) => gr.group_leader_permissionId,
+  )
   @JoinColumn()
-  groupLeaderPermissionId: IGroupLeaderPermission[];
+  groupLeaderPermission: GroupLeaderPermissionEntity[];
 
   constructor(props?: PermissionEntity) {
     super();
     if (props) {
       this.name = props.name;
-      this.groupLeaderPermissionId = props.groupLeaderPermissionId;
+      this.groupLeaderPermission = props.groupLeaderPermission;
     }
     Object.assign(this, props);
   }
