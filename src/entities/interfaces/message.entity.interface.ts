@@ -1,11 +1,10 @@
+import { ChatBoxEntity } from '../chat-box.entity';
+import { ChatGroupEntity } from '../chat-group.entity';
 import { IBaseEntity } from './base.entity.interface';
-import { IChatBoxEntity } from './chat-box.entity.interface';
-import { IChatGroupEntity } from './chat-group.entity.interface';
 
 export interface IMessage extends IBaseEntity {
-  messageId?: string;
-  chatboxId?: string;
-  senderId?: string;
+  messageId: string;
+  senderId: string;
   messageType?: string;
   contentText?: string;
   contentImage?: string;
@@ -13,6 +12,6 @@ export interface IMessage extends IBaseEntity {
   contentVideo?: string;
   contentFile?: string;
 
-  chatBoxId: IChatBoxEntity;
-  chatGroupId?: IChatGroupEntity;
+  chatBox?: ChatBoxEntity;
+  chatGroup?: ChatGroupEntity;
 }
