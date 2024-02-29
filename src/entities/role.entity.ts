@@ -13,21 +13,21 @@ import { RoleEnum } from 'src/configs/enums/role.enum';
 @Entity({ name: 'role' })
 export class RoleEntity extends BaseEntity implements IRole {
   @Column({ name: 'role_id', type: 'uuid' })
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   roleId: string;
   @Column({ name: 'role_name', enum: RoleEnum, default: RoleEnum.user })
   roleName: RoleEnum;
 
   @OneToOne(() => AccountEntity)
   @JoinColumn()
-  accountId: AccountEntity;
+  account: AccountEntity;
 
   constructor(props?: RoleEntity) {
     super();
     if (props) {
       this.roleId = props.roleId;
       this.roleName = props.roleName;
-      this.accountId = props.accountId;
+      this.account = props.account;
     }
     Object.assign(this, props);
   }
