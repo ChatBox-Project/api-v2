@@ -37,4 +37,21 @@ export class MessageEntity extends BaseEntity implements IMessage {
   @OneToMany(() => ChatGroupEntity, (chat) => chat.groupId)
   @JoinColumn()
   chatGroupId?: ChatGroupEntity;
+
+  constructor(props?: MessageEntity) {
+    super();
+    if (props) {
+      this.messageId = props.messageId;
+      this.senderId = props.senderId;
+      this.messageType = props.messageType;
+      this.contentText = props.contentText;
+      this.contentImage = props.contentImage;
+      this.contentAudio = props.contentAudio;
+      this.contentVideo = props.contentVideo;
+      this.contentFile = props.contentFile;
+      this.chatBoxId = props.chatBoxId;
+      this.chatGroupId = props.chatGroupId;
+    }
+    Object.assign(this, props);
+  }
 }
