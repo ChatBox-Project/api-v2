@@ -15,7 +15,7 @@ import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 import { AccountEntity } from './account.entity';
 import { ChatBoxEntity } from './chat-box.entity';
 import { ChatGroupEntity } from './chat-group.entity';
-import { GroupLeaderPermission } from './group-leader-permission.entity';
+import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
 
 @Entity({ name: 'user_base' })
 export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
@@ -46,22 +46,22 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
   @IsNotEmpty()
   @OneToOne(() => AccountEntity)
   @JoinColumn()
-  accountId: AccountEntity;
+  account: AccountEntity;
 
   @Column({ name: 'chat_box_id', type: 'uuid' })
   @ManyToOne(() => ChatBoxEntity, (chat) => chat.chatBoxId)
   @JoinColumn()
-  chatBoxId?: ChatBoxEntity[];
+  chatBox?: ChatBoxEntity[];
 
   @Column({ name: 'chat_group_id', type: 'uuid' })
   @ManyToMany(() => ChatGroupEntity)
   @JoinTable()
-  chatGroupId?: ChatGroupEntity[];
+  chatGroup?: ChatGroupEntity[];
 
   @Column({ name: 'group_leader_permission_id', type: 'uuid' })
-  @ManyToOne(() => GroupLeaderPermission, (gr) => gr.leaderId)
+  @ManyToOne(() => GroupLeaderPermissionEntity, (gr) => gr.leaderId)
   @JoinColumn()
-  groupLeaderPermissionId?: GroupLeaderPermission[];
+  groupLeaderPermission?: GroupLeaderPermissionEntity[];
 
   constructor(props?: UserBaseEntity) {
     super();
@@ -72,10 +72,10 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
       this.sex = props.sex;
       this.avatarUrl = props.avatarUrl;
       this.birth = props.birth;
-      this.accountId = props.accountId;
-      this.chatBoxId = props.chatBoxId;
-      this.chatGroupId = props.chatGroupId;
-      this.groupLeaderPermissionId = props.groupLeaderPermissionId;
+      this.account = props.account;
+      this.chatBox = props.chatBox;
+      this.chatGroup = props.chatGroup;
+      this.groupLeaderPermission = props.groupLeaderPermission;
     }
     Object.assign(this, props);
   }
