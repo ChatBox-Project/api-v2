@@ -3,6 +3,8 @@ import {
   Entity,
   Index,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
 } from 'typeorm';
@@ -52,12 +54,12 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
   chatBoxId?: ChatBoxEntity[];
 
   @Column({ name: 'chat_group_id', type: 'uuid' })
-  @ManyToOne(() => ChatGroupEntity)
-  @JoinColumn()
+  @ManyToMany(() => ChatGroupEntity)
+  @JoinTable()
   chatGroupId?: ChatGroupEntity[];
 
   @Column({ name: 'group_leader_permission_id', type: 'uuid' })
-  @OneToOne(() => GroupLeaderPermission, (gr) => gr.group_leader_permissionId)
+  @ManyToOne(() => GroupLeaderPermission, (gr) => gr.leaderId)
   @JoinColumn()
   groupLeaderPermissionId?: GroupLeaderPermission[];
 
