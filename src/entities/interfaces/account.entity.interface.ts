@@ -1,4 +1,5 @@
 import { IIdEntity } from './id.entity.interface';
+import { IRole } from './role.entity.interface';
 
 export interface IAccountEntity extends IIdEntity {
   username: string;
@@ -14,4 +15,7 @@ export interface IAccountEntity extends IIdEntity {
   verificationExpires: Date;
   loginAttempts: number;
   blockExpires: Date;
+
+  role?: IRole;
+  account: IAccountEntity;
 }
