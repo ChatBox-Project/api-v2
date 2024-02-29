@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserBaseEntity } from './user.base.entity';
 import { MessageEntity } from './message.entity';
@@ -14,6 +15,7 @@ import { MessageEntity } from './message.entity';
 @Entity({ name: 'chat-box' })
 export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
   @Index('IX_ChatBox_ChatBoxId', { unique: true })
+  @PrimaryGeneratedColumn('uuid')
   @Column({ name: 'chat_box_id', type: 'varchar', length: 255 })
   chatBoxId: string;
 
