@@ -1,9 +1,9 @@
 import { EGender } from 'src/configs';
 import { IBaseEntity } from './base.entity.interface';
-import { IAccountEntity } from './account.entity.interface';
-import { IChatBoxEntity } from './chat-box.entity.interface';
-import { IChatGroupEntity } from './chat-group.entity.interface';
-import { IGroupLeaderPermission } from './group-leader-permission.entity.interface';
+import { AccountEntity } from '../account.entity';
+import { ChatBoxEntity } from '../chat-box.entity';
+import { ChatGroupEntity } from '../chat-group.entity';
+import { GroupLeaderPermissionEntity } from '../group-leader-permission.entity';
 
 export interface IUserBaseEntity extends IBaseEntity {
   firstName: string;
@@ -13,8 +13,8 @@ export interface IUserBaseEntity extends IBaseEntity {
   avatarUrl: string;
   birth: Date;
 
-  accountId: IAccountEntity;
-  chatBoxId?: IChatBoxEntity[];
-  chatGroupId?: IChatGroupEntity[];
-  groupLeaderPermissionId?: IGroupLeaderPermission[];
+  account: AccountEntity;
+  chatBox?: ChatBoxEntity[];
+  chatGroup?: ChatGroupEntity[];
+  groupLeaderPermission?: GroupLeaderPermissionEntity[];
 }
