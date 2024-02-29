@@ -1,19 +1,40 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { IMessage } from './interfaces/message.entity.interface';
-import { IChatBoxEntity, IChatGroupEntity } from './interfaces';
+import { ChatBoxEntity } from './chat-box.entity';
+import { ChatGroupEntity } from './chat-group.entity';
+import { IsNotEmpty } from 'class-validator';
 
 @Entity({ name: 'message' })
 export class MessageEntity extends BaseEntity implements IMessage {
+  @Index('IX_Message_MessageId', { unique: true })
+  @Column({ name: 'message_id', type: 'varchar', length: 255 })
+  @IsNotEmpty()
   messageId?: string;
-  chatboxId?: string;
+
+  @Index('IX_Message_Sender_id', { unique: true })
+  @Column({ name: 'sender_id', type: 'varchar', length: 255 })
+  @IsNotEmpty()
   senderId?: string;
+
+  @Column({ name: 'message_type', type: 'varchar', length: 255 })
   messageType?: string;
+  @Column({ name: 'content_text', type: 'varchar', length: 255 })
   contentText?: string;
+  @Column({ name: 'content_image', type: 'varchar', length: 255 })
   contentImage?: string;
+  @Column({ name: 'content_audio', type: 'varchar', length: 255 })
   contentAudio?: string;
+  @Column({ name: 'content_video', type: 'varchar', length: 255 })
   contentVideo?: string;
+  @Column({ name: 'content_file', type: 'varchar', length: 255 })
   contentFile?: string;
-  chatBoxId: IChatBoxEntity;
-  chatGroupId?: IChatGroupEntity;
+
+  @OneToMany(() => ChatBoxEntity, (chat) => chat.chatBoxId)
+  @JoinColumn()
+  chatBoxId: ChatBoxEntity;
+
+  @OneToMany(() => ChatGroupEntity, (chat) => chat.groupId)
+  @JoinColumn()
+  chatGroupId?: ChatGroupEntity;
 }
