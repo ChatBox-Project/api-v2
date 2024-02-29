@@ -21,7 +21,7 @@ export class GroupLeaderPermission
   @Column({ name: 'group_leader_permission_id', type: 'varchar', length: 255 })
   group_leader_permissionId?: string;
 
-  @OneToMany(() => UserBaseEntity, (user) => user.accountId)
+  @OneToMany(() => UserBaseEntity, (user) => user.groupLeaderPermissionId)
   @JoinColumn()
   leaderId?: UserBaseEntity;
 
