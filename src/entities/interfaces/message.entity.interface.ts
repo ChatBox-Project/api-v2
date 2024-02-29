@@ -1,4 +1,6 @@
 import { IBaseEntity } from './base.entity.interface';
+import { IChatBoxEntity } from './chat-box.entity.interface';
+import { IChatGroupEntity } from './chat-group.entity.interface';
 
 export interface IMessage extends IBaseEntity {
   messageId?: string;
@@ -10,4 +12,7 @@ export interface IMessage extends IBaseEntity {
   contentAudio?: string;
   contentVideo?: string;
   contentFile?: string;
+
+  chatBoxId: IChatBoxEntity;
+  chatGroupId?: IChatGroupEntity;
 }
