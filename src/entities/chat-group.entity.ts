@@ -3,6 +3,7 @@ import {
   Entity,
   Index,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
 } from 'typeorm';
@@ -10,6 +11,7 @@ import { BaseEntity } from './bases/base.entity';
 import { IChatGroupEntity } from './interfaces/chat-group.entity.interface';
 import { UserBaseEntity } from './user.base.entity';
 import { GroupLeaderPermission } from './group-leader-permission.entity';
+import { MessageEntity } from './message.entity';
 
 @Entity({ name: 'chat-group' })
 export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
@@ -28,12 +30,16 @@ export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
   groupLeaderId: string;
 
   @ManyToMany(() => UserBaseEntity, (user) => user.chatGroupId)
-  @JoinColumn()
+  @JoinTable()
   userId: UserBaseEntity[];
 
-  @ManyToOne(() => GroupLeaderPermission)
+  @ManyToOne(() => GroupLeaderPermission, (gr) => gr.groupId)
   @JoinColumn()
   groupLeaderPermissionId: GroupLeaderPermission;
+
+  @ManyToOne(() => MessageEntity, (mess) => mess.chatGroupId)
+  @JoinColumn()
+  messageId?: MessageEntity;
 
   constructor(props?: ChatGroupEntity) {
     super();
