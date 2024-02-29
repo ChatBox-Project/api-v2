@@ -3,5 +3,4 @@ import { BaseEntity } from './bases/base.entity';
 import { IChatGroupEntity } from './interfaces/chat-group.entity.interface';
 
 @Entity({ name: 'chat-group' })
-export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
-  }
+export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {}
