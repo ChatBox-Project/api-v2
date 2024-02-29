@@ -14,34 +14,34 @@ import { ChatGroupEntity } from './chat-group.entity';
 import { PermissionEntity } from './permission.entity';
 
 @Entity({ name: 'group-leader-permission' })
-export class GroupLeaderPermission
+export class GroupLeaderPermissionEntity
   extends BaseEntity
   implements IGroupLeaderPermission
 {
   @Index('IX_GroupLeaderPermission_GroupLeaderPermissionId', { unique: true })
-  @Column({ name: 'group_leader_permission_id', type: 'varchar', length: 255 })
-  @PrimaryGeneratedColumn('uuid')
-  group_leader_permissionId?: string;
+  @Column({ name: 'group_leader_permission_id', type: 'uuid', length: 255 })
+  @PrimaryGeneratedColumn()
+  group_leader_permissionId: string;
 
-  @OneToMany(() => UserBaseEntity, (user) => user.groupLeaderPermissionId)
+  @OneToMany(() => UserBaseEntity, (user) => user.groupLeaderPermission)
   @JoinColumn()
-  leaderId?: UserBaseEntity;
+  leaderId: UserBaseEntity;
 
   @OneToMany(() => ChatGroupEntity, (chatGroup) => chatGroup.groupId)
   @JoinColumn()
-  groupId?: string | ChatGroupEntity[];
+  group: string | ChatGroupEntity[];
 
   @OneToOne(() => PermissionEntity)
   @JoinColumn()
-  permissionId: PermissionEntity;
+  permission: PermissionEntity;
 
-  constructor(props?: GroupLeaderPermission) {
+  constructor(props?: GroupLeaderPermissionEntity) {
     super();
     if (props) {
       this.group_leader_permissionId = props.group_leader_permissionId;
       this.leaderId = props.leaderId;
-      this.groupId = props.groupId;
-      this.permissionId = props.permissionId;
+      this.group = props.group;
+      this.permission = props.permission;
     }
     Object.assign(this, props);
   }
