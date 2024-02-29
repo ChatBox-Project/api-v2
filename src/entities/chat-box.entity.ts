@@ -16,4 +16,14 @@ export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
   @OneToMany(() => UserBaseEntity, (user) => user.chatBoxId)
   @JoinColumn()
   userId: UserBaseEntity;
+
+  constructor(props?: ChatBoxEntity) {
+    super();
+    if (props) {
+      this.chatBoxId = props.chatBoxId;
+      this.chatBoxName = props.chatBoxName;
+      this.userId = props.userId;
+    }
+    Object.assign(this, props);
+  }
 }
