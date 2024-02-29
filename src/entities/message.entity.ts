@@ -30,11 +30,11 @@ export class MessageEntity extends BaseEntity implements IMessage {
   @Column({ name: 'content_file', type: 'varchar', length: 255 })
   contentFile?: string;
 
-  @OneToMany(() => ChatBoxEntity, (chat) => chat.chatBoxId)
+  @OneToMany(() => ChatBoxEntity, (chat) => chat.messageId)
   @JoinColumn()
   chatBoxId: ChatBoxEntity;
 
-  @OneToMany(() => ChatGroupEntity, (chat) => chat.groupId)
+  @OneToMany(() => ChatGroupEntity, (chat) => chat.messageId)
   @JoinColumn()
   chatGroupId?: ChatGroupEntity;
 
