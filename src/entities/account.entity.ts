@@ -59,4 +59,23 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
   @OneToOne(() => UserBaseEntity)
   @JoinColumn()
   userId: UserBaseEntity;
+
+  constructor(props?: AccountEntity) {
+    super();
+    if (props) {
+      this.username = props.username;
+      this.email = props.email;
+      this.password = props.password;
+      this.passwordSalt = props.passwordSalt;
+      this.jwtToken = props.jwtToken;
+      this.refreshToken = props.refreshToken;
+      this.verified = props.verified;
+      this.verificationExpires = props.verificationExpires;
+      this.loginAttempts = props.loginAttempts;
+      this.blockExpires = props.blockExpires;
+      this.role = props.role;
+      this.userId = props.userId;
+    }
+    Object.assign(this, props);
+  }
 }
