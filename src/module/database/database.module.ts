@@ -30,6 +30,6 @@ import * as Joi from 'joi';
       inject: [ConfigService],
     }),
   ],
-  exports: [DatabaseModule],
+  exports: [],
 })
 export class DatabaseModule {}
