@@ -6,4 +6,8 @@ export class AuthService {
   public async login() {
     console.log('Login...');
   }
+
+  public async register(userRegister: any) {
+    console.log(userRegister);
+  }
 }
