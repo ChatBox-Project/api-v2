@@ -23,28 +23,28 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
 
   @Column({ name: 'password_salt', type: 'varchar', length: 50 })
   @IsNotEmpty()
-  passwordSalt: string;
+  passwordSalt?: string;
 
   @Index('IX_Account_JwtToken', { unique: true })
   @Column({ name: 'jwt_token', type: 'varchar', length: 4069 })
-  jwtToken: string;
+  jwtToken?: string;
 
   @Index('IX_Account_RefreshToken', { unique: true })
   @Column({ name: 'refresh_token', type: 'varchar', length: 4069 })
-  refreshToken: string;
+  refreshToken?: string;
 
   @Column({ name: 'verified', type: 'boolean', default: false })
-  verified: boolean;
+  verified?: boolean;
 
   @Column({
     name: 'verification_expires',
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  verificationExpires: Date;
+  verificationExpires?: Date;
 
   @Column({ name: 'login_attempts', type: 'integer', default: 0 })
-  loginAttempts: number;
+  loginAttempts?: number;
 
   @Column({
     name: 'block_expires',
