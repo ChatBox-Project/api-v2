@@ -7,8 +7,8 @@ import {
   MessageRepository,
   PermissionRepository,
   RoleRepository,
-} from 'src/repositorys';
-import { BaseRepository } from 'src/repositorys';
+} from 'src/repositories';
+import { BaseRepository } from 'src/repositories';
 import { DataSource } from 'typeorm';
 
 const repositories = [
