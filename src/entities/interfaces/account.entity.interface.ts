@@ -6,15 +6,15 @@ export interface IAccountEntity extends IIdEntity {
   username: string;
   email: string;
   password: string;
-  passwordSalt: string;
+  passwordSalt?: string;
 
-  jwtToken: string;
-  refreshToken: string;
-  verified: boolean;
-  verificationExpires: Date;
-  loginAttempts: number;
-  blockExpires: Date;
+  jwtToken?: string;
+  refreshToken?: string;
+  verified?: boolean;
+  verificationExpires?: Date;
+  loginAttempts?: number;
+  blockExpires?: Date;
 
   role?: RoleEntity;
-  user: UserBaseEntity;
+  user?: UserBaseEntity;
 }
