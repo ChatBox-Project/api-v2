@@ -4,7 +4,7 @@ interface IErrorRes extends Error {
   errorCode: string;
 }
 
-export class ErrorRespone extends HttpException {
+export class ErrorResponse extends HttpException {
   constructor(err?: IErrorRes) {
     super(err || '', HttpStatus.BAD_REQUEST);
     this.errorCode = err.errorCode;
