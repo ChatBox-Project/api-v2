@@ -18,24 +18,7 @@ export class UserRegisterDto {
   password: string;
 
   @IsNotEmpty()
-  @MinLength(6)
   @MaxLength(50)
   @IsEmail()
-  email?: string;
-
-  @IsNotEmpty()
-  @MinLength(6)
-  @MaxLength(50)
-  firstName: string;
-
-  @IsNotEmpty()
-  @MinLength(6)
-  @MaxLength(50)
-  lastName: string;
-
-  @IsNotEmpty()
-  @MinLength(6)
-  @MaxLength(50)
-  @IsPhoneNumber('VN')
-  phoneNumber: string;
+  email: string;
 }
