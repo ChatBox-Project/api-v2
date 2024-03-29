@@ -4,7 +4,7 @@ import { IIdEntity } from './id.entity.interface';
 
 export interface IAccountEntity extends IIdEntity {
   username: string;
-  email: string;
+
   password: string;
   passwordSalt?: string;
 
