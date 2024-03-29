@@ -26,7 +26,10 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
 
   @Index('IX_Account_RefreshToken', { unique: true })
   @Column({ name: 'refresh_token', type: 'varchar', length: 4069 })
-  refreshToken?: string;
+  refreshToken?: string[];
+
+  @Column({ name: 'keyToken', type: 'varchar', length: 4069 })
+  keyToken?: string;
 
   @Column({ name: 'verified', type: 'boolean', default: false })
   verified?: boolean;
