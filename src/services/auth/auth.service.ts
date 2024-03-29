@@ -40,8 +40,11 @@ export class AuthService {
       });
     }
   }
-  private async createAccount(_accountRegister: UserRegisterDto, isApp: boolean): Promise<boolean> {
+  private async createAccount(_accountRegister: UserRegisterDto, isApp: boolean): Promise<unknown> {
     try {
+      // check password
+      
+
       const salt = await bcrypt.genSaltSync(10);
       const hashedPassword = await bcrypt.hash(_accountRegister.password, salt);
 
@@ -62,17 +65,21 @@ export class AuthService {
             format: 'pem',
           },
         });
-        // console.log('publicKey', publicKey);
-        // console.log('privateKey', privateKey);
-        /* This line of code is calling the `createKeyToken` method from the `_keyTokenService` service
-        and passing an object with `accountId` and `publicKey` properties as arguments. The
-        `createKeyToken` method likely generates a token or key associated with the provided account
-        ID and public key, and then assigns the generated key to the `keyString` constant for
-        further use in the application. */
         const publicKeyString = await this._keyTokenService.createKeyToken({ accountId: newUser.id, publicKey: publicKey });
 
         const tokens = await createTokenPair({ accountId: newUser.id }, publicKeyString, privateKey);
-        
+
+        const saveAccount = new AccountEntity({ ...newUser, publicKey: publicKeyString.toString(), refreshToken: tokens.refreshToken });
+        const test = await this._accountRepository.save(saveAccount);
+        console.log('test', test);
+        return {
+          status: 200,
+          message: 'Register Success',
+          metadata: {
+            user: newUser,
+            token: tokens.accessToken,
+          },
+        };
       }
     } catch (error) {
       throw new ErrorResponse({
