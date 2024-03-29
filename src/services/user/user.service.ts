@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from 'src/validators';
 
 @Injectable()
-export class UserService {}
+export class UserService {
+  constructor() {}
+
+  public async createUser(user: CreateUserDto, header: any) {}
+}
