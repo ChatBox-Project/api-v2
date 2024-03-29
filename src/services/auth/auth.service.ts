@@ -42,52 +42,47 @@ export class AuthService {
   }
   private async createAccount(_accountRegister: UserRegisterDto, isApp: boolean): Promise<unknown> {
     try {
-      // check password
-      
+      const salt = bcrypt.genSaltSync(10);
+      // Hasd Pw asynchronously
+      const hashPwPromise = Promise.all([bcrypt.hash(_accountRegister.password, salt), bcrypt.hash(_accountRegister.passwordSalt, salt)]);
+      const [HashedPw, HashedPwSalt] = await hashPwPromise;
 
-      const salt = await bcrypt.genSaltSync(10);
-      const hashedPassword = await bcrypt.hash(_accountRegister.password, salt);
-
-      const newUser = await this._accountRepository.create({
+      const newAccount = await this._accountRepository.create({
         ..._accountRegister,
-        password: hashedPassword,
+        password: HashedPw,
+        passwordSalt: HashedPwSalt,
+        verified: false,
+        verificationExpires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        loginAttempts: 0,
+        blockExpires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       });
+      // Generate RSA key pair asynchronously
+      const { publicKey, privateKey } = await this._keyTokenService.generateRSAKeyPair();
 
-      if (newUser) {
-        const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-          modulusLength: 4096,
-          publicKeyEncoding: {
-            type: 'pkcs1',
-            format: 'pem',
-          },
-          privateKeyEncoding: {
-            type: 'pkcs1',
-            format: 'pem',
-          },
-        });
-        const publicKeyString = await this._keyTokenService.createKeyToken({ accountId: newUser.id, publicKey: publicKey });
+      // create Key Token
+      const publicKeyString = await this._keyTokenService.createKeyToken({ accountId: newAccount.id, publicKey });
 
-        const tokens = await createTokenPair({ accountId: newUser.id }, publicKeyString, privateKey);
+      // Create token pair
+      const tokens = await createTokenPair({ accountId: newAccount.id }, publicKeyString, privateKey);
 
-        const saveAccount = new AccountEntity({ ...newUser, publicKey: publicKeyString.toString(), refreshToken: tokens.refreshToken });
-        const test = await this._accountRepository.save(saveAccount);
-        console.log('test', test);
-        return {
-          status: 200,
-          message: 'Register Success',
-          metadata: {
-            user: newUser,
-            token: tokens.accessToken,
-          },
-        };
-      }
+      // update account with token and publickey
+      newAccount.publicKey = publicKeyString.toString();
+      newAccount.refreshToken = tokens.refreshToken;
+      await this._accountRepository.save(newAccount);
+
+      return {
+        status: 200,
+        message: 'Register success',
+        metadata: {
+          user: newAccount,
+          token: tokens.accessToken,
+        },
+      };
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
         errorCode: 'REGISTER_FAIL',
       });
     }
-
-    return true;
   }
 }
