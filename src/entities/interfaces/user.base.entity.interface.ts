@@ -9,7 +9,7 @@ export interface IUserBaseEntity extends IBaseEntity {
   firstName: string;
   lastName: string;
   phone: number;
-  sex: EGender;
+  gender: EGender;
   avatarUrl: string;
   birth: Date;
 
