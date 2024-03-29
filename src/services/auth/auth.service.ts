@@ -21,7 +21,7 @@ export class AuthService {
   public async register(_accountRegister: UserRegisterDto, _header: any): Promise<unknown> {
     try {
       const data = await this._accountService.getAccountByUsername(_accountRegister.username);
-      
+
       if (data) {
         throw new ErrorResponse({
           ...new BadRequestException('Username is exist'),
@@ -46,7 +46,7 @@ export class AuthService {
   }
   private async createAccount(_accountRegister: UserRegisterDto, isApp: boolean): Promise<boolean> {
     try {
-      const { username, password, email } = _accountRegister;
+      const { username, password } = _accountRegister;
       const salt = await bcrypt.genSalt(10);
       const hasdPassword = await bcrypt.hash(password, salt);
 
