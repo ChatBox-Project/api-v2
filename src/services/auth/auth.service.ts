@@ -9,12 +9,14 @@ import { UserBaseEntity } from 'src/entities/user.base.entity';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { AccountService } from '../account';
+import { KeyTokenService } from '../key/keyToken.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
     private readonly _accountService: AccountService,
+    private readonly _keyTokenService: KeyTokenService,
   ) {}
   public async login() {
     console.log('Login...');
@@ -61,8 +63,14 @@ export class AuthService {
         });
         // console.log('publicKey', publicKey);
         // console.log('privateKey', privateKey);
+        /* This line of code is calling the `createKeyToken` method from the `_keyTokenService` service
+        and passing an object with `accountId` and `publicKey` properties as arguments. The
+        `createKeyToken` method likely generates a token or key associated with the provided account
+        ID and public key, and then assigns the generated key to the `keyString` constant for
+        further use in the application. */
+        const keyString = await this._keyTokenService.createKeyToken({ accountId: newUser.id, publicKey: publicKey });
         
-
+const tokens = await 
       }
     } catch (error) {
       throw new ErrorResponse({
