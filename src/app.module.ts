@@ -7,9 +7,9 @@ import { DatabaseModule } from './modules/database/database.module';
 import { ChatGateway } from './chat.gateway';
 import { AppMiddleware } from './middlewares/app.middleware';
 import { AuthModule } from './modules/auth/auth.module';
-import { KeyModule } from './modules';
+import { KeyModule, UserModule } from './modules';
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, AuthModule, KeyModule, TypeOrmModule.forFeature(entities)],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, AuthModule, KeyModule, UserModule, TypeOrmModule.forFeature(entities)],
   controllers: [],
   providers: [ChatGateway],
 })
