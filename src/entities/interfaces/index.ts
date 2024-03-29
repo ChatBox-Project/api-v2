@@ -5,5 +5,5 @@ export * from './chat-group.entity.interface';
 export * from './group-leader-permission.entity.interface';
 export * from './message.entity.interface';
 export * from './permission.entity.interface';
-export * from './role.entity.interface';
+export * from '../role.entity.interface';
 export * from './user.base.entity.interface';
