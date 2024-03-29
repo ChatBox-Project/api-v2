@@ -9,26 +9,22 @@ import { UserBaseEntity } from './user.base.entity';
 @Entity({ name: 'account' })
 export class AccountEntity extends IdEntity implements IAccountEntity {
   @Index('IX_Account_Username', { unique: true })
-  @Column({ name: 'username', type: 'varchar', length: 50 })
+  @Column({ name: 'username', type: 'varchar' })
   username: string;
 
-  @Column({ name: 'password', type: 'varchar', length: 50 })
+  @Column({ name: 'password', type: 'varchar' })
   @IsNotEmpty()
   password: string;
 
-  @Column({ name: 'password_salt', type: 'varchar', length: 50 })
+  @Column({ name: 'password_salt', type: 'varchar' })
   @IsNotEmpty()
   passwordSalt?: string;
 
-  @Index('IX_Account_JwtToken', { unique: true })
-  @Column({ name: 'jwt_token', type: 'varchar', length: 4069 })
-  jwtToken?: string;
-
   @Index('IX_Account_RefreshToken', { unique: true })
-  @Column({ name: 'refresh_token', type: 'varchar', length: 4069 })
-  refreshToken?: string[];
+  @Column({ name: 'refresh_token', type: 'varchar', unique: true, default: '' })
+  refreshToken?: string;
 
-  @Column({ name: 'keyToken', type: 'varchar', length: 4069 })
+  @Column({ name: 'keyToken', type: 'varchar', default: '' })
   keyToken?: string;
 
   @Column({ name: 'verified', type: 'boolean', default: false })
@@ -50,6 +46,7 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   blockExpires: Date;
+  publicKey?: string;
 
   @OneToOne(() => RoleEntity)
   @JoinColumn()
@@ -65,7 +62,7 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
       this.username = props.username;
       this.password = props.password;
       this.passwordSalt = props.passwordSalt;
-      this.jwtToken = props.jwtToken;
+
       this.refreshToken = props.refreshToken;
       this.verified = props.verified;
       this.verificationExpires = props.verificationExpires;
