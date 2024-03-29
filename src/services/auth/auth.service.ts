@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { AccountService } from '../account';
 import { KeyTokenService } from '../key/keyToken.service';
+import { createTokenPair } from 'src/utils/auth.util';
 
 @Injectable()
 export class AuthService {
@@ -68,9 +69,10 @@ export class AuthService {
         `createKeyToken` method likely generates a token or key associated with the provided account
         ID and public key, and then assigns the generated key to the `keyString` constant for
         further use in the application. */
-        const keyString = await this._keyTokenService.createKeyToken({ accountId: newUser.id, publicKey: publicKey });
+        const publicKeyString = await this._keyTokenService.createKeyToken({ accountId: newUser.id, publicKey: publicKey });
+
+        const tokens = await createTokenPair({ accountId: newUser.id }, publicKeyString, privateKey);
         
-const tokens = await 
       }
     } catch (error) {
       throw new ErrorResponse({
