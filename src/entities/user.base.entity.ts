@@ -1,13 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne } from 'typeorm';
 import { IUserBaseEntity } from './interfaces/user.base.entity.interface';
 import { EGender } from 'src/configs';
 import { BaseEntity } from './bases/base.entity';
@@ -33,7 +24,7 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
   phone: number;
 
   @Column({ name: 'sex', enum: EGender, default: EGender.other })
-  sex: EGender;
+  gender: EGender;
 
   @Column({ name: 'avatar_url', type: 'varchar', length: 255 })
   @IsString()
@@ -69,7 +60,7 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
       this.firstName = props.firstName;
       this.lastName = props.lastName;
       this.phone = props.phone;
-      this.sex = props.sex;
+      this.gender = props.gender;
       this.avatarUrl = props.avatarUrl;
       this.birth = props.birth;
       this.account = props.account;
