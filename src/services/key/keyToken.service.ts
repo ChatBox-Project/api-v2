@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/entities/account.entity';
 import { ErrorResponse } from 'src/errors';
 import { AccountRepository } from 'src/repositories';
-
+import * as crypto from 'crypto';
 @Injectable()
 export class KeyTokenService {
   constructor(@InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository) {}
@@ -22,5 +22,31 @@ export class KeyTokenService {
         errorCode: 'REGISTER_FAIL',
       });
     }
+  }
+
+  public async generateRSAKeyPair(): Promise<{ publicKey: string; privateKey: string }> {
+    return new Promise((resolve, reject) => {
+      crypto.generateKeyPair(
+        'rsa',
+        {
+          modulusLength: 4096,
+          publicKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem',
+          },
+          privateKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem',
+          },
+        },
+        (err, publicKey, privateKey) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve({ publicKey: publicKey.toString(), privateKey: privateKey.toString() });
+          }
+        },
+      );
+    });
   }
 }
