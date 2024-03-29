@@ -12,11 +12,6 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
   @Column({ name: 'username', type: 'varchar', length: 50 })
   username: string;
 
-  @Index('IX_Account_Email', { unique: true })
-  @Column({ name: 'email', type: 'varchar', length: 50 })
-  @IsEmail()
-  email: string;
-
   @Column({ name: 'password', type: 'varchar', length: 50 })
   @IsNotEmpty()
   password: string;
@@ -65,7 +60,6 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
     super();
     if (props) {
       this.username = props.username;
-      this.email = props.email;
       this.password = props.password;
       this.passwordSalt = props.passwordSalt;
       this.jwtToken = props.jwtToken;
