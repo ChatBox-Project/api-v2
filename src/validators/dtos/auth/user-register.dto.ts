@@ -10,4 +10,9 @@ export class UserRegisterDto {
   @MinLength(8)
   @MaxLength(50)
   password: string;
+
+  @IsNotEmpty()
+  @MinLength(8)
+  @MaxLength(50)
+  passwordSalt: string;
 }
