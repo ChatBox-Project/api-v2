@@ -13,7 +13,7 @@ export class AccountService {
 
   async getAccountByUsername(username: string): Promise<AccountEntity> {
     return await this._accountRepository.findOne({
-      where: { username: ILike(username) },
+      where: { user: ILike(username) },
     });
   }
 }
