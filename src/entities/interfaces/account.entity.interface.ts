@@ -9,11 +9,12 @@ export interface IAccountEntity extends IIdEntity {
   passwordSalt?: string;
 
   jwtToken?: string;
-  refreshToken?: string[];
+  refreshToken?: string;
   verified?: boolean;
   verificationExpires?: Date;
   loginAttempts?: number;
   blockExpires?: Date;
+  publicKey?: string;
 
   role?: RoleEntity;
   user?: UserBaseEntity;
