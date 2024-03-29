@@ -7,6 +7,7 @@ import { UserRegisterDto, checkUsername } from 'src/validators';
 import { ErrorResponse } from 'src/errors';
 import { UserBaseEntity } from 'src/entities/user.base.entity';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 import { AccountService } from '../account';
 
 @Injectable()
@@ -38,19 +39,37 @@ export class AuthService {
   }
   private async createAccount(_accountRegister: UserRegisterDto, isApp: boolean): Promise<boolean> {
     try {
-      const { username, password } = _accountRegister;
-      const salt = await bcrypt.genSalt(10);
-      const hasdPassword = await bcrypt.hash(password, salt);
+      const salt = await bcrypt.genSaltSync(10);
+      const hashedPassword = await bcrypt.hash(_accountRegister.password, salt);
 
       const newUser = await this._accountRepository.create({
         ..._accountRegister,
-        password: hasdPassword,
+        password: hashedPassword,
       });
 
-      console.log(newUser);
       if (newUser) {
+        const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+          modulusLength: 4096,
+          publicKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem',
+          },
+          privateKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem',
+          },
+        });
+        // console.log('publicKey', publicKey);
+        // console.log('privateKey', privateKey);
+        
+
       }
-    } catch (error) {}
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'REGISTER_FAIL',
+      });
+    }
 
     return true;
   }
