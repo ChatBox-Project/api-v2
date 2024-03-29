@@ -11,5 +11,6 @@ import { KeyTokenService } from 'src/services/key/keyToken.service';
   imports: [TypeOrmModule.forFeature(entities)],
   controllers: [AuthController],
   providers: [AuthService, AccountService, KeyTokenService],
+  exports: [AuthService],
 })
 export class AuthModule {}
