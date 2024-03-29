@@ -6,3 +6,4 @@ export * from './role.repository';
 export * from './chat-box.entity';
 export * from './chat-group.repository';
 export * from './base.repository';
+export * from './user.repository';
