@@ -26,7 +26,7 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
   @Column({ name: 'sex', enum: EGender, default: EGender.other })
   gender: EGender;
 
-  @Column({ name: 'avatar_url', type: 'varchar', length: 255 })
+  @Column({ name: 'avatar_url', type: 'varchar'})
   @IsString()
   avatarUrl: string;
 
