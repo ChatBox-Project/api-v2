@@ -5,7 +5,7 @@ interface ICreateUserDto {
   firstName: string;
   lastName: string;
   phone: number;
-  sex: EGender;
+  gender: EGender;
   avatarUrl: string;
   birth: Date;
 }
@@ -23,19 +23,19 @@ export class CreateUserDto implements ICreateUserDto {
   lastName: string;
 
   @IsNotEmpty()
-  @IsPhoneNumber()
+  // @IsPhoneNumber()
   phone: number;
 
   @IsNotEmpty()
-  sex: EGender;
+  gender: EGender;
 
   @IsNotEmpty()
   @MinLength(5)
   @MaxLength(255)
-  @IsUrl()
+  // @IsUrl()
   avatarUrl: string;
 
   @IsNotEmpty()
-  @IsDate()
+  // @IsDate()
   birth: Date;
 }
