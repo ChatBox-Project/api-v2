@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './entities/entity.provider';
 import { DatabaseModule } from './modules/database/database.module';
 import { ChatGateway } from './chat.gateway';
-import { AppMiddleware } from './middlewares/app.middleware';
+import { LoggerMiddleware } from './middlewares/app.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { KeyModule, UserModule } from './modules';
 @Module({
@@ -15,6 +15,6 @@ import { KeyModule, UserModule } from './modules';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AppMiddleware).forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
