@@ -1,11 +1,8 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-
-interface IErrorRes extends Error {
-  errorCode: string;
-}
+import { IResponseError } from './interface';
 
 export class ErrorResponse extends HttpException {
-  constructor(err?: IErrorRes) {
+  constructor(err?: IResponseError) {
     super(err || '', HttpStatus.BAD_REQUEST);
     this.errorCode = err.errorCode;
   }
