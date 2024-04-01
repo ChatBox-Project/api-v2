@@ -7,3 +7,4 @@ export * from './message.entity.interface';
 export * from './permission.entity.interface';
 export * from '../role.entity.interface';
 export * from './user.base.entity.interface';
+export * from './otp.entity.interface';
