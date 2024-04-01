@@ -1,13 +1,10 @@
 import { RoleEntity } from '../role.entity';
-import { UserBaseEntity } from '../user.base.entity';
+import { UserEntity } from '../user.base.entity';
 import { IIdEntity } from './id.entity.interface';
 
 export interface IAccountEntity extends IIdEntity {
-  username: string;
-
+  phoneNumber: string;
   password: string;
-  passwordSalt?: string;
-
   jwtToken?: string;
   refreshToken?: string;
   verified?: boolean;
@@ -15,7 +12,6 @@ export interface IAccountEntity extends IIdEntity {
   loginAttempts?: number;
   blockExpires?: Date;
   publicKey?: string;
-
   role?: RoleEntity;
-  user?: UserBaseEntity;
+  user?: UserEntity;
 }
