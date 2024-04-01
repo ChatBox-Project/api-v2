@@ -1,26 +1,29 @@
 import { ErrorResponse } from 'src/errors';
-import { isValidEmail } from './email.valid';
 import { BadRequestException } from '@nestjs/common';
-import { isValidNumberPhone } from './numberPhone.valid';
 
-export const checkUsername = (username: string) => {
+export const checkUsername = (phoneNumber: string) => {
   const regexNumber = /^\d+\.?\d*$/;
-
+  const isValidNumberPhone = (numberPhone: string): unknown => {
+    // console.log('isValidNumberPhone: ', /((0[3|5|7|8|9])+([0-9]{8})|([+]84[3|5|7|8|9])+([0-9]{8}))\b/g.test(numberPhone));
+    return /((0[3|5|7|8|9])+([0-9]{8})|([+]84[3|5|7|8|9])+([0-9]{8}))\b/g.test(numberPhone);
+  };
   try {
-    if (username.includes('@')) {
-      if (isValidEmail(username)) {
+    if (regexNumber.test(phoneNumber)) {
+      // console.log('Rex::', regexNumber.test(phoneNumber));
+
+      if (isValidNumberPhone(phoneNumber)) {
         return true;
       } else {
-        throw new ErrorResponse({ ...new BadRequestException('Email is invalid'), errorCode: 'EMAIL_INVALID' });
-      }
-    } else if (!regexNumber.test(username)) { 
-      if (isValidNumberPhone(username)) {
-        return true;
-      } else {
-        throw new ErrorResponse({ ...new BadRequestException('Phone number is invalid'), errorCode: 'PHONE_INVALID' });
+        throw new ErrorResponse({
+          ...new BadRequestException('Invalid phone number'),
+          errorCode: 'INVALID_PHONE_NUMBER',
+        });
       }
     } else {
-      throw new ErrorResponse({ ...new BadRequestException('Email or NumberPhone Invalid!'), errorCode: 'USERNAME_INVALID' });
+      throw new ErrorResponse({
+        ...new BadRequestException('Invalid phone number'),
+        errorCode: 'INVALID_PHONE_NUMBER_Regex',
+      });
     }
   } catch (error) {
     throw new ErrorResponse({ ...error, errorCode: error.errorCode });
