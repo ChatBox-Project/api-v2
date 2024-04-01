@@ -1,16 +1,7 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { IChatGroupEntity } from './interfaces/chat-group.entity.interface';
-import { UserBaseEntity } from './user.base.entity';
+import { UserEntity } from './user.base.entity';
 import { MessageEntity } from './message.entity';
 import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
 
@@ -31,9 +22,9 @@ export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
   @Column({ name: 'group_leader_id', type: 'varchar', length: 255 })
   groupLeader: string;
 
-  @ManyToMany(() => UserBaseEntity, (user) => user.chatGroup)
+  @ManyToMany(() => UserEntity, (user) => user.chatGroup)
   @JoinTable()
-  user: UserBaseEntity[];
+  user: UserEntity[];
 
   @ManyToOne(() => GroupLeaderPermissionEntity, (gr) => gr.group)
   @JoinColumn()
@@ -42,18 +33,4 @@ export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
   @ManyToOne(() => MessageEntity, (mess) => mess.chatGroup)
   @JoinColumn()
   message: MessageEntity[];
-
-  constructor(props?: ChatGroupEntity) {
-    super();
-    if (props) {
-      this.groupId = props.groupId;
-      this.groupName = props.groupName;
-      this.groupMembers = props.groupMembers;
-      this.groupLeader = props.groupLeader;
-      this.user = props.user;
-      this.groupLeaderPermission = props.groupLeaderPermission;
-      this.message = props.message;
-    }
-    Object.assign(this, props);
-  }
 }
