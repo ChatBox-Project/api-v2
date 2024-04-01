@@ -5,7 +5,7 @@ import { AccountRepository } from 'src/repositories';
 import { UserRegisterDto, checkUsername } from 'src/validators';
 
 import { ErrorResponse } from 'src/errors';
-import { UserBaseEntity } from 'src/entities/user.base.entity';
+import { UserEntity } from 'src/entities/user.base.entity';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { AccountService } from '../account';
@@ -25,10 +25,19 @@ export class AuthService {
 
   public async register(_accountRegister: UserRegisterDto, _header: any): Promise<unknown> {
     try {
-      const holderAccount = await this._accountService.getAccountByUsername(_accountRegister.username);
+      // Check phone number
+      const isPhoneNumber = await checkUsername(_accountRegister.phoneNumber);
+      if (!isPhoneNumber) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Invalid phone number'),
+          errorCode: 'INVALID_PHONE_NUMBER',
+        });
+      }
+
+      const holderAccount = await this._accountService.getAccountByUsername(_accountRegister.phoneNumber);
       if (holderAccount) {
         throw new ErrorResponse({
-          ...new BadRequestException('Username is exist'),
+          ...new BadRequestException('PhoneNumber is exist'),
           errorCode: 'USERNAME_EXIST',
         });
       }
@@ -44,30 +53,37 @@ export class AuthService {
     try {
       const salt = bcrypt.genSaltSync(10);
       // Hasd Pw asynchronously
-      const hashPwPromise = Promise.all([bcrypt.hash(_accountRegister.password, salt), bcrypt.hash(_accountRegister.passwordSalt, salt)]);
-      const [HashedPw, HashedPwSalt] = await hashPwPromise;
+      const HashedPw = await bcrypt.hash(_accountRegister.password, salt);
+      // console.log('HashedPw:: ', HashedPw);
 
       const newAccount = await this._accountRepository.create({
         ..._accountRegister,
         password: HashedPw,
-        passwordSalt: HashedPwSalt,
         verified: false,
         verificationExpires: new Date(Date.now() + 1000 * 60 * 60 * 24),
         loginAttempts: 0,
         blockExpires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       });
+      // console.log('newAccount:: ', newAccount);
+
       // Generate RSA key pair asynchronously
       const { publicKey, privateKey } = await this._keyTokenService.generateRSAKeyPair();
+      // console.log('publicKey:: ', publicKey, 'privateKey:: ', privateKey);
 
       // create Key Token
       const publicKeyString = await this._keyTokenService.createKeyToken({ accountId: newAccount.id, publicKey });
+      // console.log('publicKeyString:: ', publicKeyString);
 
       // Create token pair
       const tokens = await createTokenPair({ accountId: newAccount.id }, publicKeyString, privateKey);
+      // console.log('tokens:: ', tokens);
 
       // update account with token and publickey
       newAccount.publicKey = publicKeyString.toString();
       newAccount.refreshToken = tokens.refreshToken;
+
+      // console.log('tokens.accessToken:: ', newAccount);
+
       await this._accountRepository.save(newAccount);
 
       return {
