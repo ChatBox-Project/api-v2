@@ -11,9 +11,9 @@ export class AccountService {
     private readonly _accountRepository: AccountRepository,
   ) {}
 
-  async getAccountByUsername(username: string): Promise<AccountEntity> {
+  async getAccountByUsername(phoneNumber: string): Promise<AccountEntity> {
     return await this._accountRepository.findOne({
-      where: { username: ILike(username) },
+      where: { phoneNumber: ILike(phoneNumber) },
     });
   }
 }
