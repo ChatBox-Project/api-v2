@@ -5,10 +5,9 @@ import { ChatBoxEntity } from '../chat-box.entity';
 import { ChatGroupEntity } from '../chat-group.entity';
 import { GroupLeaderPermissionEntity } from '../group-leader-permission.entity';
 
-export interface IUserBaseEntity extends IBaseEntity {
+export interface IUserEntity extends IBaseEntity {
   firstName: string;
   lastName: string;
-  phone: number;
   gender: EGender;
   avatarUrl: string;
   birth: Date;
