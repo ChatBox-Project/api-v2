@@ -1,6 +1,6 @@
 import { GroupLeaderPermissionEntity } from '../group-leader-permission.entity';
 import { MessageEntity } from '../message.entity';
-import { UserBaseEntity } from '../user.base.entity';
+import { UserEntity } from '../user.base.entity';
 import { IBaseEntity } from './base.entity.interface';
 
 export interface IChatGroupEntity extends IBaseEntity {
@@ -9,7 +9,7 @@ export interface IChatGroupEntity extends IBaseEntity {
   groupMembers?: string[];
   groupLeader: string;
 
-  user: UserBaseEntity[];
+  user: UserEntity[];
   groupLeaderPermission: GroupLeaderPermissionEntity;
   message: MessageEntity[];
 }
