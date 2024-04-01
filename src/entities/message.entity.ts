@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { IMessage } from './interfaces/message.entity.interface';
 import { ChatBoxEntity } from './chat-box.entity';
@@ -50,21 +43,4 @@ export class MessageEntity extends BaseEntity implements IMessage {
   @OneToMany(() => ChatGroupEntity, (chat) => chat.message)
   @JoinColumn()
   chatGroup?: ChatGroupEntity;
-
-  constructor(props?: MessageEntity) {
-    super();
-    if (props) {
-      this.messageId = props.messageId;
-      this.senderId = props.senderId;
-      this.messageType = props.messageType;
-      this.contentText = props.contentText;
-      this.contentImage = props.contentImage;
-      this.contentAudio = props.contentAudio;
-      this.contentVideo = props.contentVideo;
-      this.contentFile = props.contentFile;
-      this.chatBox = props.chatBox;
-      this.chatGroup = props.chatGroup;
-    }
-    Object.assign(this, props);
-  }
 }
