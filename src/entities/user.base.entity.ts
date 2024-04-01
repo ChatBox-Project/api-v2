@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne } from 'typeorm';
-import { IUserBaseEntity } from './interfaces/user.base.entity.interface';
+import { IUserEntity } from './interfaces/user.base.entity.interface';
 import { EGender } from 'src/configs';
 import { BaseEntity } from './bases/base.entity';
 import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
@@ -8,8 +8,8 @@ import { ChatBoxEntity } from './chat-box.entity';
 import { ChatGroupEntity } from './chat-group.entity';
 import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
 
-@Entity({ name: 'user_base' })
-export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
+@Entity({ name: 'users' })
+export class UserEntity extends BaseEntity implements IUserEntity {
   @Column({ name: 'first_name', type: 'varchar', length: 255 })
   @IsString()
   firstName: string;
@@ -18,15 +18,10 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
   @IsString()
   lastName: string;
 
-  @Column({ name: 'phone', type: 'integer' })
-  @IsPhoneNumber()
-  @Index('IX_UserBase_PhoneNumber', { unique: true })
-  phone: number;
-
   @Column({ name: 'sex', enum: EGender, default: EGender.other })
   gender: EGender;
 
-  @Column({ name: 'avatar_url', type: 'varchar'})
+  @Column({ name: 'avatar_url', type: 'varchar' })
   @IsString()
   avatarUrl: string;
 
@@ -53,21 +48,4 @@ export class UserBaseEntity extends BaseEntity implements IUserBaseEntity {
   @ManyToOne(() => GroupLeaderPermissionEntity, (gr) => gr.leaderId)
   @JoinColumn()
   groupLeaderPermission?: GroupLeaderPermissionEntity[];
-
-  constructor(props?: UserBaseEntity) {
-    super();
-    if (props) {
-      this.firstName = props.firstName;
-      this.lastName = props.lastName;
-      this.phone = props.phone;
-      this.gender = props.gender;
-      this.avatarUrl = props.avatarUrl;
-      this.birth = props.birth;
-      this.account = props.account;
-      this.chatBox = props.chatBox;
-      this.chatGroup = props.chatGroup;
-      this.groupLeaderPermission = props.groupLeaderPermission;
-    }
-    Object.assign(this, props);
-  }
 }
