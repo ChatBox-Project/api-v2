@@ -11,19 +11,7 @@ export class PermissionEntity extends BaseEntity implements IPermission {
   @IsNotEmpty()
   name: string;
 
-  @OneToOne(
-    () => GroupLeaderPermissionEntity,
-    (gr) => gr.group_leader_permissionId,
-  )
+  @OneToOne(() => GroupLeaderPermissionEntity, (gr) => gr.group_leader_permissionId)
   @JoinColumn()
   groupLeaderPermission: GroupLeaderPermissionEntity[];
-
-  constructor(props?: PermissionEntity) {
-    super();
-    if (props) {
-      this.name = props.name;
-      this.groupLeaderPermission = props.groupLeaderPermission;
-    }
-    Object.assign(this, props);
-  }
 }
