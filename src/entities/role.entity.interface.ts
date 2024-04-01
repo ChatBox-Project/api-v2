@@ -5,6 +5,5 @@ import { AccountEntity } from './account.entity';
 export interface IRole extends IBaseEntity {
   roleId: string;
   roleName: RoleEnum;
-
   account: AccountEntity;
 }
