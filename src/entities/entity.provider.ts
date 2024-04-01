@@ -5,7 +5,7 @@ import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
 import { MessageEntity } from './message.entity';
 import { PermissionEntity } from './permission.entity';
 import { RoleEntity } from './role.entity';
-import { UserBaseEntity } from './user.base.entity';
+import { UserEntity } from './user.base.entity';
 
 export const entities = [
   AccountEntity,
@@ -15,5 +15,5 @@ export const entities = [
   MessageEntity,
   PermissionEntity,
   ChatGroupEntity,
-  UserBaseEntity,
+  UserEntity,
 ];
