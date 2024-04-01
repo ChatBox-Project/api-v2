@@ -1,15 +1,12 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class UserRegisterDto {
-  @MinLength(3)
-  @MaxLength(50)
-  username: string;
+  @IsNotEmpty()
+  @MaxLength(10)
+  @MinLength(10)
+  phoneNumber: string;
 
   @MinLength(8)
   @MaxLength(50)
   password: string;
-
-  @MinLength(8)
-  @MaxLength(50)
-  passwordSalt: string;
 }
