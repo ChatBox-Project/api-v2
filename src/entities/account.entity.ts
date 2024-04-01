@@ -4,21 +4,19 @@ import { IAccountEntity } from './interfaces/account.entity.interface';
 
 import { IsEmail, IsNotEmpty } from 'class-validator';
 import { RoleEntity } from './role.entity';
-import { UserBaseEntity } from './user.base.entity';
+
+import { BaseEntity } from './bases/base.entity';
+import { UserEntity } from './user.base.entity';
 
 @Entity({ name: 'account' })
-export class AccountEntity extends IdEntity implements IAccountEntity {
-  @Index('IX_Account_Username', { unique: true })
-  @Column({ name: 'username', type: 'varchar' })
-  username: string;
+export class AccountEntity extends BaseEntity implements IAccountEntity {
+  @Index('IX_Account_PhoneNumber', { unique: true })
+  @Column({ name: 'phoneNumber', type: 'char', length: 10, unique: true })
+  phoneNumber: string;
 
-  @Column({ name: 'password', type: 'varchar' })
+  @Column({ name: 'password', type: 'varchar', length: 255 })
   @IsNotEmpty()
   password: string;
-
-  @Column({ name: 'password_salt', type: 'varchar' })
-  @IsNotEmpty()
-  passwordSalt?: string;
 
   @Index('IX_Account_RefreshToken', { unique: true })
   @Column({ name: 'refresh_token', type: 'varchar', unique: true, default: '' })
@@ -52,25 +50,7 @@ export class AccountEntity extends IdEntity implements IAccountEntity {
   @JoinColumn()
   role?: RoleEntity;
 
-  @OneToOne(() => UserBaseEntity)
+  @OneToOne(() => UserEntity)
   @JoinColumn()
-  user: UserBaseEntity;
-
-  constructor(props?: AccountEntity) {
-    super();
-    if (props) {
-      this.username = props.username;
-      this.password = props.password;
-      this.passwordSalt = props.passwordSalt;
-
-      this.refreshToken = props.refreshToken;
-      this.verified = props.verified;
-      this.verificationExpires = props.verificationExpires;
-      this.loginAttempts = props.loginAttempts;
-      this.blockExpires = props.blockExpires;
-      this.role = props.role;
-      this.user = props.user;
-    }
-    Object.assign(this, props);
-  }
+  user: UserEntity;
 }
