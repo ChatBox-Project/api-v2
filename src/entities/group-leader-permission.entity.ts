@@ -8,13 +8,13 @@ import { PermissionEntity } from './permission.entity';
 @Entity({ name: 'group-leader-permission' })
 export class GroupLeaderPermissionEntity extends BaseEntity implements IGroupLeaderPermission {
   @Index('IX_GroupLeaderPermission_GroupLeaderPermissionId', { unique: true })
-  @Column({ name: 'group_leader_permission_id', type: 'uuid', length: 255 })
+  @Column({ name: 'group_leader_permission_id', type: 'uuid'})
   @PrimaryGeneratedColumn()
   group_leader_permissionId: string;
 
-  @OneToMany(() => UserEntity, (user) => user.groupLeaderPermission)
-  @JoinColumn()
-  leaderId: UserEntity;
+  // @OneToMany(() => UserEntity, (user) => user.groupLeaderPermission)
+  // @JoinColumn()
+  // leaderId: UserEntity;
 
   @OneToMany(() => ChatGroupEntity, (chatGroup) => chatGroup.groupId)
   @JoinColumn()
