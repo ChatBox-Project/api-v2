@@ -4,7 +4,6 @@ import { EGender } from 'src/configs';
 interface ICreateUserDto {
   firstName: string;
   lastName: string;
-  phone: number;
   gender: EGender;
   avatarUrl: string;
   birth: Date;
@@ -21,10 +20,6 @@ export class CreateUserDto implements ICreateUserDto {
   @MaxLength(50)
   @IsString()
   lastName: string;
-
-  @IsNotEmpty()
-  // @IsPhoneNumber()
-  phone: number;
 
   @IsNotEmpty()
   gender: EGender;

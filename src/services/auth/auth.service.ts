@@ -57,7 +57,7 @@ export class AuthService {
       // Response
       const metadata = { user: holderAccount, token: holderAccount.refreshToken };
 
-      console.log('metadata:: ', metadata);
+      // console.log('metadata:: ', metadata);
       const res = await this._respone.createResponse(200, 'Login success', metadata);
       return res;
     } catch (error) {
