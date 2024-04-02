@@ -11,8 +11,7 @@ export interface IUserEntity extends IBaseEntity {
   gender: EGender;
   avatarUrl: string;
   birth: Date;
-  account: AccountEntity;
-  chatBox?: ChatBoxEntity[];
-  chatGroup?: ChatGroupEntity[];
-  groupLeaderPermission?: GroupLeaderPermissionEntity[];
+  // chatBox?: ChatBoxEntity[];
+  // chatGroup?: ChatGroupEntity[];
+  // groupLeaderPermission?: GroupLeaderPermissionEntity[];
 }
