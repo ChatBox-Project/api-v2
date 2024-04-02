@@ -7,17 +7,17 @@ import { MessageEntity } from './message.entity';
 @Entity({ name: 'chat-box' })
 export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
   @Index('IX_ChatBox_ChatBoxId', { unique: true })
-  @Column({ name: 'chat_box_id', type: 'uuid', length: 255 })
+  @Column({ name: 'chat_box_id', type: 'uuid' })
   @PrimaryGeneratedColumn()
   chatBoxId: string;
 
   @Index('IX_ChatBox_ChatBoxName', { unique: true })
-  @Column({ name: 'chat_box_name', type: 'varchar', length: 255 })
+  @Column({ name: 'chat_box_name', type: 'varchar' })
   chatBoxName: string;
 
-  @OneToMany(() => UserEntity, (user) => user.chatBox)
-  @JoinColumn()
-  user: UserEntity;
+  // @OneToMany(() => UserEntity, (user) => user.chatBox)
+  // @JoinColumn()
+  // user: UserEntity;
 
   @ManyToOne(() => MessageEntity, (mess) => mess.chatBox)
   @JoinColumn()
