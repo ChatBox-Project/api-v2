@@ -11,6 +11,7 @@ import * as crypto from 'crypto';
 import { AccountService } from '../account';
 import { KeyTokenService } from '../key/keyToken.service';
 import { createTokenPair } from 'src/utils/auth.util';
+import { ResponseService } from '../res';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +19,7 @@ export class AuthService {
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
     private readonly _accountService: AccountService,
     private readonly _keyTokenService: KeyTokenService,
+    private readonly _respone: ResponseService,
   ) {}
   public async login() {
     console.log('Login...');
@@ -74,26 +76,18 @@ export class AuthService {
       const publicKeyString = await this._keyTokenService.createKeyToken({ accountId: newAccount.id, publicKey });
       // console.log('publicKeyString:: ', publicKeyString);
 
+      // const publicKeyBuffer = Buffer.from(publicKeyString, 'base64');
+
       // Create token pair
       const tokens = await createTokenPair({ accountId: newAccount.id }, publicKeyString, privateKey);
       // console.log('tokens:: ', tokens);
 
-      // update account with token and publickey
-      newAccount.publicKey = publicKeyString.toString();
-      newAccount.refreshToken = tokens.refreshToken;
-
       // console.log('tokens.accessToken:: ', newAccount);
-
-      await this._accountRepository.save(newAccount);
-
-      return {
-        status: 200,
-        message: 'Register success',
-        metadata: {
-          user: newAccount,
-          token: tokens.accessToken,
-        },
-      };
+      await this._accountRepository.save({ ...newAccount, publicKey: publicKeyString.toString(), refreshToken: tokens.refreshToken });
+      //return response
+      const metadata = { user: newAccount, token: tokens.accessToken };
+      const res = this._respone.createResponse(200, 'Register success', metadata);
+      return res;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
