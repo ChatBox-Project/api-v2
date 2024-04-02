@@ -9,7 +9,7 @@ export interface IChatGroupEntity extends IBaseEntity {
   groupMembers?: string[];
   groupLeader: string;
 
-  user: UserEntity[];
+  // user: UserEntity[];
   groupLeaderPermission: GroupLeaderPermissionEntity;
   message: MessageEntity[];
 }
