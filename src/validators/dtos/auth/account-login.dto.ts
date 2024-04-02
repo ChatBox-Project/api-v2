@@ -1,8 +1,10 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class AccountLoginDto {
   @IsNotEmpty()
-  email: string;
+  @MaxLength(10)
+  @MinLength(10)
+  phoneNumber: string;
 
   @IsNotEmpty()
   password: string;
