@@ -10,18 +10,18 @@ import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity implements IUserEntity {
-  @Column({ name: 'first_name', type: 'varchar', length: 255 })
+  @Column({ name: 'first_name', type: 'varchar', default: '' })
   @IsString()
   firstName: string;
 
-  @Column({ name: 'last_name', type: 'varchar', length: 255 })
+  @Column({ name: 'last_name', type: 'varchar', default: '' })
   @IsString()
   lastName: string;
 
   @Column({ name: 'sex', enum: EGender, default: EGender.other })
   gender: EGender;
 
-  @Column({ name: 'avatar_url', type: 'varchar' })
+  @Column({ name: 'avatar_url', type: 'varchar', default: '' })
   @IsString()
   avatarUrl: string;
 
