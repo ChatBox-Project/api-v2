@@ -8,8 +8,17 @@ import { ChatGateway } from './chat.gateway';
 import { LoggerMiddleware } from './middlewares/app.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { KeyModule, UserModule } from './modules';
+import { OtpModule } from './modules/otp';
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), DatabaseModule, AuthModule, KeyModule, UserModule, TypeOrmModule.forFeature(entities)],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    DatabaseModule,
+    AuthModule,
+    KeyModule,
+    UserModule,
+    OtpModule,
+    TypeOrmModule.forFeature(entities),
+  ],
   controllers: [],
   providers: [ChatGateway],
 })
