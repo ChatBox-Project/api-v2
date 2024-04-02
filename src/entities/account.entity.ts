@@ -23,11 +23,18 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
   @Column({ name: 'refresh_token', type: 'varchar', unique: true, default: '' })
   refreshToken?: string;
 
+  @Index('IX_Account_AccessToken', { unique: true })
+  @Column({ name: 'access_token', type: 'varchar', unique: true, default: '' })
+  accessToken?: string;
   @Column({ name: 'keyToken', type: 'varchar', default: '' })
   keyToken?: string;
 
   @Column({ name: 'verified', type: 'boolean', default: false })
   verified?: boolean;
+
+  @Index('IX_Account_OTP')
+  @Column({ name: 'otp', type: 'char', default: '' })
+  otp?: string;
 
   @Column({
     name: 'verification_expires',
@@ -53,5 +60,5 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
 
   @OneToOne(() => UserEntity)
   @JoinColumn()
-  user: UserEntity;
+  user?: UserEntity;
 }
