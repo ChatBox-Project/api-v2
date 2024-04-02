@@ -6,7 +6,7 @@ import { AuthService, ResponseService, UserService } from 'src/services';
 import { AuthModule } from '../auth';
 
 @Module({
-  imports: [TypeOrmModule.forFeature(entities), AuthModule],
+  imports: [TypeOrmModule.forFeature(entities)],
   controllers: [UserController],
   providers: [UserService, ResponseService],
 })
