@@ -8,32 +8,32 @@ import { IsNotEmpty } from 'class-validator';
 @Entity({ name: 'message' })
 export class MessageEntity extends BaseEntity implements IMessage {
   @Index('IX_Message_MessageId', { unique: true })
-  @Column({ name: 'message_id', type: 'uuid', length: 255 })
+  @Column({ name: 'message_id', type: 'uuid' })
   @IsNotEmpty()
   @PrimaryGeneratedColumn()
   messageId: string;
 
   @Index('IX_Message_Sender_id', { unique: true })
-  @Column({ name: 'sender_id', type: 'varchar', length: 255 })
+  @Column({ name: 'sender_id', type: 'varchar' })
   @IsNotEmpty()
   senderId: string;
 
-  @Column({ name: 'message_type', type: 'varchar', length: 255 })
+  @Column({ name: 'message_type', type: 'varchar' })
   messageType?: string;
 
-  @Column({ name: 'content_text', type: 'varchar', length: 255 })
+  @Column({ name: 'content_text', type: 'varchar' })
   contentText?: string;
 
-  @Column({ name: 'content_image', type: 'varchar', length: 255 })
+  @Column({ name: 'content_image', type: 'varchar' })
   contentImage?: string;
 
-  @Column({ name: 'content_audio', type: 'varchar', length: 255 })
+  @Column({ name: 'content_audio', type: 'varchar' })
   contentAudio?: string;
 
-  @Column({ name: 'content_video', type: 'varchar', length: 255 })
+  @Column({ name: 'content_video', type: 'varchar' })
   contentVideo?: string;
 
-  @Column({ name: 'content_file', type: 'varchar', length: 255 })
+  @Column({ name: 'content_file', type: 'varchar' })
   contentFile?: string;
 
   @OneToMany(() => ChatBoxEntity, (chat) => chat.message)
