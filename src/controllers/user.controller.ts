@@ -8,7 +8,7 @@ export class UserController {
 
   @Post('create')
   public async create(@Body() user: CreateUserDto, @Headers() header: any): Promise<unknown> {
-    const create = await this._userService.create(user, header);
-    return _.omit(user, 'password');
+    // const create = await this._userService.create(user, header);
+    return _.omit(user);
   }
 }
