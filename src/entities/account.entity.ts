@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IdEntity } from './bases/id.entity';
 import { IAccountEntity } from './interfaces/account.entity.interface';
 
@@ -7,6 +7,7 @@ import { RoleEntity } from './role.entity';
 
 import { BaseEntity } from './bases/base.entity';
 import { UserEntity } from './user.base.entity';
+import { UUID } from 'crypto';
 
 @Entity({ name: 'account' })
 export class AccountEntity extends BaseEntity implements IAccountEntity {
