@@ -77,8 +77,6 @@ export class AuthService {
       const publicKeyString = await this._keyTokenService.createKeyToken({ accountId: newAccount.id, publicKey });
       // console.log('publicKeyString:: ', publicKeyString);
 
-      // const publicKeyBuffer = Buffer.from(publicKeyString, 'base64');
-
       // Create token pair
       const tokens = await createTokenPair({ accountId: newAccount.id }, publicKeyString, privateKey);
       // console.log('tokens:: ', tokens);
