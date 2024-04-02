@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/entities/account.entity';
-import { AccountRepository } from 'src/repositories';
+import { AccountRepository, UserRepository } from 'src/repositories';
 import { UserRegisterDto, checkUsername } from 'src/validators';
 
 import { ErrorResponse } from 'src/errors';
@@ -17,6 +17,7 @@ import { ResponseService } from '../res';
 export class AuthService {
   constructor(
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
+    @InjectRepository(UserEntity) private readonly _userRepository: UserRepository,
     private readonly _accountService: AccountService,
     private readonly _keyTokenService: KeyTokenService,
     private readonly _respone: ResponseService,
@@ -82,8 +83,11 @@ export class AuthService {
       const tokens = await createTokenPair({ accountId: newAccount.id }, publicKeyString, privateKey);
       // console.log('tokens:: ', tokens);
 
-      // console.log('tokens.accessToken:: ', newAccount);
-      await this._accountRepository.save({ ...newAccount, publicKey: publicKeyString.toString(), refreshToken: tokens.refreshToken });
+      await this._accountRepository.save({
+        ...newAccount,
+        publicKey: publicKeyString.toString(),
+        refreshToken: tokens.refreshToken,
+      });
       //return response
       const metadata = { user: newAccount, token: tokens.accessToken };
       const res = this._respone.createResponse(200, 'Register success', metadata);
