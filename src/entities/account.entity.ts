@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { IdEntity } from './bases/id.entity';
 import { IAccountEntity } from './interfaces/account.entity.interface';
 
@@ -46,6 +46,9 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
   @Column({ name: 'login_attempts', type: 'integer', default: 0 })
   loginAttempts?: number;
 
+  @Column({ name: 'user_id', type: 'uuid', nullable: true })
+  userId: string;
+
   @Column({
     name: 'block_expires',
     type: 'timestamptz',
@@ -58,7 +61,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
   @JoinColumn()
   role?: RoleEntity;
 
-  @OneToOne(() => UserEntity)
-  @JoinColumn()
-  user?: UserEntity;
+  @ManyToOne(() => UserEntity, (user) => user.accounts)
+  @JoinColumn({ name: 'user_id' }) // Specify the join column explicitly
+  user: UserEntity;
 }
