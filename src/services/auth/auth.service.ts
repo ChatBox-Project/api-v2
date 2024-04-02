@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/entities/account.entity';
 import { AccountRepository, UserRepository } from 'src/repositories';
-import { UserRegisterDto, checkUsername } from 'src/validators';
+import { AccountLoginDto, AccountRegisterDto, checkUsername } from 'src/validators';
 
 import { ErrorResponse } from 'src/errors';
 import { UserEntity } from 'src/entities/user.base.entity';
@@ -22,11 +22,11 @@ export class AuthService {
     private readonly _keyTokenService: KeyTokenService,
     private readonly _respone: ResponseService,
   ) {}
-  public async login() {
-    console.log('Login...');
+  public async login(_accountLogin: AccountLoginDto, _header: any): Promise<unknown> {
+    return {};
   }
 
-  public async register(_accountRegister: UserRegisterDto, _header: any): Promise<unknown> {
+  public async register(_accountRegister: AccountRegisterDto, _header: any): Promise<unknown> {
     try {
       // Check phone number
       const isPhoneNumber = await checkUsername(_accountRegister.phoneNumber);
@@ -52,7 +52,7 @@ export class AuthService {
       });
     }
   }
-  private async createAccount(_accountRegister: UserRegisterDto, isApp: boolean): Promise<unknown> {
+  private async createAccount(_accountRegister: AccountRegisterDto, isApp: boolean): Promise<unknown> {
     try {
       const salt = bcrypt.genSaltSync(10);
       // Hasd Pw asynchronously
