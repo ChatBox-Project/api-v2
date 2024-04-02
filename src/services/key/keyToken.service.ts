@@ -11,7 +11,7 @@ export class KeyTokenService {
   public async createKeyToken({ accountId, publicKey }): Promise<string> {
     try {
       const publicKeyString = publicKey.toString();
-      console.log(publicKey)
+      // console.log(publicKey)
       const tokens = await this._accountRepository.create({
         user: accountId,
         keyToken: publicKeyString,
