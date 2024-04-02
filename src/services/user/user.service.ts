@@ -5,10 +5,9 @@ import { CreateUserDto } from 'src/validators';
 export class UserService {
   constructor() {}
 
-  public async createUser(user: CreateUserDto, header: any) {
+  public async createUser(user: CreateUserDto, header: any)  {
     try {
-      console.log('Create user...');
-
+        
     } catch (error) {
       
     }
