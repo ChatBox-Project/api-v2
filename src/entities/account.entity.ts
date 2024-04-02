@@ -33,13 +33,12 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
   verified?: boolean;
 
   @Index('IX_Account_OTP')
-  @Column({ name: 'otp', type: 'char', default: '' })
+  @Column({ name: 'otp', type: 'char', default: '', length: 6 })
   otp?: string;
 
   @Column({
     name: 'verification_expires',
     type: 'timestamptz',
-    default: () => 'CURRENT_TIMESTAMP',
   })
   verificationExpires?: Date;
 
