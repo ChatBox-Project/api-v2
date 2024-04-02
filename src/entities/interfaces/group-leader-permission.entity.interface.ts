@@ -5,7 +5,7 @@ import { IBaseEntity } from './base.entity.interface';
 
 export interface IGroupLeaderPermission extends IBaseEntity {
   group_leader_permissionId: string;
-  leaderId: UserEntity;
+  // leaderId: UserEntity;
   group: ChatGroupEntity[] | string;
 
   permission: PermissionEntity; // permissionId
