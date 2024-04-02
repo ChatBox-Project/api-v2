@@ -7,8 +7,8 @@ export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @Post('create')
-  public async create(@Body() user: CreateUserDto, @Param() params: any): Promise<unknown> {
-    const create = await this._userService.createUser(user, params);
+  public async create(@Body() _user: CreateUserDto, @Headers() _header: any): Promise<unknown> {
+    const create = await this._userService.createUser(_user, _header);
     return _.omit(create);
   }
 }
