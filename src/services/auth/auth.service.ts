@@ -17,13 +17,55 @@ import { ResponseService } from '../res';
 export class AuthService {
   constructor(
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
-    @InjectRepository(UserEntity) private readonly _userRepository: UserRepository,
     private readonly _accountService: AccountService,
     private readonly _keyTokenService: KeyTokenService,
     private readonly _respone: ResponseService,
   ) {}
-  public async login(_accountLogin: AccountLoginDto, _header: any): Promise<unknown> {
-    return {};
+  public async login(_accountLogin: AccountLoginDto, _headers: any): Promise<unknown> {
+    const isApp = _headers?.isapp === 'true' || _headers?.isapp === true ? true : false;
+
+    try {
+      const holderAccount = await this._accountRepository.findOne({ where: { phoneNumber: _accountLogin.phoneNumber } });
+      if (!holderAccount) {
+        throw new ErrorResponse({
+          ...new BadRequestException('PhoneNumber is not exist'),
+          errorCode: 'PHONENUMBER_NOT_EXIST',
+        });
+      }
+
+      const isMatch = await bcrypt.compare(_accountLogin.password, holderAccount.password);
+
+      if (!isMatch) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Password is not match'),
+          errorCode: 'PASSWORD_NOT_MATCH',
+        });
+      }
+
+      if (!isMatch) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Password is not match'),
+          errorCode: 'PASSWORD_NOT_MATCH',
+        });
+      }
+
+      delete _accountLogin.password;
+
+      // const { publicKey, privateKey } = await this._keyTokenService.generateRSAKeyPair();
+      // console.log('publicKey:: ', publicKey, 'privateKey:: ', privateKey);
+
+      // Response
+      const metadata = { user: holderAccount, token: holderAccount.refreshToken };
+
+      console.log('metadata:: ', metadata);
+      const res = await this._respone.createResponse(200, 'Login success', metadata);
+      return res;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'Login_FAIL',
+      });
+    }
   }
 
   public async register(_accountRegister: AccountRegisterDto, _header: any): Promise<unknown> {
@@ -85,9 +127,10 @@ export class AuthService {
         ...newAccount,
         publicKey: publicKeyString.toString(),
         refreshToken: tokens.refreshToken,
+        accessToken: tokens.accessToken,
       });
       //return response
-      const metadata = { user: newAccount, token: tokens.accessToken };
+      const metadata = { user: newAccount, token: tokens.refreshToken };
       const res = this._respone.createResponse(200, 'Register success', metadata);
       return res;
     } catch (error) {
