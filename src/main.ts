@@ -9,7 +9,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-
+  app.enableCors();
   app.use(passport.initialize());
 
   const port = process.env.PORT || 3333;

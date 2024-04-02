@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Headers } from '@nestjs/common';
+import { Body, Controller, Post, Headers, Param } from '@nestjs/common';
 import { UserService } from 'src/services';
 import { CreateUserDto } from 'src/validators';
 import * as _ from 'underscore';
@@ -7,8 +7,8 @@ export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @Post('create')
-  public async create(@Body() user: CreateUserDto, @Headers() header: any): Promise<unknown> {
-    const create = await this._userService.createUser(user, header);
+  public async create(@Body() user: CreateUserDto, @Param() params: any): Promise<unknown> {
+    const create = await this._userService.createUser(user, params);
     return _.omit(create);
   }
 }
