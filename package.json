@@ -31,7 +31,6 @@
         "@nestjs/typeorm": "^10.0.2",
         "@nestjs/websockets": "^10.3.3",
         "@types/jsonwebtoken": "^9.0.6",
-
         "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
         "class-transformer": "^0.5.1",
@@ -46,6 +45,7 @@
         "rxjs": "^7.8.1",
         "twilio": "^5.0.1",
         "typeorm": "^0.3.20",
+        "underscore": "^1.13.6",
         "validator": "^13.11.0"
     },
     "devDependencies": {
@@ -60,6 +60,7 @@
         "@types/passport-jwt": "^4.0.1",
         "@types/passport-local": "^1.0.38",
         "@types/supertest": "^6.0.0",
+        "@types/underscore": "^1.11.15",
         "@typescript-eslint/eslint-plugin": "^6.0.0",
         "@typescript-eslint/parser": "^6.0.0",
         "eslint": "^8.42.0",
