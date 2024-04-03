@@ -10,7 +10,7 @@ export class OtpController {
   }
 
   // verify
-  @Get('verify')
+  @Post('verify')
   public async verify(@Body() _req: any): Promise<any> {
     return await this._optSerivce.verifyOtp(_req.phoneNumber, _req.otp);
   }
