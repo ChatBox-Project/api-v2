@@ -83,14 +83,17 @@ export class UserService {
         },
       });
 
+
       if (!holderAccount) {
         throw new ErrorResponse({
           ...new BadRequestException('Account not found'),
           errorCode: 'ACCOUNT_NOT_FOUND',
         });
       }
+      const holderUser = await this._userRepository.findOne({where: {id: holderAccount.userId}});
+      
 
-      const metadata = { user: holderAccount };
+      const metadata = { user: holderUser };
       return this._response.createResponse(200, 'success', metadata);
 
       return {};
