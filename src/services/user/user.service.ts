@@ -83,7 +83,15 @@ export class UserService {
         },
       });
 
-      console.log('holderAccount:: ', holderAccount);
+      if (!holderAccount) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Account not found'),
+          errorCode: 'ACCOUNT_NOT_FOUND',
+        });
+      }
+
+      const metadata = { user: holderAccount };
+      return this._response.createResponse(200, 'success', metadata);
 
       return {};
     } catch (error) {
