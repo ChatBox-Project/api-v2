@@ -63,4 +63,34 @@ export class UserService {
       });
     }
   }
+
+  // get
+
+  public async getAccount(header: any): Promise<unknown> {
+    try {
+      // check token
+      if (!header.token) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Invalid token'),
+          errorCode: 'INVALID_TOKEN',
+        });
+      }
+      // found account
+
+      const holderAccount = await this._accountRepository.findOne({
+        where: {
+          accessToken: header.token,
+        },
+      });
+
+      console.log('holderAccount:: ', holderAccount);
+
+      return {};
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'USER_NOT_FOUND',
+      });
+    }
+  }
 }

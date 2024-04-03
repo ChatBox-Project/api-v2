@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors, Headers } from '@nestjs/common';
+import { Body, Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors, Headers, Get } from '@nestjs/common';
 import { UserService } from 'src/services';
 import { CreateUserDto } from 'src/validators';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -28,4 +28,10 @@ export class UserController {
   //     mimetype: file.mimetype,
   //   });
   // }
+
+  @Get('getAccount')
+  public async getAccount(@Headers() _header: any): Promise<unknown> {
+    const account = await this._userService.getAccount(_header);
+    return _.omit(account);
+  }
 }
