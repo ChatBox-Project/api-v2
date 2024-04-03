@@ -55,7 +55,7 @@ export class AuthService {
       // console.log('publicKey:: ', publicKey, 'privateKey:: ', privateKey);
 
       // Response
-      const metadata = { user: holderAccount, token: holderAccount.refreshToken };
+      const metadata = { user: holderAccount, token: holderAccount.accessToken };
 
       // console.log('metadata:: ', metadata);
       const res = await this._respone.createResponse(200, 'Login success', metadata);
