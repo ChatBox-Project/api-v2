@@ -1,13 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/entities/account.entity';
-import { AccountRepository, UserRepository } from 'src/repositories';
+import { AccountRepository } from 'src/repositories';
 import { AccountLoginDto, AccountRegisterDto, checkUsername } from 'src/validators';
 
 import { ErrorResponse } from 'src/errors';
-import { UserEntity } from 'src/entities/user.base.entity';
 import * as bcrypt from 'bcrypt';
-import * as crypto from 'crypto';
 import { AccountService } from '../account';
 import { KeyTokenService } from '../key/keyToken.service';
 import { createTokenPair } from 'src/utils/auth.util';
