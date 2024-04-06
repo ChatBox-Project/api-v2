@@ -54,7 +54,7 @@ export class AccountService {
       const hashedPassword = await bcrypt.hash(pw.pw, salt);
       // change password
       const updatePw = await this._accountRepository.update(holder.id, { password: hashedPassword });
-      console.log(updatePw);
+      // console.log(updatePw);
       if (!updatePw) {
         throw new ErrorResponse({
           ...new BadRequestException('Change password fail'),
@@ -71,11 +71,32 @@ export class AccountService {
         errorCode: 'ChangePW_FAIL',
       });
     }
-
-    return;
   }
 
-  public async forgotPassword(phoneNumber: ForgotPwDto): Promise<unknown> {
+  public async forgotPassword(phoneNumber: ForgotPwDto, pw: changePwDto): Promise<unknown> {
+    try {
+      const holder = await this._accountRepository.findOne({ where: { phoneNumber: phoneNumber.phoneNumber } });
+      if (!holder) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Phone number is not exists'),
+          errorCode: 'PHONE_NUMBER_NOT_EXIST',
+        });
+      }
+      const changePw = await this.changePassword({ token: holder.accessToken }, pw);
+      if (!changePw) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Change password fail'),
+          errorCode: 'CHANGE_FORGOT_PW_FAIL',
+        });
+      }
+      console.log(changePw);
+      return changePw;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'CHANGE_FORGOT_PW_FAIL',
+      });
+    }
     return;
   }
 }
