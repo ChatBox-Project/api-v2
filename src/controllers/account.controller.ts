@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Headers, Put } from '@nestjs/common';
+import { Body, Controller, Post, Headers, Put, Param } from '@nestjs/common';
 import { AccountService } from 'src/services';
 import { changePwDto, ForgotPwDto } from 'src/validators';
 import _ from 'underscore';
@@ -13,8 +13,8 @@ export class AccountController {
   }
 
   @Put('forgotpw')
-  public async forgotPassword(@Body() phoneNumber: ForgotPwDto): Promise<unknown> {
-    const forgotPw = await this._accountSerivce.forgotPassword(phoneNumber);
+  public async forgotPassword(@Param() phoneNumber: ForgotPwDto, @Body() pw: changePwDto): Promise<unknown> {
+    const forgotPw = await this._accountSerivce.forgotPassword(phoneNumber, pw);
     return _.omit(forgotPw, 'password');
   }
 }
