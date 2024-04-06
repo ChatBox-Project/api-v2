@@ -14,13 +14,14 @@ export class UserController {
     return _.omit(create);
   }
   @Get('get')
-  public async getAccount(@Headers() _header: any): Promise<unknown> {
-    const account = await this._userService.getAccount(_header);
+  public async getUser(@Headers() _header: any): Promise<unknown> {
+    const account = await this._userService.getUser(_header);
     return _.omit(account);
   }
 
   @Put('update')
   public async updateAccount(@Body() _user: CreateUserDto, @Headers() _header: any): Promise<unknown> {
-    return;
+    const update = await this._userService.updateUser(_user, _header);
+    return _.omit(update);
   }
 }
