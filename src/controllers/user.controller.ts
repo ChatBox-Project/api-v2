@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors, Headers, Get } from '@nestjs/common';
+import { Body, Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors, Headers, Get, Put } from '@nestjs/common';
 import { UserService } from 'src/services';
 import { CreateUserDto } from 'src/validators';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -13,25 +13,14 @@ export class UserController {
     const create = await this._userService.createUser(_user, _header);
     return _.omit(create);
   }
-  // @Post('avatar')
-  // @UseInterceptors(
-  //   FileInterceptor('file', {
-  //     storage: diskStorage({
-  //       destination: './uploadedFiles/avatars',
-  //     }),
-  //   }),
-  // )
-  // // async addAvatar(@Req() request: RequestWithUser, @UploadedFile() file: Express.Multer.File) {
-  //   return this.usersService.addAvatar(request.user.id, {
-  //     path: file.path,
-  //     filename: file.originalname,
-  //     mimetype: file.mimetype,
-  //   });
-  // }
-
-  @Get('getAccount')
+  @Get('get')
   public async getAccount(@Headers() _header: any): Promise<unknown> {
     const account = await this._userService.getAccount(_header);
     return _.omit(account);
+  }
+
+  @Put('update')
+  public async updateAccount(@Body() _user: CreateUserDto, @Headers() _header: any): Promise<unknown> {
+    return;
   }
 }
