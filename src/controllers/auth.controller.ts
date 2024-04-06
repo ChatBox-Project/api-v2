@@ -9,11 +9,11 @@ import _ from 'underscore';
 export class AuthController {
   constructor(private readonly _authService: AuthService) {}
 
-  @Post('login')
-  public async login(@Body() _req: AccountLoginDto, @Headers() _headers: any) {
-    const login = await this._authService.login(_req, _headers);
-    return _.omit(login, 'password');
-  }
+    @Post('login')
+    public async login(@Body() _req: AccountLoginDto, @Headers() _headers: any) {
+      const login = await this._authService.login(_req, _headers);
+      return _.omit(login, 'password');
+    }
   @UsePipes(new JoiValidationPipe(RegisterSchema))
   @Post('register')
   public async register(@Body() _userRegister: AccountRegisterDto, @Headers() _headers: any): Promise<unknown> {
