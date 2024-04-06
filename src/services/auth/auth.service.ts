@@ -128,7 +128,7 @@ export class AuthService {
         accessToken: tokens.accessToken,
       });
       //return response
-      const metadata = { user: newAccount, token: tokens.accessToken };
+      const metadata = { token: tokens.accessToken };
       const res = this._respone.createResponse(200, 'Register success', metadata);
       return res;
     } catch (error) {
