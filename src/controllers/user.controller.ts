@@ -1,8 +1,6 @@
-import { Body, Controller, Post, Req, UploadedFile, UseGuards, UseInterceptors, Headers, Get, Put } from '@nestjs/common';
+import { Body, Controller, Post, Headers, Get, Put } from '@nestjs/common';
 import { UserService } from 'src/services';
 import { CreateUserDto } from 'src/validators';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import * as _ from 'underscore';
 @Controller('users')
 export class UserController {
