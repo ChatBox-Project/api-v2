@@ -4,9 +4,11 @@ import { entities } from 'src/entities/entity.provider';
 import { AuthModule } from '../auth';
 import { AccountController } from 'src/controllers/account.controller';
 import { KeyModule } from '../keys';
+import { AccountService, ResponseService } from 'src/services';
 
 @Module({
   imports: [TypeOrmModule.forFeature(entities), AuthModule, KeyModule],
   controllers: [AccountController],
+  providers: [AccountService, ResponseService],
 })
 export class AccountModule {}
