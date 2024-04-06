@@ -66,7 +66,7 @@ export class UserService {
 
   // get
 
-  public async getAccount(header: any): Promise<unknown> {
+  public async getUser(header: any): Promise<unknown> {
     try {
       // check token
       if (!header.token) {
@@ -83,6 +83,35 @@ export class UserService {
         },
       });
 
+      if (!holderAccount) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Account not found'),
+          errorCode: 'ACCOUNT_NOT_FOUND',
+        });
+      }
+      const holderUser = await this._userRepository.findOne({ where: { id: holderAccount.userId } });
+
+      const metadata = { user: holderUser };
+      return this._response.createResponse(200, 'success', metadata);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'USER_NOT_FOUND',
+      });
+    }
+  }
+
+  public async updateUser(_userDto: CreateUserDto, _header: any): Promise<unknown> {
+    try {
+      // check token
+      if (!_header.token) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Invalid token'),
+          errorCode: 'INVALID_TOKEN',
+        });
+      }
+      // find account
+      const holderAccount = await this._accountRepository.findOne({ where: { accessToken: _header.token } });
 
       if (!holderAccount) {
         throw new ErrorResponse({
@@ -90,17 +119,31 @@ export class UserService {
           errorCode: 'ACCOUNT_NOT_FOUND',
         });
       }
-      const holderUser = await this._userRepository.findOne({where: {id: holderAccount.userId}});
-      
 
-      const metadata = { user: holderUser };
-      return this._response.createResponse(200, 'success', metadata);
-
-      return {};
+      // find user
+      const holderUser = await this._userRepository.findOne({ where: { id: holderAccount.userId } });
+      if (!holderUser) {
+        throw new ErrorResponse({
+          ...new BadRequestException('User not found'),
+          errorCode: 'USER_NOT_FOUND',
+        });
+      }
+      // update user
+      const updatedUser = await this._userRepository.update(holderUser.id, _userDto);
+      //check updated user
+      if (!updatedUser) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Update failed'),
+          errorCode: 'UPDATE_FAILED',
+        });
+      }
+      const metadata = { user: updatedUser };
+      const res = this._response.createResponse(200, 'success', metadata);
+      return res;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
-        errorCode: 'USER_NOT_FOUND',
+        errorCode: 'UPDATE_FAILED',
       });
     }
   }
