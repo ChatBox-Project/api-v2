@@ -26,6 +26,10 @@ import * as Joi from 'joi';
         password: configService.getOrThrow('DATABASE_PASSWORD'),
         autoLoadEntities: true,
         synchronize: configService.getOrThrow('DATABASE_SYNCHRONIZE'),
+        // migrations: configService.getOrThrow('DATABASE_MIGRATIONS'),
+        cli: {
+          migrationsDir: 'src/migrations',
+        },
       }),
       inject: [ConfigService],
     }),
