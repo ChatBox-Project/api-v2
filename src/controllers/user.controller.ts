@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Headers, Get, Patch, Put } from '@nestjs/common';
+import { Body, Controller, Post, Headers, Get, Patch, Put, Param } from '@nestjs/common';
 import { UserService } from 'src/services';
 import { CreateUserDto, UpdateUserDto } from 'src/validators';
 import * as _ from 'underscore';
@@ -21,9 +21,9 @@ export class UserController {
     const update = await this._userService.updateUser(_userUpdate, _header);
     return _.omit(update);
   }
-  @Put('friends')
-  public async addFriend(@Headers() _header: any, @Body() friendId: string): Promise<unknown> {
-    const addFriend = await this._userService.addFriend(_header.token, friendId);
-    return _.omit(addFriend);
-  }
+  // @Put('friends/:id')
+  // public async addFriend(@Headers() _header: any, @Param('id') friendId: string): Promise<unknown> {
+  //   const addFriend = await this._userService.addFriend(_header.token, friendId);
+  //   return _.omit(addFriend);
+  // }
 }
