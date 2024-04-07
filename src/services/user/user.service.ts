@@ -6,6 +6,8 @@ import { AccountRepository, UserRepository } from 'src/repositories';
 import { CreateUserDto, UpdateUserDto } from 'src/validators';
 import { ResponseService } from '../res';
 import { UserEntity } from 'src/entities/user.base.entity';
+import { Brackets } from 'typeorm';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -144,63 +146,66 @@ export class UserService {
     }
   }
   // add friend
-  public async addFriend(token: string, friendId: string): Promise<unknown> {
-    try {
-      // check token
-      if (!token) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Invalid token'),
-          errorCode: 'INVALID_TOKEN',
-        });
-      }
+  // public async addFriend(token: string, friendId: string): Promise<unknown> {
+  //   try {
+  //     // check token
+  //     if (!token) {
+  //       throw new ErrorResponse({
+  //         ...new BadRequestException('Invalid token'),
+  //         errorCode: 'INVALID_TOKEN',
+  //       });
+  //     }
+  //     // check friendId
+  //     if (!isUUID(friendId)) {
+  //       throw new Error('Invalid friendId');
+  //     }
 
-      // find account
-      const holderAccount = await this._accountRepository.findOne({ where: { accessToken: token } });
-      // console.log('holderAccount:: ', holderAccount)
-      if (!holderAccount) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Account not found'),
-          errorCode: 'ACCOUNT_NOT_FOUND',
-        });
-      }
+  //     // find account
+  //     const holderAccount = await this._accountRepository.findOne({ where: { accessToken: token } });
+  //     // console.log('holderAccount:: ', holderAccount)
+  //     if (!holderAccount) {
+  //       throw new ErrorResponse({
+  //         ...new BadRequestException('Account not found'),
+  //         errorCode: 'ACCOUNT_NOT_FOUND',
+  //       });
+  //     }
+  //     // console.log('holderAccount:: ', holderAccount)
+  //     // console.log('friendId:: ', friendId)
 
-      // find user
-      const holderUser = await this._userRepository.findOne({ where: { id: holderAccount.userId } });
-      if (!holderUser) {
-        throw new ErrorResponse({
-          ...new BadRequestException('User not found'),
-          errorCode: 'USER_NOT_FOUND',
-        });
-      }
+  //     // find user
+  //     const holderUser = await this._userRepository.findOne({ where: { id: holderAccount.userId } });
+  //     // console.log('holderUser:: ', holderUser)
 
-      // find friend
-      const friend = await this._userRepository.findOne({ where: { id: friendId } });
-      if (!friend) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Friend not found'),
-          errorCode: 'FRIEND_NOT_FOUND',
-        });
-      }
+  //     if (!holderUser) {
+  //       throw new ErrorResponse({
+  //         ...new BadRequestException('User not found'),
+  //         errorCode: 'USER_NOT_FOUND',
+  //       });
+  //     }
 
-      // add friend
-      // const addedFriend = await this._userRepository.update(holderUser.id, { listFriend: {} });
-      // if (!addedFriend) {
-      //   throw new ErrorResponse({
-      //     ...new BadRequestException('Add friend failed'),
-      //     errorCode: 'ADD_FRIEND_FAILED',
-      //   });
-      // }
+  //     // check friend
+      
+  //     // console.log('friendUser:: ', friendUser);
 
-      // const metadata = { user: addedFriend };
-      // const res = this._response.createResponse(200, 'Add friend success', metadata);
-      // return res;
+  //     // add friend
 
-      return;
-    } catch (error) {
-      throw new ErrorResponse({
-        ...new BadRequestException(error.message),
-        errorCode: 'ADD_FRIEND_FAILED',
-      });
-    }
-  }
+  //     if (!friendUser) {
+  //       throw new ErrorResponse({
+  //         ...new BadRequestException('Add friend failed'),
+  //         errorCode: 'ADD_FRIEND_FAILED',
+  //       });
+  //     }
+
+  //     // const metadata = { user: addedFriend };
+  //     // const res = this._response.createResponse(200, 'Add friend success', metadata);
+  //     // return res;
+
+  //     return;
+  //   } catch (error) {
+  //     throw new ErrorResponse({
+  //       ...new BadRequestException(error.message),
+  //       errorCode: 'ADD_FRIEND_FAILED',
+  //     });
+  //   }
+  // }
 }
