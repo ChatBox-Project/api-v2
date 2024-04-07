@@ -131,8 +131,6 @@ export class UserService {
           errorCode: 'USER_NOT_FOUND',
         });
       }
-      // console.log('holderUser:: ', holderUser);
-      // console.log('holderUser:: ', _userDto);
       // update user
       const updatedUser = await this._userRepository.update(holderUser.id, { ..._userDto });
 
