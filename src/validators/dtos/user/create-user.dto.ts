@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsPhoneNumber, IsString, IsUrl, MaxLength, MinLength } from 'class-validator';
 import { EGender } from 'src/configs';
 
@@ -12,8 +13,10 @@ export class CreateUserDto implements ICreateUserDto {
   @MinLength(5)
   @MaxLength(50)
   @IsString()
+  @ApiProperty()
   name: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   gender: EGender;
 
@@ -21,9 +24,11 @@ export class CreateUserDto implements ICreateUserDto {
   @MinLength(5)
   @MaxLength(255)
   @IsUrl()
+  @ApiProperty()
   avatarUrl: string;
 
   @IsNotEmpty()
+  @ApiProperty()
   // @IsDate()
   birth: Date;
 }
