@@ -131,22 +131,22 @@ export class UserService {
           errorCode: 'USER_NOT_FOUND',
         });
       }
-      console.log('holderUser:: ', holderUser);
+      // console.log('holderUser:: ', holderUser);
       // console.log('holderUser:: ', _userDto);
       // update user
-      // const updatedUser = await this._userRepository.update(holderUser.id, { ..._userDto });
-      // console.log('updatedUser:: ', updatedUser)
+      const updatedUser = await this._userRepository.update(holderUser.id, { ..._userDto });
+
       //check updated user
-      // if (!updatedUser) {
-      //   throw new ErrorResponse({
-      //     ...new BadRequestException('Update failed'),
-      //     errorCode: 'UPDATE_FAILED',
-      //   });
-      // }
-      // const metadata = { user: updatedUser };
-      // const res = this._response.createResponse(200, 'success', metadata);
-      // return res;
-      return;
+      if (!updatedUser) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Update failed'),
+          errorCode: 'UPDATE_FAILED',
+        });
+      }
+
+      const metadata = { user: updatedUser };
+      const res = this._response.createResponse(200, 'success', metadata);
+      return res;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
