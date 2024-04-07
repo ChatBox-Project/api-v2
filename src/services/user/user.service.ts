@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/entities/account.entity';
 import { ErrorResponse } from 'src/errors';
 import { AccountRepository, UserRepository } from 'src/repositories';
-import { CreateUserDto } from 'src/validators';
+import { CreateUserDto, UpdateUserDto } from 'src/validators';
 import { ResponseService } from '../res';
 import { UserEntity } from 'src/entities/user.base.entity';
 
@@ -15,7 +15,7 @@ export class UserService {
     private readonly _response: ResponseService,
   ) {}
 
-  public async createUser(_userDto: CreateUserDto, _header: any) {
+  public async createUser(_userDto: CreateUserDto, _header: any): Promise<unknown> {
     try {
       // check token
       // console.log('params:: ', _header);
@@ -37,11 +37,12 @@ export class UserService {
       }
 
       const existingUser = await this._userRepository.findOne({ where: { id: foundAccount.userId } });
-      console.log('existingUser:: ', existingUser);
+      // console.log('existingUser:: ', existingUser);
 
       if (existingUser) {
         // Update existing user
         await this._userRepository.update(existingUser.id, _userDto);
+        return this._response.createResponse(200, 'Update user success');
       } else {
         // Create a new user
         const newUser = await this._userRepository.create({ ..._userDto });
@@ -52,10 +53,11 @@ export class UserService {
       }
 
       const updatedAccount = await this._accountRepository.findOne({ where: { accessToken: _header.token } });
-      console.log('updatedAccount:: ', updatedAccount);
+      // console.log('updatedAccount:: ', updatedAccount);
 
       const metadata = { user: updatedAccount };
-      console.log('metadata:: ', metadata);
+      const res = this._response.createResponse(200, 'update success', metadata);
+      return res;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
@@ -101,8 +103,9 @@ export class UserService {
     }
   }
 
-  public async updateUser(_userDto: CreateUserDto, _header: any): Promise<unknown> {
+  public async updateUser(_userDto: UpdateUserDto, _header: any): Promise<unknown> {
     try {
+      // console.log('userDto:: ', _header);
       // check token
       if (!_header.token) {
         throw new ErrorResponse({
@@ -112,7 +115,7 @@ export class UserService {
       }
       // find account
       const holderAccount = await this._accountRepository.findOne({ where: { accessToken: _header.token } });
-
+      // console.log('holderAccount:: ', holderAccount)
       if (!holderAccount) {
         throw new ErrorResponse({
           ...new BadRequestException('Account not found'),
@@ -128,18 +131,22 @@ export class UserService {
           errorCode: 'USER_NOT_FOUND',
         });
       }
+      console.log('holderUser:: ', holderUser);
+      // console.log('holderUser:: ', _userDto);
       // update user
-      const updatedUser = await this._userRepository.update(holderUser.id, _userDto);
+      // const updatedUser = await this._userRepository.update(holderUser.id, { ..._userDto });
+      // console.log('updatedUser:: ', updatedUser)
       //check updated user
-      if (!updatedUser) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Update failed'),
-          errorCode: 'UPDATE_FAILED',
-        });
-      }
-      const metadata = { user: updatedUser };
-      const res = this._response.createResponse(200, 'success', metadata);
-      return res;
+      // if (!updatedUser) {
+      //   throw new ErrorResponse({
+      //     ...new BadRequestException('Update failed'),
+      //     errorCode: 'UPDATE_FAILED',
+      //   });
+      // }
+      // const metadata = { user: updatedUser };
+      // const res = this._response.createResponse(200, 'success', metadata);
+      // return res;
+      return;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
