@@ -48,7 +48,6 @@ export class OtpService {
   public async verifyOtp(phoneNumber: string, otp: string): Promise<unknown> {
     try {
       const account = await this._accountRepository.findOne({ where: { phoneNumber: phoneNumber } });
-
       if (!account) {
         throw new ErrorResponse({
           ...new BadRequestException('PhoneNumber is not exist'),
@@ -72,9 +71,15 @@ export class OtpService {
 
       const result = await this._accountRepository.update(account.id, { verified: true });
       // res
+      if (!result) {
+        throw new ErrorResponse({
+          ...new BadRequestException('OTP is incorrect'),
+          errorCode: 'OTP_INCORRECT',
+        });
+      }
 
-      const metadata = { result };
-      const res = this._respone.createResponse(200, 'OTP verified', metadata);
+      const metatdata = { message: 'Verify successfully', verify: true };
+      const res = await this._respone.createResponse(200, 'OK', metatdata);
       return res;
     } catch (error) {
       throw new ErrorResponse({
