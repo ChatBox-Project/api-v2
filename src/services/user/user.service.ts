@@ -68,10 +68,10 @@ export class UserService {
 
   // get
 
-  public async getUser(header: any): Promise<unknown> {
+  public async getUser(token: string): Promise<unknown> {
     try {
       // check token
-      if (!header.token) {
+      if (!token) {
         throw new ErrorResponse({
           ...new BadRequestException('Invalid token'),
           errorCode: 'INVALID_TOKEN',
@@ -81,10 +81,10 @@ export class UserService {
 
       const holderAccount = await this._accountRepository.findOne({
         where: {
-          accessToken: header.token,
+          accessToken: token,
         },
       });
-
+      console.log('holderAccount:: ', holderAccount);
       if (!holderAccount) {
         throw new ErrorResponse({
           ...new BadRequestException('Account not found'),
