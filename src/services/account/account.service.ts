@@ -6,7 +6,7 @@ import { AccountRepository } from 'src/repositories';
 import { ILike } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ResponseService } from '../res';
-import { changePwDto, ForgotPwDto } from 'src/validators';
+import { ChangePwDto, ForgotPwDto } from 'src/validators';
 
 @Injectable()
 export class AccountService {
@@ -22,10 +22,10 @@ export class AccountService {
     });
   }
 
-  public async changePassword(_headers: any, pw: changePwDto): Promise<unknown> {
+  public async changePassword(token: string, pw: ChangePwDto): Promise<unknown> {
     try {
       // check token
-      if (!_headers?.token) {
+      if (!token) {
         throw new ErrorResponse({
           ...new BadRequestException('Token is not exists'),
           errorCode: 'TOKEN_NOT_EXIST',
@@ -33,7 +33,7 @@ export class AccountService {
       }
 
       //find account
-      const holder = await this._accountRepository.findOne({ where: { accessToken: _headers.token } });
+      const holder = await this._accountRepository.findOne({ where: { accessToken: token } });
 
       if (!holder) {
         throw new ErrorResponse({
@@ -74,7 +74,33 @@ export class AccountService {
     }
   }
 
-  public async forgotPassword(phoneNumber: string, pw: string): Promise<unknown> {
-    return;
+  public async forgotPassword(phoneNumber: ForgotPwDto, pw: ChangePwDto): Promise<unknown> {
+    try {
+      // find account
+      const holderAccount = await this._accountRepository.findOne({ where: { phoneNumber: phoneNumber.phone } });
+      console.log(holderAccount);
+
+      if (!holderAccount) {
+        throw new ErrorResponse({
+          ...new BadRequestException('PhoneNumber is not exist'),
+          errorCode: 'PHONENUMBER_NOT_EXIST',
+        });
+      }
+      // change password
+      const changePw = await this.changePassword(holderAccount.accessToken, pw);
+      console.log(changePw)
+      if (!changePw) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Change password fail'),
+          errorCode: 'ChangePW_FAIL',
+        });
+      }
+      return changePw;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'UPDATE_PW_FAIL',
+      });
+    }
   }
 }
