@@ -22,6 +22,35 @@ export class AccountService {
     });
   }
 
+  public async getAccount(token: string): Promise<unknown> {
+    try {
+      // check token
+      if (!token) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Invalid token'),
+          errorCode: 'INVALID_TOKEN',
+        });
+      }
+
+      // found account
+      const holderAccount = await this._accountRepository.findOne({ where: { accessToken: token } });
+      // console.log('holderAccount:: ', holderAccount)
+      if (!holderAccount) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Account not found'),
+          errorCode: 'ACCOUNT_NOT_FOUND',
+        });
+      }
+
+      const metadata = { account: holderAccount };
+      return this._response.createResponse(200, 'success', metadata);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'UPDATE_PW_FAIL',
+      });
+    }
+  }
   public async changePassword(token: string, pw: ChangePwDto): Promise<unknown> {
     try {
       // check token
@@ -88,7 +117,7 @@ export class AccountService {
       }
       // change password
       const changePw = await this.changePassword(holderAccount.accessToken, pw);
-      console.log(changePw)
+      console.log(changePw);
       if (!changePw) {
         throw new ErrorResponse({
           ...new BadRequestException('Change password fail'),
