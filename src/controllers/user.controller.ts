@@ -1,6 +1,6 @@
-import { Body, Controller, Post, Headers, Get, Put } from '@nestjs/common';
+import { Body, Controller, Post, Headers, Get, Patch } from '@nestjs/common';
 import { UserService } from 'src/services';
-import { CreateUserDto } from 'src/validators';
+import { CreateUserDto, UpdateUserDto } from 'src/validators';
 import * as _ from 'underscore';
 @Controller('users')
 export class UserController {
@@ -16,10 +16,9 @@ export class UserController {
     const account = await this._userService.getUser(_header);
     return _.omit(account);
   }
-
-  @Put('update')
-  public async updateAccount(@Body() _user: CreateUserDto, @Headers() _header: any): Promise<unknown> {
-    const update = await this._userService.updateUser(_user, _header);
+  @Patch('update')
+  public async updateUser(@Body() _userUpdate: any, @Headers() _header: any): Promise<unknown> {
+    const update = await this._userService.updateUser(_userUpdate, _header);
     return _.omit(update);
   }
 }
