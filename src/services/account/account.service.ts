@@ -49,6 +49,7 @@ export class AccountService {
           errorCode: 'PASSWORD_IS_MATCH',
         });
       }
+
       // hash password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(pw.pw, salt);
@@ -82,6 +83,7 @@ export class AccountService {
           errorCode: 'PHONE_NUMBER_NOT_EXIST',
         });
       }
+
       const changePw = await this.changePassword({ token: holder.accessToken }, pw);
       if (!changePw) {
         throw new ErrorResponse({
@@ -89,7 +91,7 @@ export class AccountService {
           errorCode: 'CHANGE_FORGOT_PW_FAIL',
         });
       }
-      console.log(changePw);
+      // console.log(changePw);
       return changePw;
     } catch (error) {
       throw new ErrorResponse({
