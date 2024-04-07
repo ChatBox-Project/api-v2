@@ -2,8 +2,7 @@ import { IsDate, IsNotEmpty, IsPhoneNumber, IsString, IsUrl, MaxLength, MinLengt
 import { EGender } from 'src/configs';
 
 interface ICreateUserDto {
-  firstName: string;
-  lastName: string;
+  name: string;
   gender: EGender;
   avatarUrl: string;
   birth: Date;
@@ -13,13 +12,7 @@ export class CreateUserDto implements ICreateUserDto {
   @MinLength(5)
   @MaxLength(50)
   @IsString()
-  firstName: string;
-
-  @IsNotEmpty()
-  @MinLength(5)
-  @MaxLength(50)
-  @IsString()
-  lastName: string;
+  name: string;
 
   @IsNotEmpty()
   gender: EGender;
@@ -27,7 +20,7 @@ export class CreateUserDto implements ICreateUserDto {
   @IsNotEmpty()
   @MinLength(5)
   @MaxLength(255)
-  // @IsUrl()
+  @IsUrl()
   avatarUrl: string;
 
   @IsNotEmpty()
