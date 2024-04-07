@@ -7,7 +7,7 @@ import { AccountEntity } from './account.entity';
 import { ChatBoxEntity } from './chat-box.entity';
 import { ChatGroupEntity } from './chat-group.entity';
 import { GroupLeaderPermissionEntity } from './group-leader-permission.entity';
-
+import { IListFriend } from './interfaces';
 @Entity({ name: 'users' })
 export class UserEntity extends BaseEntity implements IUserEntity {
   @Index('IX_USER_ID', { unique: true })
@@ -28,6 +28,10 @@ export class UserEntity extends BaseEntity implements IUserEntity {
 
   @Column({ name: 'birth', type: 'date', default: new Date() })
   birth: Date;
+
+  @Index('IX_USER_FRIEND')
+  @Column('jsonb', { array: true, default: [] })
+  listFriend: IListFriend[];
 
   @OneToMany(() => AccountEntity, (account) => account.user)
   accounts: AccountEntity[];
