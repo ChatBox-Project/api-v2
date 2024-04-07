@@ -15,13 +15,9 @@ export class UserEntity extends BaseEntity implements IUserEntity {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ name: 'first_name', type: 'varchar', default: '' })
+  @Column({ name: 'name', type: 'varchar', default: '' })
   @IsString()
-  firstName: string;
-
-  @Column({ name: 'last_name', type: 'varchar', default: '' })
-  @IsString()
-  lastName: string;
+  name: string;
 
   @Column({ name: 'sex', enum: EGender, default: EGender.other })
   gender: EGender;
