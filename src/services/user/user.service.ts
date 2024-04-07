@@ -59,8 +59,6 @@ export class UserService {
     }
   }
 
-  // get
-
   public async getUser(token: string): Promise<unknown> {
     try {
       // check token
