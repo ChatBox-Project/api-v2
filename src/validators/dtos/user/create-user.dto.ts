@@ -20,7 +20,7 @@ export class CreateUserDto implements ICreateUserDto {
   @IsNotEmpty()
   gender: EGender;
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   @MinLength(5)
   @MaxLength(255)
   @IsUrl()
