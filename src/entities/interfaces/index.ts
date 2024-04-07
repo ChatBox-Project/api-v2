@@ -8,3 +8,4 @@ export * from './permission.entity.interface';
 export * from '../role.entity.interface';
 export * from './user.base.entity.interface';
 export * from './otp.entity.interface';
+export * from './listFriend.interface';
