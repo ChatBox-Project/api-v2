@@ -74,31 +74,7 @@ export class AccountService {
     }
   }
 
-  public async forgotPassword(phoneNumber: ForgotPwDto, pw: changePwDto): Promise<unknown> {
-    try {
-      const holder = await this._accountRepository.findOne({ where: { phoneNumber: phoneNumber.phoneNumber } });
-      if (!holder) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Phone number is not exists'),
-          errorCode: 'PHONE_NUMBER_NOT_EXIST',
-        });
-      }
-
-      const changePw = await this.changePassword({ token: holder.accessToken }, pw);
-      if (!changePw) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Change password fail'),
-          errorCode: 'CHANGE_FORGOT_PW_FAIL',
-        });
-      }
-      // console.log(changePw);
-      return changePw;
-    } catch (error) {
-      throw new ErrorResponse({
-        ...new BadRequestException(error.message),
-        errorCode: 'CHANGE_FORGOT_PW_FAIL',
-      });
-    }
+  public async forgotPassword(phoneNumber: string, pw: string): Promise<unknown> {
     return;
   }
 }

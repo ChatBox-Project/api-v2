@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Headers, Put, Param } from '@nestjs/common';
+import { Body, Controller, Post, Headers, Put, Param, Patch } from '@nestjs/common';
 import { AccountService } from 'src/services';
 import { changePwDto, ForgotPwDto } from 'src/validators';
 import _ from 'underscore';
@@ -9,13 +9,14 @@ export class AccountController {
   @Put('changepw')
   public async changePassword(@Headers() _headers: any, @Body() pw: changePwDto): Promise<unknown> {
     const changePw = await this._accountSerivce.changePassword(_headers, pw);
-    return _.omit(changePw, 'password'); 
+    return _.omit(changePw, 'password');
   }
-  
+
   // before login
-  @Put('forgotpw')
-  public async forgotPassword(@Param() phoneNumber: ForgotPwDto, @Body() pw: changePwDto): Promise<unknown> {
-    const forgotPw = await this._accountSerivce.forgotPassword(phoneNumber, pw);
-    return _.omit(forgotPw, 'password');
+  @Patch('forgotpw')
+  public async forgotPassword(@Headers() _headers: any, @Body() pw: ForgotPwDto) {
+    console.log(_headers.phone, pw.phoneNumber);
+    // const forgotPw = await this._accountSerivce.forgotPassword(_headers.phone, pw.phoneNumber);
+    // return _.omit(forgotPw, 'password');
   }
 }

@@ -6,5 +6,4 @@ export class changePwDto {
   @MaxLength(50)
   @IsString()
   pw: string;
-  
 }

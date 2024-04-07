@@ -142,7 +142,7 @@ export class UserService {
         });
       }
 
-      const metadata = { user: updatedUser };
+      const metadata = { user: _header.token };
       const res = this._response.createResponse(200, 'success', metadata);
       return res;
     } catch (error) {
