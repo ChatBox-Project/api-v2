@@ -6,8 +6,7 @@ import { ChatGroupEntity } from '../chat-group.entity';
 import { GroupLeaderPermissionEntity } from '../group-leader-permission.entity';
 
 export interface IUserEntity extends IBaseEntity {
-  firstName: string;
-  lastName: string;
+  name: string;
   gender: EGender;
   avatarUrl: string;
   birth: Date;
