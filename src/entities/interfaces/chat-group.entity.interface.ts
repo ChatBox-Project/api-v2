@@ -10,6 +10,5 @@ export interface IChatGroupEntity extends IBaseEntity {
   groupLeader: string;
 
   // user: UserEntity[];
-  groupLeaderPermission: GroupLeaderPermissionEntity;
-  message: MessageEntity[];
+  
 }
