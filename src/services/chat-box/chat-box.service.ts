@@ -18,27 +18,33 @@ export class ChatBoxService {
     try {
       // Find user by token
       const foundUser = await this.findUser(token);
+      // console.log('foundUser:: ', foundUser);
+      // find chatbox in foundUser
 
-      if (foundUser && Array.isArray(foundUser.chatBox)) {
-        const chatBoxExists = foundUser.chatBox.some((chatBox) => chatBox.id === _id);
-        if (chatBoxExists) {
-          throw new ErrorResponse({
-            ...new BadRequestException('Chat box is exist'),
-            errorCode: 'CHAT_BOX_IS_EXIST',
-          });
-        }
+      const checkIdReceiver = await this._userRepository.findOneOrFail({ where: { id: _id } });
+      console.log('checkIdReceiver:: ', checkIdReceiver);
+
+      const existingChatBox = await this._chatBoxRepository.findOne({ where: { sender_id: foundUser.id, receiver_id: _id } });
+      if (existingChatBox) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Chat box already exists'),
+          errorCode: 'CHAT_BOX_ALREADY_EXISTS',
+        });
       }
-      // create chatbox
-      const newChat = await this._chatBoxRepository.create({
-        chatBoxName: foundUser.name,
+
+      // Create chat box
+      const createChatbox = this._chatBoxRepository.create({
         sender_id: foundUser.id,
         receiver_id: _id,
+        chatBoxName: `${foundUser.name} - ${checkIdReceiver.name}`,
       });
-      await this._chatBoxRepository.save({ ...newChat, user: [foundUser] });
+      await this._chatBoxRepository.save(createChatbox);
 
-      foundUser.chatBox.push(newChat);
+      // Update user's chat box
+      foundUser.chatBox = [...(foundUser.chatBox || []), createChatbox];
       await this._userRepository.save(foundUser);
-      const metadata = { newChat };
+
+      const metadata = { chatBox: createChatbox };
       const res = await this._response.createResponse(200, 'Create chat box success', metadata);
       return res;
     } catch (error) {
@@ -68,11 +74,9 @@ export class ChatBoxService {
     }
   }
 
-  public async getChatBoxById(token: string): Promise<unknown> {
+  public async getChatBoxById(_id: string): Promise<unknown> {
     try {
-      // Find user by token
-      const foundUser = await this.findUser(token);
-      const chatBox = await this._chatBoxRepository.findOne({ where: { sender_id: foundUser.id } });
+      const chatBox = await this._chatBoxRepository.findOne({ where: { id: _id } });
       if (!chatBox) {
         throw new ErrorResponse({
           ...new BadRequestException('Chat box is not exist'),
@@ -90,11 +94,11 @@ export class ChatBoxService {
     }
   }
 
-  public async deleteChatBox(token: string): Promise<unknown> {
+  public async deleteChatBox(token: string, _id: string): Promise<unknown> {
     try {
       // Find user by token
       const foundUser = await this.findUser(token);
-      const chatBox = await this._chatBoxRepository.findOne({ where: { sender_id: foundUser.id } });
+      const chatBox = await this._chatBoxRepository.findOne({ where: { id: _id } });
       if (!chatBox) {
         throw new ErrorResponse({
           ...new BadRequestException('Chat box is not exist'),
@@ -102,6 +106,10 @@ export class ChatBoxService {
         });
       }
       await this._chatBoxRepository.delete({ id: chatBox.id });
+      // Remove the chat box from the user's chat box list
+      foundUser.chatBox = foundUser.chatBox.filter((box) => box.id !== chatBox.id);
+      await this._userRepository.save(foundUser);
+
       const metadata = { chatBox };
       const res = await this._response.createResponse(200, 'Delete chat box success', metadata);
       return res;
