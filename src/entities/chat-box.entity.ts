@@ -15,9 +15,9 @@ export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
   @Column({ name: 'chat_box_name', type: 'varchar' })
   chatBoxName: string;
 
-  // @OneToMany(() => UserEntity, (user) => user.chatBox)
-  // @JoinColumn()
-  // user: UserEntity;
+  @OneToMany(() => UserEntity, (user) => user.chatBox)
+  @JoinColumn()
+  user: UserEntity;
 
   @ManyToOne(() => MessageEntity, (mess) => mess.chatBox)
   @JoinColumn()
