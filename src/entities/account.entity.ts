@@ -60,7 +60,7 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
   @JoinColumn()
   role?: RoleEntity;
 
-  @ManyToOne(() => UserEntity, (user) => user.accounts)
+  @OneToOne(() => UserEntity, (user) => user.accounts)
   @JoinColumn({ name: 'user_id' }) // Specify the join column explicitly
   user: UserEntity;
 }
