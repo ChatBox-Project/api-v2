@@ -19,28 +19,13 @@ export class UserService {
 
   public async createUser(_userDto: CreateUserDto, token: string): Promise<unknown> {
     try {
-      // check token
-      // console.log('params:: ', _header);
-      if (!token) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Invalid token'),
-          errorCode: 'INVALID_TOKEN',
-        });
-      }
-      // console.log('header:: ', _header.token);
+      const foundAccount = await this.findAccountByToken(token);
 
-      const foundAccount = await this._accountRepository.findOne({ where: { accessToken: token } });
-      // console.log('user:: ', user)
-      if (!foundAccount) {
-        throw new ErrorResponse({
-          ...new BadRequestException('User not found'),
-          errorCode: 'USER_NOT_FOUND',
-        });
-      }
       const createUser = this._userRepository.create({
         ..._userDto,
-        accounts: [foundAccount],
+        accounts: foundAccount,
       });
+
       if (!createUser) {
         throw new ErrorResponse({
           ...new BadRequestException('User not created'),
@@ -63,28 +48,16 @@ export class UserService {
 
   public async getUser(token: string): Promise<unknown> {
     try {
-      // check token
-      if (!token) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Invalid token'),
-          errorCode: 'INVALID_TOKEN',
-        });
-      }
-      // found account
-
-      const holderAccount = await this._accountRepository.findOne({
-        where: {
-          accessToken: token,
-        },
-      });
-      console.log('holderAccount:: ', holderAccount);
+      const holderAccount = await this.findAccountByToken(token);
+      // console.log('holderAccount:: ', holderAccount);
       if (!holderAccount) {
         throw new ErrorResponse({
           ...new BadRequestException('Account not found'),
           errorCode: 'ACCOUNT_NOT_FOUND',
         });
       }
-      const holderUser = await this._userRepository.findOne({ where: { id: holderAccount.userId } });
+
+      const holderUser = await this.getUserByAccountId(holderAccount.userId);
 
       const metadata = { user: holderUser };
       return this._response.createResponse(200, 'success', metadata);
@@ -98,15 +71,6 @@ export class UserService {
 
   public async updateUser(_userDto: UpdateUserDto, _header: any): Promise<unknown> {
     try {
-      // console.log('userDto:: ', _header);
-      // check token
-      if (!_header.token) {
-        throw new ErrorResponse({
-          ...new BadRequestException('Invalid token'),
-          errorCode: 'INVALID_TOKEN',
-        });
-      }
-      // find account
       const holderAccount = await this._accountRepository.findOne({ where: { accessToken: _header.token } });
       // console.log('holderAccount:: ', holderAccount)
       if (!holderAccount) {
@@ -184,7 +148,7 @@ export class UserService {
   //     }
 
   //     // check friend
-      
+
   //     // console.log('friendUser:: ', friendUser);
 
   //     // add friend
@@ -208,4 +172,40 @@ export class UserService {
   //     });
   //   }
   // }
+
+  private async findAccountByToken(token: string): Promise<AccountEntity> {
+    // Check token
+    if (!token) {
+      throw new ErrorResponse({
+        ...new BadRequestException('Invalid token'),
+        errorCode: 'INVALID_TOKEN',
+      });
+    }
+    const account = await this._accountRepository.findOne({ where: { accessToken: token } });
+    if (!account) {
+      throw new ErrorResponse({
+        ...new BadRequestException('User not found'),
+        errorCode: 'USER_NOT_FOUND',
+      });
+    }
+    return account;
+  }
+
+  private async getUserByAccountId(accountId: string): Promise<UserEntity> {
+    // Check token
+    if (!accountId) {
+      throw new ErrorResponse({
+        ...new BadRequestException('Invalid token'),
+        errorCode: 'INVALID_TOKEN',
+      });
+    }
+    const user = await this._userRepository.findOne({ where: { id: accountId } });
+    if (!user) {
+      throw new ErrorResponse({
+        ...new BadRequestException('User not found'),
+        errorCode: 'USER_NOT_FOUND',
+      });
+    }
+    return user;
+  }
 }
