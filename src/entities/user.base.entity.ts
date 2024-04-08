@@ -33,13 +33,11 @@ export class UserEntity extends BaseEntity implements IUserEntity {
   @Column('jsonb', { array: true, default: [] })
   listFriend: IListFriend[];
 
-  @OneToMany(() => AccountEntity, (account) => account.user)
-  accounts: AccountEntity[];
+  @OneToOne(() => AccountEntity, (account) => account.user)
+  accounts: AccountEntity;
 
-  // @Column({ name: 'chat_box_id', type: 'uuid' })
-  // @ManyToOne(() => ChatBoxEntity, (chat) => chat.chatBoxId)
-  // @JoinColumn()
-  // chatBox?: ChatBoxEntity[];
+  @OneToMany(() => ChatBoxEntity, (chat) => chat.chatBoxId)
+  chatBox?: ChatBoxEntity[];
 
   // @Column({ name: 'chat_group_id', type: 'uuid' })
   // @ManyToMany(() => ChatGroupEntity)
