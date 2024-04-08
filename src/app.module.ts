@@ -1,13 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './entities/entity.provider';
 import { DatabaseModule } from './modules/database/database.module';
 import { LoggerMiddleware } from './middlewares/app.middleware';
-import { AuthModule } from './modules/auth/auth.module';
-import { AccountModule, KeyModule, MessageModule, UserModule } from './modules';
-import { OtpModule } from './modules/otp';
+import { AuthModule, AccountModule, KeyModule, MessageModule, UserModule, OtpModule, ChatBoxModule } from './modules';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -18,6 +16,7 @@ import { OtpModule } from './modules/otp';
     OtpModule,
     AccountModule,
     MessageModule,
+    ChatBoxModule,
     TypeOrmModule.forFeature(entities),
   ],
   controllers: [],
