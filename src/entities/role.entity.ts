@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
-import { IRole } from './role.entity.interface';
+import { IRole } from './interfaces/role.entity.interface';
 import { AccountEntity } from './account.entity';
 import { RoleEnum } from 'src/configs/enums/role.enum';
 
