@@ -61,6 +61,7 @@ export class ChatBoxService {
       const foundUser = await this.findUser(token);
       const chatBox = await this._chatBoxRepository.find({
         where: [{ sender_id: foundUser.id }, { receiver_id: foundUser.id }],
+        order: { lastChangedDateTime: 'DESC' },
         take: 10,
       });
       const metadata = { chatBox };
