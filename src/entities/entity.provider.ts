@@ -16,4 +16,5 @@ export const entities = [
   PermissionEntity,
   ChatGroupEntity,
   UserEntity,
+  
 ];
