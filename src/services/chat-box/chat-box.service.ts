@@ -22,7 +22,7 @@ export class ChatBoxService {
       // find chatbox in foundUser
 
       const checkIdReceiver = await this._userRepository.findOneOrFail({ where: { id: _id } });
-      console.log('checkIdReceiver:: ', checkIdReceiver);
+      // console.log('checkIdReceiver:: ', checkIdReceiver);
 
       const existingChatBox = await this._chatBoxRepository.findOne({ where: { sender_id: foundUser.id, receiver_id: _id } });
       if (existingChatBox) {
@@ -97,20 +97,19 @@ export class ChatBoxService {
   public async deleteChatBox(token: string, _id: string): Promise<unknown> {
     try {
       // Find user by token
-      const foundUser = await this.findUser(token);
+      await this.findUser(token);
+      // Find chat box by ID
       const chatBox = await this._chatBoxRepository.findOne({ where: { id: _id } });
       if (!chatBox) {
         throw new ErrorResponse({
-          ...new BadRequestException('Chat box is not exist'),
+          ...new BadRequestException('Chat box does not exist'),
           errorCode: 'CHAT_BOX_NOT_EXIST',
         });
       }
-      await this._chatBoxRepository.delete({ id: chatBox.id });
-      // Remove the chat box from the user's chat box list
-      foundUser.chatBox = foundUser.chatBox.filter((box) => box.id !== chatBox.id);
-      await this._userRepository.save(foundUser);
 
-      const metadata = { chatBox };
+      // Delete chat box
+      await this._chatBoxRepository.delete({ id: chatBox.id });
+      const metadata = {};
       const res = await this._response.createResponse(200, 'Delete chat box success', metadata);
       return res;
     } catch (error) {
