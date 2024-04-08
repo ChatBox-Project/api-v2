@@ -6,7 +6,7 @@ import { entities } from './entities/entity.provider';
 import { DatabaseModule } from './modules/database/database.module';
 import { LoggerMiddleware } from './middlewares/app.middleware';
 import { AuthModule } from './modules/auth/auth.module';
-import { AccountModule, KeyModule, UserModule } from './modules';
+import { AccountModule, KeyModule, MessageModule, UserModule } from './modules';
 import { OtpModule } from './modules/otp';
 @Module({
   imports: [
@@ -17,6 +17,7 @@ import { OtpModule } from './modules/otp';
     UserModule,
     OtpModule,
     AccountModule,
+    MessageModule,
     TypeOrmModule.forFeature(entities),
   ],
   controllers: [],
