@@ -38,7 +38,7 @@ export class UserEntity extends BaseEntity implements IUserEntity {
 
   @JoinTable()
   @OneToMany(() => ChatBoxEntity, (chat) => chat.user)
-  chatBox: ChatBoxEntity[];
+  chatBox: ChatBoxEntity[] ;
 
   
   @ManyToMany(() => ChatGroupEntity)
