@@ -36,17 +36,15 @@ export class UserEntity extends BaseEntity implements IUserEntity {
   @OneToOne(() => AccountEntity, (account) => account.user)
   accounts: AccountEntity;
 
-  @Column({ name: 'chat_box_id', type: 'uuid' })
-  @OneToMany(() => ChatBoxEntity, (chat) => chat.userId)
-  chatBox?: ChatBoxEntity[];
+  @JoinTable()
+  @OneToMany(() => ChatBoxEntity, (chat) => chat.user)
+  chatBox: ChatBoxEntity[];
 
-  // @Column({ name: 'chat_group_id', type: 'uuid' })
-  // @ManyToMany(() => ChatGroupEntity)
-  // @JoinTable()
-  // chatGroup?: ChatGroupEntity[];
+  
+  @ManyToMany(() => ChatGroupEntity)
+  @JoinTable()
+  chatGroup?: ChatGroupEntity[];
 
-  // @Column({ name: 'group_leader_permission_id', type: 'uuid' })
-  // @ManyToOne(() => GroupLeaderPermissionEntity, (gr) => gr.leaderId)
-  // @JoinColumn()
-  // groupLeaderPermission?: GroupLeaderPermissionEntity[];
+  @ManyToOne(() => GroupLeaderPermissionEntity, (gr) => gr.leaderId)
+  groupLeaderPermission?: GroupLeaderPermissionEntity[];
 }
