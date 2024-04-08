@@ -2,7 +2,7 @@ import { UserEntity } from '../user.base.entity';
 import { IBaseEntity } from './base.entity.interface';
 
 export interface IChatBoxEntity extends IBaseEntity {
-  chatBoxId: string;
   chatBoxName: string;
-  // user: UserEntity;
+  sender_id: string;
+  receiver_id: string;
 }
