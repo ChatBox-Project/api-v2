@@ -8,7 +8,7 @@ import { ErrorResponse } from 'src/errors';
 import * as bcrypt from 'bcrypt';
 import { AccountService } from '../account';
 import { KeyTokenService } from '../key/keyToken.service';
-import { createTokenPair } from 'src/utils/auth.util';
+import { createTokenPair } from 'src/utils/auth/auth.util';
 import { ResponseService } from '../res';
 
 @Injectable()
