@@ -8,7 +8,7 @@ export class ChatBoxController {
 
   // crud
   @Post(':id')
-  public async createChatBox(@Headers('token') token: string, @Query('id') id: string) {
+  public async createChatBox(@Headers('token') token: string, @Param('id') id: string) {
     const create = await this._chatBoxService.createChatBox(token, id);
     return _.omit(create, 'chatbox');
   }
