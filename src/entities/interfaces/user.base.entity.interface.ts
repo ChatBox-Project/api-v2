@@ -12,7 +12,4 @@ export interface IUserEntity extends IBaseEntity {
   avatarUrl: string;
   birth: Date;
   listFriend: IListFriend[];
-  // chatBox?: ChatBoxEntity[];
-  // chatGroup?: ChatGroupEntity[];
-  // groupLeaderPermission?: GroupLeaderPermissionEntity[];
 }
