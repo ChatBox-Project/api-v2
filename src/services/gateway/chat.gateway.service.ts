@@ -1,11 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, WebSocketServer } from '@nestjs/websockets';
+import { OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit, SubscribeMessage, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { MessageEntity } from 'src/entities/message.entity';
+import { MessageService } from '../messages';
 @Injectable()
 export class AppGateWay implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   private logger: Logger = new Logger('AppGateway');
+  constructor(private messageService: MessageService) {}
 
   @WebSocketServer() server: Server;
+
+  // @SubscribeMessage('sendMessage')
+  public async handleSendMessage(client: Socket, payload: MessageEntity): Promise<void> {
+    await this.messageService.saveMessage(payload);
+    this.server.emit('sendMessage', payload);
+  }
 
   private users: number = 0;
 
