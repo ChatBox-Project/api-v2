@@ -42,5 +42,5 @@ export class MessageEntity extends BaseEntity implements IMessage {
 
   @OneToMany(() => ChatGroupEntity, (chat) => chat.message)
   @JoinColumn()
-  chatGroup?: ChatGroupEntity;
+  chatGroup?: ChatGroupEntity[];
 }
