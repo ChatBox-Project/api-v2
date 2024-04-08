@@ -36,7 +36,8 @@ export class UserEntity extends BaseEntity implements IUserEntity {
   @OneToOne(() => AccountEntity, (account) => account.user)
   accounts: AccountEntity;
 
-  @OneToMany(() => ChatBoxEntity, (chat) => chat.chatBoxId)
+  @Column({ name: 'chat_box_id', type: 'uuid' })
+  @OneToMany(() => ChatBoxEntity, (chat) => chat.userId)
   chatBox?: ChatBoxEntity[];
 
   // @Column({ name: 'chat_group_id', type: 'uuid' })
