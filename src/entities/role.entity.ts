@@ -13,6 +13,5 @@ export class RoleEntity extends BaseEntity implements IRole {
   roleName: RoleEnum;
 
   @OneToOne(() => AccountEntity)
-  @JoinColumn()
   account: AccountEntity;
 }
