@@ -13,6 +13,4 @@ export interface IAccountEntity extends IIdEntity {
   loginAttempts?: number;
   blockExpires?: Date;
   publicKey?: string;
-  role?: RoleEntity;
-  user?: UserEntity;
 }
