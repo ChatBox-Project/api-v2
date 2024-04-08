@@ -6,20 +6,21 @@ import { MessageEntity } from './message.entity';
 
 @Entity({ name: 'chat-box' })
 export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
-  @Index('IX_ChatBox_ChatBoxId', { unique: true })
-  @Column({ name: 'chat_box_id', type: 'uuid' })
   @PrimaryGeneratedColumn()
-  chatBoxId: string;
-
-  @Index('IX_ChatBox_ChatBoxName', { unique: true })
+  id: string;
   @Column({ name: 'chat_box_name', type: 'varchar' })
   chatBoxName: string;
+  @Index('IX_SENDER_ID')
+  @Column({ name: 'sender_id', type: 'uuid' })
+  sender_id: string;
 
-  @Column({ name: 'user_id', type: 'uuid' })
-  @ManyToOne(() => UserEntity, (user) => user.chatBox)
-  user: UserEntity;
+  @Index('IX_RECEIVER_ID')
+  @Column({ name: 'receiver_id', type: 'uuid' })
+  receiver_id: string;
 
-  @Column({ name: 'message_id', type: 'uuid' })
+  @ManyToOne(() => UserEntity)
+  user: UserEntity[];
+
   @ManyToOne(() => MessageEntity, (mess) => mess.chatBox)
-  message?: MessageEntity;
+  message?: MessageEntity[] | MessageEntity;
 }
