@@ -6,10 +6,10 @@ import { MessageEntity } from './message.entity';
 
 @Entity({ name: 'chat-box' })
 export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
-  @PrimaryGeneratedColumn()
-  id: string;
+
   @Column({ name: 'chat_box_name', type: 'varchar' })
   chatBoxName: string;
+
   @Index('IX_SENDER_ID')
   @Column({ name: 'sender_id', type: 'uuid' })
   sender_id: string;
