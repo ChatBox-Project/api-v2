@@ -3,3 +3,4 @@ export * from './database';
 export * from './account';
 export * from './keys';
 export * from './user';
+export * from './messages';
