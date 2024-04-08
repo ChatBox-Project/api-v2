@@ -17,7 +17,7 @@ export class ChatBoxEntity extends BaseEntity implements IChatBoxEntity {
 
   @Column({ name: 'user_id', type: 'uuid' })
   @ManyToOne(() => UserEntity, (user) => user.chatBox)
-  userId: UserEntity;
+  user: UserEntity;
 
   @Column({ name: 'message_id', type: 'uuid' })
   @ManyToOne(() => MessageEntity, (mess) => mess.chatBox)
