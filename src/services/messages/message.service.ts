@@ -43,11 +43,14 @@ export class MessageService {
         senderId: sender,
         receiverId: receiver,
         chatBox: chatbox,
+        chatboxId: chatbox.id,
       });
       await this._messageRepository.save(saveMessage);
+      console.log('saveMessage:: ', saveMessage.chatboxId);
 
       // Update user's chat box
       chatbox.message = [...(chatbox.message || []), saveMessage];
+
       console.log('chatbox:: ', chatbox.message);
       await this._chatBoxRepository.save(chatbox);
       // console.log('test:: ', test);
@@ -66,25 +69,23 @@ export class MessageService {
   public async getChatboxMessages(token: string, _id: string): Promise<MessageEntity[]> {
     try {
       const holderUser = await this.findUser(token);
+      const chatbox = await this.findBoxChat(_id);
 
-      const holderChatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
-      // console.log('holderChatBox:: ', holderChatBox);
-      // check sender and receiver
-      const senderMessage = await this._messageRepository.find({
+      const sender = await this._messageRepository.find({
         where: { senderId: holderUser.id },
-        order: { lastChangedDateTime: 'ASC' },
+        // order: { createDateTime: 'ASC' },
         take: 15,
       });
 
-      const receiverMessage = await this._messageRepository.find({
+      const reciever = await this._messageRepository.find({
         where: { receiverId: holderUser.id },
-        order: { lastChangedDateTime: 'ASC' },
+        // order: { createDateTime: 'ASC' },
         take: 15,
       });
-
-      // console.log('messages:: ', messages);
-      const allMessages = [...senderMessage, ...receiverMessage];
-      return allMessages;
+      // console.log('sender:: ', sender);
+      // console.table(reciever);
+      const messages = [...sender, ...reciever];
+      return messages;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
