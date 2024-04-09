@@ -68,14 +68,21 @@ export class MessageService {
     try {
       const holderUser = await this.findUser(token);
       const chatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
-
-      const messages = await this._messageRepository.find({
-        where: { senderId: chatBox.user1_id, receiverId: chatBox.user2_id },
-        order: { createDateTime: 'ASC' },
-        take: 15,
-      });
-      
-      return messages;
+      if (holderUser.id === chatBox.user1_id) {
+        const messages = await this._messageRepository.find({
+          where: { senderId: chatBox.user1_id, receiverId: chatBox.user2_id },
+          order: { createDateTime: 'ASC' },
+          take: 15,
+        });
+        return messages;
+      } else {
+        const messages = await this._messageRepository.find({
+          where: { senderId: chatBox.user2_id, receiverId: chatBox.user1_id },
+          order: { createDateTime: 'ASC' },
+          take: 15,
+        });
+        return messages;
+      }
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
