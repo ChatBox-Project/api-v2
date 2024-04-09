@@ -30,7 +30,7 @@ export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
   @JoinColumn()
   groupLeaderPermission: GroupLeaderPermissionEntity;
 
-  @ManyToOne(() => MessageEntity, (mess) => mess.chatGroup)
-  @JoinColumn()
-  message: MessageEntity[];
+  // @ManyToOne(() => MessageEntity, (mess) => mess.chatGroup)
+  // @JoinColumn()
+  // message: MessageEntity[];
 }
