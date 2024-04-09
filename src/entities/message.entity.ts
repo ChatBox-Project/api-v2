@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { IMessage } from './interfaces/message.entity.interface';
 import { ChatBoxEntity } from './chat-box.entity';
@@ -13,33 +13,22 @@ export class MessageEntity extends BaseEntity implements IMessage {
   @PrimaryGeneratedColumn()
   messageId: string;
 
-  @Index('IX_Message_Sender_id', { unique: true })
   @Column({ name: 'sender_id', type: 'varchar' })
-  @IsNotEmpty()
   senderId: string;
 
+  @Column({ name: 'receiver_id', type: 'varchar' })
+  receiverId: string;
+
   @Column({ name: 'message_type', type: 'varchar' })
-  messageType?: string;
+  messageType: string;
 
   @Column({ name: 'content_text', type: 'varchar' })
-  contentText?: string;
+  contentMessage: string;
 
-  @Column({ name: 'content_image', type: 'varchar' })
-  contentImage?: string;
+  @ManyToOne(() => ChatBoxEntity, (chat) => chat.message)
+  chatBox: ChatBoxEntity;
 
-  @Column({ name: 'content_audio', type: 'varchar' })
-  contentAudio?: string;
-
-  @Column({ name: 'content_video', type: 'varchar' })
-  contentVideo?: string;
-
-  @Column({ name: 'content_file', type: 'varchar' })
-  contentFile?: string;
-
-  @OneToMany(() => ChatBoxEntity, (chat) => chat.message)
-  chatBox?: ChatBoxEntity;
-
-  @OneToMany(() => ChatGroupEntity, (chat) => chat.message)
-  @JoinColumn()
-  chatGroup?: ChatGroupEntity[];
+  // @OneToMany(() => ChatGroupEntity, (chat) => chat.message)
+  // @JoinColumn()
+  // chatGroup?: ChatGroupEntity[];
 }
