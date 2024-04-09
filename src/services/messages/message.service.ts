@@ -22,15 +22,26 @@ export class MessageService {
 
   public async createMessage(_token: string, _id: string, payload: CreateMessageDto): Promise<unknown> {
     try {
+      const userholder = await this.findUser(_token);
       // check id
       const chatbox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
       console.log('chatbox before:: ', chatbox.message);
+      let sender = '';
+      let receiver = '';
+      // check sender and receiver
+      if (userholder.id === chatbox.user1_id) {
+        sender = chatbox.user1_id;
+        receiver = chatbox.user2_id;
+      } else {
+        sender = chatbox.user2_id;
+        receiver = chatbox.user1_id;
+      }
 
       // console.log('checkIDChatbox:: ', checkIDChatbox);
       const saveMessage = await this._messageRepository.create({
         ...payload,
-        senderId: chatbox.sender_id,
-        receiverId: chatbox.receiver_id,
+        senderId: sender,
+        receiverId: receiver,
         chatBox: chatbox,
       });
       await this._messageRepository.save(saveMessage);
@@ -61,7 +72,7 @@ export class MessageService {
       // check sender and receiver
 
       const messages = await this._messageRepository.find({
-        where: { senderId: holderChatBox.sender_id, receiverId: holderChatBox.receiver_id },
+        where: { chatBox: holderChatBox },
         order: { createDateTime: 'ASC' },
         take: 15,
       });

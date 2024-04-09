@@ -24,7 +24,7 @@ export class ChatBoxService {
       const checkIdReceiver = await this._userRepository.findOneOrFail({ where: { id: _id } });
       // console.log('checkIdReceiver:: ', checkIdReceiver);
 
-      const existingChatBox = await this._chatBoxRepository.findOne({ where: { sender_id: foundUser.id, receiver_id: _id } });
+      const existingChatBox = await this._chatBoxRepository.findOne({ where: { user1_id: foundUser.id, user2_id: _id } });
       if (existingChatBox) {
         throw new ErrorResponse({
           ...new BadRequestException('Chat box already exists'),
@@ -34,8 +34,8 @@ export class ChatBoxService {
 
       // Create chat box
       const createChatbox = this._chatBoxRepository.create({
-        sender_id: foundUser.id,
-        receiver_id: _id,
+        user1_id: foundUser.id,
+        user2_id: _id,
         chatBoxName: `${foundUser.name} - ${checkIdReceiver.name}`,
       });
       await this._chatBoxRepository.save(createChatbox);
@@ -61,7 +61,7 @@ export class ChatBoxService {
       // Find user by token
       const foundUser = await this.findUser(token);
       const chatBox = await this._chatBoxRepository.find({
-        where: [{ sender_id: foundUser.id }, { receiver_id: foundUser.id }],
+        where: [{ user1_id: foundUser.id }, { user2_id: foundUser.id }],
         order: { lastChangedDateTime: 'DESC' },
         take: 10,
       });
