@@ -12,10 +12,10 @@ export class AppGateWay implements OnGatewayInit, OnGatewayConnection, OnGateway
   @WebSocketServer() server: Server;
 
   // @SubscribeMessage('sendMessage')
-  public async handleSendMessage(client: Socket, payload: MessageEntity): Promise<void> {
-    await this.messageService.saveMessage(payload);
-    this.server.emit('sendMessage', payload);
-  }
+  // public async handleSendMessage(client: Socket, payload: MessageEntity): Promise<void> {
+  //   await this.messageService.saveMessage(payload);
+  //   this.server.emit('sendMessage', payload);
+  // }
 
   @SubscribeMessage('createChatBox')
   public async handleCreateChatBox(client: Socket, data: { token: string; _id: string }): Promise<void> {
