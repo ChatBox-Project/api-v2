@@ -1,10 +1,14 @@
-import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { MessageEntity } from './message.entity';
 import { UserEntity } from './user.base.entity';
 
 @Entity({ name: 'chat-box' })
 export class ChatBoxEntity extends BaseEntity {
+  @Column({ name: 'chat_box_id', type: 'uuid' })
+  @PrimaryGeneratedColumn()
+  chatBoxId: string;
+  
   @Column({ name: 'chat_box_name', type: 'varchar' })
   chatBoxName: string;
 
