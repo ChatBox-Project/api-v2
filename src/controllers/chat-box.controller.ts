@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Headers, UsePipes, Param, Query, Get, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Headers, UsePipes, Param, Query, Get, Delete, Put } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { ChatBoxService, MessageService } from 'src/services';
 import { CreateMessageDto } from 'src/validators';
@@ -50,14 +50,41 @@ export class ChatBoxController {
   @Get(':id/messages')
   @ApiOkResponse({ description: 'Get chat box messages' })
   public async getChatboxMessages(@Param('id') _id: string, @Headers() headers: any) {
-    const messages = await this._messageService.getChatboxMessages(headers.token, _id);
-    return _.omit(messages, 'messages');
+    return await this._messageService.getChatboxMessages(headers.token, _id);
+    // return _.omit(messages, 'messages');
   }
 
-  // @Post(':id/messages/')
-  // @ApiOkResponse({ description: 'Get message by id' })
-  // public async send(@Param('id') _id: string, @Par('receiver_id') receiver_id: string, @Headers() headers: any, payload: CreateMessageDto) {
-  //   const message = await this._messageService.sendMessage(headers.token, _id, receiver_id, payload);
-  //   return _.omit(message, 'message');
-  // }
+  @Get(':id/messages/:messageId')
+  @ApiOkResponse({ description: 'Get message by id' })
+  public async getMessage(@Param('id') _id: string, @Param('messageId') messageId: string, @Headers() headers: any) {
+    const message = await this._messageService.getMessageById(headers.token, _id, messageId);
+    return _.omit(message, 'message');
+  }
+
+  @Put(':id/messages/:messageId')
+  @ApiOkResponse({ description: 'Update message' })
+  public async updateMessage(
+    @Param('id') boxChat_id: string,
+    @Param('messageId') messageId: string,
+    @Body() message: CreateMessageDto,
+    @Headers() headers: any,
+  ): Promise<unknown> {
+    const update = await this._messageService.updateMessage(headers.token, boxChat_id, messageId, message);
+    return _.omit(update, 'message');
+  }
+
+  @Delete(':id/messages/:messageId')
+  @ApiOkResponse({ description: 'Delete message' })
+  public async deleteMessage(@Param('id') boxChat_id: string, @Param('messageId') messageId: string, @Headers() headers: any) {
+    const deleteMessage = await this._messageService.deleteMessage(headers.token, boxChat_id, messageId);
+    return _.omit(deleteMessage, 'message');
+  }
+
+  @Get('search')
+  @ApiOkResponse({ description: 'Search message' })
+  public async searchMessage(@Query('message') message: any, @Headers() headers: any) {
+    console.log('query:: ', message);
+    const search = await this._messageService.searchMessageLikeContent(headers.token, message);
+    return _.omit(search, 'message');
+  }
 }
