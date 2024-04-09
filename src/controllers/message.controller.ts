@@ -6,9 +6,9 @@ import _ from 'underscore';
 export class MessageController {
   constructor(private _messageService: MessageService) {}
 
-  @Post()
-  public async saveMessage(@Headers() _headers: any, @Body() _message: CreateMessageDto): Promise<unknown> {
-    const message = await this._messageService.createMessage(_headers.token, _message);
-    return _.omit(message, 'message');
-  }
+  // @Post()
+  // public async saveMessage(@Headers() _headers: any, @Body() _message: CreateMessageDto): Promise<unknown> {
+  //   const message = await this._messageService.createMessage(_headers.token, _message);
+  //   return _.omit(message, 'message');
+  // }
 }
