@@ -5,10 +5,6 @@ import { UserEntity } from './user.base.entity';
 
 @Entity({ name: 'chat-box' })
 export class ChatBoxEntity extends BaseEntity {
-  @Column({ name: 'chat_box_id' })
-  @PrimaryGeneratedColumn()
-  chatBoxId: string;
-
   @Column({ name: 'chat_box_name', type: 'varchar' })
   chatBoxName: string;
 
@@ -24,6 +20,5 @@ export class ChatBoxEntity extends BaseEntity {
   user: UserEntity;
 
   @OneToMany(() => MessageEntity, (mess) => mess.chatBox)
-  @JoinTable()
   message: MessageEntity[];
 }
