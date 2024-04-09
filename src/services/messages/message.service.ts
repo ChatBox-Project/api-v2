@@ -8,6 +8,7 @@ import { ErrorResponse } from 'src/errors';
 import { AccountRepository, ChatBoxRepository, MessageRepository, UserRepository } from 'src/repositories';
 import { CreateMessageDto } from 'src/validators';
 import { ResponseService } from '../res';
+import { ILike } from 'typeorm';
 
 @Injectable()
 export class MessageService {
@@ -51,28 +52,7 @@ export class MessageService {
     }
   }
 
-  // public async sendMessage(token: string, _id: string, receiver_id: string, payload: CreateMessageDto) {
-  //   try {
-  //     //check token
-  //     const holderUser = await this.findUser(token);
-  //     console.log('holderUser:: ', holderUser);
-  //     // check box
-  //     const holderChatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
-  //     console.log('holderChatBox:: ', holderChatBox);
-
-  //     const holderRecipient = await this._userRepository.findOneOrFail({ where: { id: receiver_id } });
-  //     console.log('holderRecipient:: ', holderRecipient);
-
-  //     // find chatbox
-  //   } catch (error) {
-  //     throw new ErrorResponse({
-  //       ...new BadRequestException(error.message),
-  //       errorCode: 'MESS_NOT_SEEN',
-  //     });
-  //   }3
-  // }
-
-  async getChatboxMessages(token: string, _id: string): Promise<MessageEntity[]> {
+  public async getChatboxMessages(token: string, _id: string): Promise<MessageEntity[]> {
     try {
       await this.findUser(token);
 
@@ -92,6 +72,94 @@ export class MessageService {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
         errorCode: 'MESS_NOT_SEEN',
+      });
+    }
+  }
+
+  public async getMessageById(token: string, _id: string, messageId: string): Promise<MessageEntity> {
+    try {
+      await this.findUser(token);
+      await this.findBoxChat(_id);
+
+      const message = await this._messageRepository.findOneOrFail({ where: { id: messageId } });
+      // console.log('message:: ', message);
+      return message;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'MESS_NOT_SEEN',
+      });
+    }
+  }
+
+  public async updateMessage(token: string, _id: string, messageId: string, payload: CreateMessageDto): Promise<MessageEntity> {
+    try {
+      await this.findUser(token);
+      await this.findBoxChat(_id);
+
+      const message = await this._messageRepository.findOneOrFail({ where: { id: messageId } });
+      // console.log('message:: ', message);
+      await this._messageRepository.update({ id: messageId }, { ...payload });
+      return message;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'Message_NOT_FOUND',
+      });
+    }
+  }
+
+  public async deleteMessage(token: string, _id: string, messageId: string): Promise<unknown> {
+    try {
+      await this.findUser(token);
+      await this.findBoxChat(_id);
+      const message = await this._messageRepository.findOneOrFail({ where: { id: messageId } });
+      // console.log('message:: ', message);
+      await this._messageRepository.delete({ id: messageId });
+      //res
+
+      const res = this._response.createResponse(200, 'Delete message success', {});
+      return res;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'Message_NOT_FOUND',
+      });
+    }
+  }
+
+  public async searchMessageLikeContent(token: string, content: string): Promise<MessageEntity[]> {
+    try {
+      await this.findUser(token);
+
+      const messages = await this._messageRepository.find({
+        where: { contentMessage: ILike(content) },
+        order: { createDateTime: 'ASC' },
+        take: 15,
+      });
+      return messages;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'Message_NOT_FOUND',
+      });
+    }
+  }
+
+  private async findBoxChat(_id: string): Promise<ChatBoxEntity> {
+    try {
+      // check id
+      const chatbox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
+      if (!chatbox)
+        throw new ErrorResponse({
+          ...new BadRequestException('Chat box is not exist'),
+          errorCode: 'BoxChat_NOT_FOUND',
+        });
+      return chatbox;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'BoxChat_NOT_FOUND',
       });
     }
   }
