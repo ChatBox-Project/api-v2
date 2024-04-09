@@ -15,16 +15,27 @@ export class MessageService {
     @InjectRepository(MessageEntity) private readonly _messageRepository: MessageRepository,
     @InjectRepository(ChatBoxEntity) private readonly _chatBoxRepository: ChatBoxRepository,
     @InjectRepository(UserEntity) private readonly _userRepository: UserRepository,
+    @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
     private readonly _response: ResponseService,
   ) {}
 
-  public async createMessage(_id: string, message: CreateMessageDto): Promise<unknown> {
+  public async createMessage(_token: string, _id: string, payload: CreateMessageDto): Promise<unknown> {
     try {
+      const foundUser = await this.findUser(_token);
       // check id
       const chatbox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
+
+      // check sender and receiver
+      // if (chatbox.sender_id !== foundUser.id && chatbox.receiver_id !== foundUser.id) {
+      //   throw new ErrorResponse({
+      //     ...new BadRequestException('You are not sender or receiver'),
+      //     errorCode: 'YOU_ARE_NOT_SENDER_OR_RECEIVER',
+      //   });
+      // }
+
       // console.log('checkIDChatbox:: ', checkIDChatbox);
       const saveMessage = await this._messageRepository.create({
-        ...message,
+        ...payload,
         senderId: chatbox.sender_id,
         receiverId: chatbox.receiver_id,
         chatBox: chatbox,
@@ -33,7 +44,7 @@ export class MessageService {
 
       // Update user's chat box
       chatbox.message = [...(chatbox.message || []), saveMessage];
-      const test = await this._chatBoxRepository.save(chatbox);  
+      const test = await this._chatBoxRepository.save(chatbox);
       console.log('test:: ', test);
 
       const metadata = { message: saveMessage };
@@ -46,8 +57,40 @@ export class MessageService {
       });
     }
   }
-  public async saveMessage(message: MessageEntity) {}
+
   public async getMessages(): Promise<MessageEntity[]> {
     return await this._messageRepository.find();
+  }
+
+  private async findUser(token: string): Promise<UserEntity> {
+    try {
+      if (!token) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Token is required'),
+          errorCode: 'TOKEN_REQUIRED',
+        });
+      }
+      const account = await this._accountRepository.findOne({ where: { accessToken: token } });
+      if (!account) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Account is not exist'),
+          errorCode: 'ACCOUNT_NOT_EXIST',
+        });
+      }
+      // console.log('_id:: ', _id)
+      const user = await this._userRepository.findOne({ where: { id: account.userId } });
+      if (!user) {
+        throw new ErrorResponse({
+          ...new BadRequestException('User is not exist'),
+          errorCode: 'USER_NOT_EXIST',
+        });
+      }
+      return user;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'FIND_USER_BY_ID_ERROR',
+      });
+    }
   }
 }
