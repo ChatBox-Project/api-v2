@@ -21,17 +21,9 @@ export class MessageService {
 
   public async createMessage(_token: string, _id: string, payload: CreateMessageDto): Promise<unknown> {
     try {
-      const foundUser = await this.findUser(_token);
       // check id
       const chatbox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
-
-      // check sender and receiver
-      // if (chatbox.sender_id !== foundUser.id && chatbox.receiver_id !== foundUser.id) {
-      //   throw new ErrorResponse({
-      //     ...new BadRequestException('You are not sender or receiver'),
-      //     errorCode: 'YOU_ARE_NOT_SENDER_OR_RECEIVER',
-      //   });
-      // }
+      console.log('chatbox before:: ', chatbox.message);
 
       // console.log('checkIDChatbox:: ', checkIDChatbox);
       const saveMessage = await this._messageRepository.create({
@@ -44,8 +36,9 @@ export class MessageService {
 
       // Update user's chat box
       chatbox.message = [...(chatbox.message || []), saveMessage];
-      const test = await this._chatBoxRepository.save(chatbox);
-      console.log('test:: ', test);
+      console.log('chatbox:: ', chatbox.message);
+      await this._chatBoxRepository.save(chatbox);
+      // console.log('test:: ', test);
 
       const metadata = { message: saveMessage };
       const res = this._response.createResponse(200, 'Create message success', metadata);
@@ -58,8 +51,49 @@ export class MessageService {
     }
   }
 
-  public async getMessages(): Promise<MessageEntity[]> {
-    return await this._messageRepository.find();
+  // public async sendMessage(token: string, _id: string, receiver_id: string, payload: CreateMessageDto) {
+  //   try {
+  //     //check token
+  //     const holderUser = await this.findUser(token);
+  //     console.log('holderUser:: ', holderUser);
+  //     // check box
+  //     const holderChatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
+  //     console.log('holderChatBox:: ', holderChatBox);
+
+  //     const holderRecipient = await this._userRepository.findOneOrFail({ where: { id: receiver_id } });
+  //     console.log('holderRecipient:: ', holderRecipient);
+
+  //     // find chatbox
+  //   } catch (error) {
+  //     throw new ErrorResponse({
+  //       ...new BadRequestException(error.message),
+  //       errorCode: 'MESS_NOT_SEEN',
+  //     });
+  //   }3
+  // }
+
+  async getChatboxMessages(token: string, _id: string): Promise<MessageEntity[]> {
+    try {
+      await this.findUser(token);
+
+      const holderChatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
+      // console.log('holderChatBox:: ', holderChatBox);
+      // check sender and receiver
+
+      const messages = await this._messageRepository.find({
+        where: { senderId: holderChatBox.sender_id, receiverId: holderChatBox.receiver_id },
+        order: { createDateTime: 'ASC' },
+        take: 15,
+      });
+      // console.log('messages:: ', messages);
+
+      return messages;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'MESS_NOT_SEEN',
+      });
+    }
   }
 
   private async findUser(token: string): Promise<UserEntity> {
