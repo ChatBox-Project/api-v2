@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from './bases/base.entity';
 import { MessageEntity } from './message.entity';
 import { UserEntity } from './user.base.entity';
@@ -16,10 +16,9 @@ export class ChatBoxEntity extends BaseEntity {
   @Column({ name: 'receiver_id', type: 'uuid' })
   receiver_id: string;
 
-  @ManyToMany(() => UserEntity)
-  user: UserEntity[];
+  @ManyToOne(() => UserEntity)
+  user: UserEntity;
 
-  @JoinTable()
   @OneToMany(() => MessageEntity, (mess) => mess.chatBox)
   message: MessageEntity[];
 }
