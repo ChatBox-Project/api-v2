@@ -65,20 +65,26 @@ export class MessageService {
 
   public async getChatboxMessages(token: string, _id: string): Promise<MessageEntity[]> {
     try {
-      await this.findUser(token);
+      const holderUser = await this.findUser(token);
 
       const holderChatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
       // console.log('holderChatBox:: ', holderChatBox);
       // check sender and receiver
-
-      const messages = await this._messageRepository.find({
-        where: { chatBox: holderChatBox },
+      const senderMessage = await this._messageRepository.find({
+        where: { senderId: holderUser.id },
         order: { createDateTime: 'ASC' },
         take: 15,
       });
-      // console.log('messages:: ', messages);
 
-      return messages;
+      const receiverMessage = await this._messageRepository.find({
+        where: { receiverId: holderUser.id },
+        order: { createDateTime: 'ASC' },
+        take: 15,
+      });
+
+      // console.log('messages:: ', messages);
+      const allMessages = [...senderMessage, ...receiverMessage];
+      return allMessages;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
