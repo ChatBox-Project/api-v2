@@ -54,9 +54,7 @@ export class ChatBoxService {
       });
     }
   }
-  public async searchBoxByNameUser(){
-    
-  }
+  public async searchBoxByNameUser() {}
   public async getChatBox(token: string): Promise<unknown> {
     try {
       // Find user by token
@@ -77,8 +75,10 @@ export class ChatBoxService {
     }
   }
 
-  public async getChatBoxById(_id: string): Promise<unknown> {
+  public async getChatBoxById(token: string, _id: string): Promise<unknown> {
     try {
+      // find user
+
       const chatBox = await this._chatBoxRepository.findOne({ where: { id: _id } });
       if (!chatBox) {
         throw new ErrorResponse({
