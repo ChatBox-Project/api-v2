@@ -46,4 +46,18 @@ export class ChatBoxController {
     const create = await this._messageService.createMessage(headers.token, _id, message);
     return _.omit(create, 'message');
   }
+
+  @Get(':id/messages')
+  @ApiOkResponse({ description: 'Get chat box messages' })
+  public async getChatboxMessages(@Param('id') _id: string, @Headers() headers: any) {
+    const messages = await this._messageService.getChatboxMessages(headers.token, _id);
+    return _.omit(messages, 'messages');
+  }
+
+  // @Post(':id/messages/')
+  // @ApiOkResponse({ description: 'Get message by id' })
+  // public async send(@Param('id') _id: string, @Par('receiver_id') receiver_id: string, @Headers() headers: any, payload: CreateMessageDto) {
+  //   const message = await this._messageService.sendMessage(headers.token, _id, receiver_id, payload);
+  //   return _.omit(message, 'message');
+  // }
 }
