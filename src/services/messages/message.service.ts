@@ -70,7 +70,9 @@ export class MessageService {
       const holderUser = await this.findUser(token);
       const chatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
       // console.table(chatBox);
-      const messages = await this._messageRepository.find();
+      const messages = await this._messageRepository.find({
+        order: { createDateTime: 'DESC' },
+      });
       return messages;
     } catch (error) {
       throw new ErrorResponse({
