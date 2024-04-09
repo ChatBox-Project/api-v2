@@ -80,11 +80,11 @@ export class ChatBoxController {
     return _.omit(deleteMessage, 'message');
   }
 
-  @Get('search')
-  @ApiOkResponse({ description: 'Search message' })
-  public async searchMessage(@Query('message') message: any, @Headers() headers: any) {
-    console.log('query:: ', message);
-    const search = await this._messageService.searchMessageLikeContent(headers.token, message);
-    return _.omit(search, 'message');
-  }
+  // @Get('message')
+  // @ApiOkResponse({ description: 'Search message' })
+  // public async searchMessage(@Query('message') message: string, @Headers() headers: any) {
+  //   console.log('query:: ', message);  
+  //   // const search = await this._messageService.searchMessageLikeContent(headers.token, message);
+  //   // return _.omit(search, 'message');
+  // }
 }
