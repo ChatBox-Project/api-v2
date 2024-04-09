@@ -50,6 +50,7 @@ export class MessageService {
       chatbox.message = [...(chatbox.message || []), saveMessage];
 
       console.log('chatbox:: ', chatbox.message);
+      // console.table([...chatbox.message]);
       await this._chatBoxRepository.save(chatbox);
       // console.log('test:: ', test);
 
@@ -68,21 +69,9 @@ export class MessageService {
     try {
       const holderUser = await this.findUser(token);
       const chatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
-      if (holderUser.id === chatBox.user1_id) {
-        const messages = await this._messageRepository.find({
-          where: { senderId: chatBox.user1_id, receiverId: chatBox.user2_id },
-          order: { createDateTime: 'ASC' },
-          take: 15,
-        });
-        return messages;
-      } else {
-        const messages = await this._messageRepository.find({
-          where: { senderId: chatBox.user2_id, receiverId: chatBox.user1_id },
-          order: { createDateTime: 'ASC' },
-          take: 15,
-        });
-        return messages;
-      }
+      // console.table(chatBox);
+      const messages = await this._messageRepository.find();
+      return messages;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
