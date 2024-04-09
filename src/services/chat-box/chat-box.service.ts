@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AccountEntity, ChatBoxEntity, UserEntity } from 'src/entities/';
+import { AccountEntity, ChatBoxEntity, MessageEntity, UserEntity } from 'src/entities/';
 import { AccountRepository, ChatBoxRepository, UserRepository } from 'src/repositories';
 import { ResponseService } from '../res';
 import { ErrorResponse } from 'src/errors';
@@ -39,6 +39,7 @@ export class ChatBoxService {
         chatBoxName: `${foundUser.name} - ${checkIdReceiver.name}`,
       });
       await this._chatBoxRepository.save(createChatbox);
+      //  create Message
 
       // Update user's chat box
       foundUser.chatBox = [...(foundUser.chatBox || []), createChatbox];
