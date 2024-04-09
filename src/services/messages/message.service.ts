@@ -72,13 +72,13 @@ export class MessageService {
       // check sender and receiver
       const senderMessage = await this._messageRepository.find({
         where: { senderId: holderUser.id },
-        order: { lastChangedDateTime: 'DESC' },
+        order: { lastChangedDateTime: 'ASC' },
         take: 15,
       });
 
       const receiverMessage = await this._messageRepository.find({
         where: { receiverId: holderUser.id },
-        order: { lastChangedDateTime: 'DESC' },
+        order: { lastChangedDateTime: 'ASC' },
         take: 15,
       });
 
