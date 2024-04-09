@@ -36,14 +36,14 @@ export class ChatBoxController {
   @ApiOkResponse({ description: 'Get chat box by id' })
   @Get(':id')
   public async getChatBoxById(@Param('id') _id: string, @Headers('token') token: string) {
-    const chatBox = await this._chatBoxService.deleteChatBox(token, _id);
+    const chatBox = await this._chatBoxService.getChatBoxById(token, _id);
     return _.omit(chatBox, 'chatbox');
   }
 
   @Post(':id/messages')
   @ApiOkResponse({ description: 'Create message' })
-  public async createMessage(@Param('id') _id: string, @Body() message: CreateMessageDto) {
-    const create = await this._messageService.createMessage(_id, message);
+  public async createMessage(@Param('id') _id: string, @Body() message: CreateMessageDto, @Headers() headers: any) {
+    const create = await this._messageService.createMessage(headers.token, _id, message);
     return _.omit(create, 'message');
   }
 }
