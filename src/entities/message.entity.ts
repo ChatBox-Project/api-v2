@@ -29,7 +29,7 @@ export class MessageEntity extends BaseEntity implements IMessage {
   @JoinColumn()
   chatBox: ChatBoxEntity;
 
-  chatboxId: string;
+
   // @OneToMany(() => ChatGroupEntity, (chat) => chat.message)
   // @JoinColumn()
   // chatGroup?: ChatGroupEntity[];
