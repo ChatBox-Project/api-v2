@@ -1,11 +1,15 @@
 import { Body, Controller, Post, Headers, UsePipes, Param, Query, Get, Delete } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
-import { ChatBoxService } from 'src/services';
+import { ChatBoxService, MessageService } from 'src/services';
+import { CreateMessageDto } from 'src/validators';
 import _ from 'underscore';
 
 @Controller('chat')
 export class ChatBoxController {
-  constructor(private readonly _chatBoxService: ChatBoxService) {}
+  constructor(
+    private readonly _chatBoxService: ChatBoxService,
+    private readonly _messageService: MessageService,
+  ) {}
 
   // crud
   @Post(':id')
@@ -34,5 +38,12 @@ export class ChatBoxController {
   public async getChatBoxById(@Param('id') _id: string, @Headers('token') token: string) {
     const chatBox = await this._chatBoxService.deleteChatBox(token, _id);
     return _.omit(chatBox, 'chatbox');
+  }
+
+  @Post(':id/messages')
+  @ApiOkResponse({ description: 'Create message' })
+  public async createMessage(@Param('id') _id: string, @Body() message: CreateMessageDto) {
+    const create = await this._messageService.createMessage(_id, message);
+    return _.omit(create, 'message');
   }
 }
