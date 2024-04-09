@@ -54,7 +54,9 @@ export class ChatBoxService {
       });
     }
   }
-
+  public async searchBoxByNameUser(){
+    
+  }
   public async getChatBox(token: string): Promise<unknown> {
     try {
       // Find user by token
