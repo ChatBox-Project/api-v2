@@ -7,7 +7,7 @@ import { IsNotEmpty } from 'class-validator';
 
 @Entity({ name: 'message' })
 export class MessageEntity extends BaseEntity implements IMessage {
-  @Index('IX_Message_MessageId', { unique: true })
+  @Index('IX_Message_MessageId')
   @Column({ name: 'message_id', type: 'uuid' })
   @IsNotEmpty()
   @PrimaryGeneratedColumn()
