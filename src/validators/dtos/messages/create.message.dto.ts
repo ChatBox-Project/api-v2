@@ -6,23 +6,7 @@ export class CreateMessageDto {
   @ApiProperty()
   messageType: string;
 
-  //   @IsNotEmpty()
+  @IsNotEmpty()
   @ApiProperty()
-  contentText: string;
-
-  //   @IsNotEmpty()
-  @ApiProperty()
-  contentImage?: string;
-
-  //   @IsNotEmpty()
-  @ApiProperty()
-  contentAudio?: string;
-
-  //   @IsNotEmpty()
-  @ApiProperty()
-  contentVideo?: string;
-
-  //   @IsNotEmpty()
-  @ApiProperty()
-  contentFile?: string;
+  contentMessage: string;
 }
