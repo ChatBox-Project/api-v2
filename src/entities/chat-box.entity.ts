@@ -14,11 +14,11 @@ export class ChatBoxEntity extends BaseEntity {
 
   @Index('IX_SENDER_ID')
   @Column({ name: 'sender_id', type: 'uuid' })
-  sender_id: string;
+  user1_id: string;
 
   @Index('IX_RECEIVER_ID')
   @Column({ name: 'receiver_id', type: 'uuid' })
-  receiver_id: string;
+  user2_id: string;
 
   @ManyToOne(() => UserEntity)
   user: UserEntity;
