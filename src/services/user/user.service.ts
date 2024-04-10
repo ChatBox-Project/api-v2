@@ -6,8 +6,6 @@ import { AccountRepository, UserRepository } from 'src/repositories';
 import { CreateUserDto, UpdateUserDto } from 'src/validators';
 import { ResponseService } from '../res';
 import { UserEntity } from 'src/entities/user.base.entity';
-import { Brackets } from 'typeorm';
-import { isUUID } from 'class-validator';
 
 @Injectable()
 export class UserService {
