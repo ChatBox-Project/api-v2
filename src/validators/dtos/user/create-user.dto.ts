@@ -21,8 +21,8 @@ export class CreateUserDto implements ICreateUserDto {
   gender: EGender;
 
   // @IsNotEmpty()
-  @MinLength(5)
-  @MaxLength(255)
+  // @MinLength(5)
+  // @MaxLength(255)
   @IsUrl()
   @ApiProperty()
   avatarUrl: string;
