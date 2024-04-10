@@ -9,16 +9,21 @@ import { AccountRepository, ChatBoxRepository, MessageRepository, UserRepository
 import { CreateMessageDto } from 'src/validators';
 import { ResponseService } from '../res';
 import { ILike } from 'typeorm';
+import { AppGateWay } from '../gateway';
 
 @Injectable()
 export class MessageService {
+  // private _appGateway: AppGateWay;
   constructor(
     @InjectRepository(MessageEntity) private readonly _messageRepository: MessageRepository,
     @InjectRepository(ChatBoxEntity) private readonly _chatBoxRepository: ChatBoxRepository,
     @InjectRepository(UserEntity) private readonly _userRepository: UserRepository,
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
     private readonly _response: ResponseService,
-  ) {}
+    // private readonly _appGateway: AppGateWay,
+  ) {
+    
+  }
 
   public async createMessage(_token: string, _id: string, payload: CreateMessageDto): Promise<unknown> {
     try {
@@ -49,10 +54,11 @@ export class MessageService {
       // Update user's chat box
       chatbox.message = [...(chatbox.message || []), saveMessage];
 
-      console.log('chatbox:: ', chatbox.message);
+      // console.log('chatbox:: ', chatbox.message);
       // console.table([...chatbox.message]);
       await this._chatBoxRepository.save(chatbox);
       // console.log('test:: ', test);
+      // this._appGateway.server.emit('newMessage', saveMessage);
 
       const metadata = { message: saveMessage };
       const res = this._response.createResponse(200, 'Create message success', metadata);
