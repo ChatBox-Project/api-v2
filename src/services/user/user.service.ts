@@ -109,6 +109,27 @@ export class UserService {
       });
     }
   }
+
+  public async getUserById(token: string, userId: string): Promise<unknown> {
+    try {
+      await this.findAccountByToken(token);
+      const user = await this._userRepository.findOne({ where: { id: userId } });
+      if (!user) {
+        throw new ErrorResponse({
+          ...new BadRequestException('User not found'),
+          errorCode: 'USER_NOT_FOUND',
+        });
+      }
+      const metadata = { user };
+      return this._response.createResponse(200, 'success', metadata);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'USER_NOT_FOUND',
+      });
+    }
+  }
+
   // add friend
   // public async addFriend(token: string, friendId: string): Promise<unknown> {
   //   try {
