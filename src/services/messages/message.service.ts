@@ -21,9 +21,7 @@ export class MessageService {
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
     private readonly _response: ResponseService,
     // private readonly _appGateway: AppGateWay,
-  ) {
-    
-  }
+  ) {}
 
   public async createMessage(_token: string, _id: string, payload: CreateMessageDto): Promise<unknown> {
     try {
@@ -49,14 +47,11 @@ export class MessageService {
         receiverId: receiver,
         chatBox: chatbox,
       });
+      console.log('saveMessage:: ', saveMessage);
       await this._messageRepository.save(saveMessage);
-
       // Update user's chat box
-      chatbox.message = [...(chatbox.message || []), saveMessage];
 
-      // console.log('chatbox:: ', chatbox.message);
-      // console.table([...chatbox.message]);
-      await this._chatBoxRepository.save(chatbox);
+      // await this._chatBoxRepository.save(chatbox);
       // console.log('test:: ', test);
       // this._appGateway.server.emit('newMessage', saveMessage);
 
@@ -75,11 +70,18 @@ export class MessageService {
     try {
       const holderUser = await this.findUser(token);
       const chatBox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
-      // console.table(chatBox);
+
       const messages = await this._messageRepository.find({
         order: { createDateTime: 'DESC' },
+        where: { chatBox: { id: _id } },
       });
+      // console.table(chatBox);
+      // const messages = await this._messageRepository.find({
+
+      //   order: { createDateTime: 'DESC' },
+      // });
       return messages;
+      
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
