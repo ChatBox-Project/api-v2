@@ -23,7 +23,7 @@ export class CreateUserDto implements ICreateUserDto {
   // @IsNotEmpty()
   // @MinLength(5)
   // @MaxLength(255)
-  @IsUrl()
+  // @IsUrl()
   @ApiProperty()
   avatarUrl: string;
 
