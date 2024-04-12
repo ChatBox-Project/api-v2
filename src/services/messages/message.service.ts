@@ -147,7 +147,7 @@ export class MessageService {
       await this.findUser(token);
 
       const messages = await this._messageRepository.find({
-        where: { contentMessage: ILike(content) },
+        // where: { contentMessage: ILike(content) },
         order: { createDateTime: 'ASC' },
         take: 15,
       });
