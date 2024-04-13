@@ -5,9 +5,14 @@ import { AccountEntity } from 'src/common/entities/account.entity';
 import { MessageEntity } from 'src/common/entities/message.entity';
 import { UserEntity } from 'src/common/entities/user.base.entity';
 import { ErrorResponse } from 'src/errors';
-import { AccountRepository, ChatBoxRepository, MessageRepository, UserRepository } from 'src/common/repositories';
-import { CreateMessageDto } from 'src/validators';
+
+
 import { ResponseService } from '../../common/res';
+import { MessageRepository } from './message.repository';
+import { ChatBoxRepository } from '../chat-box/chat-box.entity';
+import { UserRepository } from '../accounts/users/user.repository';
+import { AccountRepository } from '../accounts/account.repository';
+import { CreateMessageDto } from './dtos';
 
 @Injectable()
 export class MessageService {
