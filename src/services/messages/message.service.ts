@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Headers, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatBoxEntity } from 'src/entities';
 import { AccountEntity } from 'src/entities/account.entity';
@@ -8,8 +8,6 @@ import { ErrorResponse } from 'src/errors';
 import { AccountRepository, ChatBoxRepository, MessageRepository, UserRepository } from 'src/repositories';
 import { CreateMessageDto } from 'src/validators';
 import { ResponseService } from '../res';
-import { ILike } from 'typeorm';
-import { AppGateWay } from '../gateway';
 
 @Injectable()
 export class MessageService {
@@ -20,7 +18,6 @@ export class MessageService {
     @InjectRepository(UserEntity) private readonly _userRepository: UserRepository,
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
     private readonly _response: ResponseService,
-    // private readonly _appGateway: AppGateWay,
   ) {}
 
   public async createMessage(_token: string, _id: string, payload: CreateMessageDto): Promise<unknown> {
@@ -81,7 +78,6 @@ export class MessageService {
       //   order: { createDateTime: 'DESC' },
       // });
       return messages;
-    
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException(error.message),
