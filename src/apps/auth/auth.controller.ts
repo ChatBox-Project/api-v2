@@ -1,10 +1,11 @@
 import { Body, Controller, Post, Headers, UsePipes } from '@nestjs/common';
 import { AuthService } from 'src/apps/auth/auth.service';
-import { AccountLoginDto, AccountRegisterDto } from 'src/validators';
+
 
 import { RegisterSchema } from 'src/validators/joi-schema/auth/register.joi.schema';
 import { JoiValidationPipe } from 'src/validators/pipes/joi';
 import _ from 'underscore';
+import { AccountLoginDto, AccountRegisterDto } from './dto';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly _authService: AuthService) {}
