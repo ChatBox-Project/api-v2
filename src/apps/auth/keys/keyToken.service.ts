@@ -2,8 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/common/entities/account.entity';
 import { ErrorResponse } from 'src/errors';
-import { AccountRepository } from 'src/common/repositories';
+
 import * as crypto from 'crypto';
+import { AccountRepository } from 'src/apps/accounts/account.repository';
 @Injectable()
 export class KeyTokenService {
   constructor(@InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository) {}
