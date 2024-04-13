@@ -2,8 +2,9 @@ import { CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
+import { AccountRepository } from 'src/apps/accounts/account.repository';
 import { AccountEntity } from 'src/common/entities/account.entity';
-import { AccountRepository } from 'src/common/repositories';
+
 
 export class AuthGuard implements CanActivate {
   constructor(
