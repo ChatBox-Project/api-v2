@@ -1,6 +1,5 @@
 import { Body, Controller, Headers, Post } from '@nestjs/common';
 
-import { CreateMessageDto } from 'src/validators';
 import _ from 'underscore';
 import { MessageService } from './message.service';
 @Controller('message')
