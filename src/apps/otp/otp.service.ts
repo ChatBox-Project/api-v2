@@ -2,9 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/common/entities/account.entity';
 import { ErrorResponse } from 'src/errors';
-import { AccountRepository } from 'src/common/repositories';
+
 import { Twilio } from 'twilio';
 import { ResponseService } from '../../common/res';
+import { AccountRepository } from '../accounts/account.repository';
 
 @Injectable()
 export class OtpService {
