@@ -1,2 +1,2 @@
-export * from './auth';
+export * from '../common/auth';
 export * from './twilio/twilio.util';
