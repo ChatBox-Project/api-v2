@@ -1,8 +1,9 @@
 import { Body, Controller, Post, Headers, Put, Param, Patch, Query, Get } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
-import { ChangePwDto, ForgotPwDto } from 'src/validators';
 import _ from 'underscore';
 import { AccountService } from './account.service';
+import { ChangePwDto, ForgotPwDto } from './dto';
+
 @Controller('account')
 export class AccountController {
   constructor(private readonly _accountSerivce: AccountService) {}
