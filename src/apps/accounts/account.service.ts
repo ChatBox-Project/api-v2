@@ -2,11 +2,13 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/common/entities/account.entity';
 import { ErrorResponse } from 'src/errors';
-import { AccountRepository } from 'src/common/repositories';
+
 import { ILike } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ResponseService } from '../../common/res';
-import { ChangePwDto, ForgotPwDto } from 'src/validators';
+import { AccountRepository } from './account.repository';
+import { ChangePwDto, ForgotPwDto } from './dto';
+
 
 @Injectable()
 export class AccountService {
