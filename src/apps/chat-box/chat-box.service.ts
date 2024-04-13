@@ -1,9 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity, ChatBoxEntity, MessageEntity, UserEntity } from 'src/common/entities';
-import { AccountRepository, ChatBoxRepository, UserRepository } from 'src/common/repositories';
+
 import { ResponseService } from '../../common/res';
 import { ErrorResponse } from 'src/errors';
+import { AccountRepository } from '../accounts/account.repository';
+import { UserRepository } from '../accounts/users/user.repository';
+import { ChatBoxRepository } from './chat-box.entity';
 
 @Injectable()
 export class ChatBoxService {
