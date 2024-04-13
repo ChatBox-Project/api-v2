@@ -1,8 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/common/entities/account.entity';
-import { AccountRepository } from 'src/common/repositories';
-import { AccountLoginDto, AccountRegisterDto, checkUsername } from 'src/validators';
+
 
 import { ErrorResponse } from 'src/errors';
 import * as bcrypt from 'bcrypt';
@@ -11,6 +10,9 @@ import { KeyTokenService } from './keys/keyToken.service';
 import { createTokenPair } from 'src/common/auth/auth.util';
 import { ResponseService } from '../../common/res';
 import { AccountService } from '../accounts/account.service';
+import { AccountRepository } from '../accounts/account.repository';
+import { AccountLoginDto, AccountRegisterDto } from './dto';
+import { checkUsername } from 'src/validators';
 
 @Injectable()
 export class AuthService {
