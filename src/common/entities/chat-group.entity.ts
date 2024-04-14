@@ -18,7 +18,7 @@ export class ChatGroupEntity extends BaseEntity implements IChatGroupEntity {
 
   @Column({ name: 'group_members', type: 'varchar', array: true })
   groupMembers?: string[];
-
+ 
   @Column({ name: 'group_leader_id', type: 'varchar' })
   groupLeader: string;
 
