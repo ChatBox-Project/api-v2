@@ -6,56 +6,39 @@ import { MessageEntity } from 'src/common/entities/message.entity';
 import { UserEntity } from 'src/common/entities/user.base.entity';
 import { ErrorResponse } from 'src/errors';
 
-
 import { ResponseService } from '../../common/res';
 import { MessageRepository } from './message.repository';
 import { ChatBoxRepository } from '../chat-box/chat-box.entity';
 import { UserRepository } from '../accounts/users/user.repository';
 import { AccountRepository } from '../accounts/account.repository';
 import { CreateMessageDto } from './dtos';
+import { Gateway } from '../gateways/gateway';
 
 @Injectable()
 export class MessageService {
-  // private _appGateway: AppGateWay;
   constructor(
     @InjectRepository(MessageEntity) private readonly _messageRepository: MessageRepository,
     @InjectRepository(ChatBoxEntity) private readonly _chatBoxRepository: ChatBoxRepository,
     @InjectRepository(UserEntity) private readonly _userRepository: UserRepository,
     @InjectRepository(AccountEntity) private readonly _accountRepository: AccountRepository,
+    private readonly eventGateway: Gateway,
     private readonly _response: ResponseService,
   ) {}
 
   public async createMessage(_token: string, _id: string, payload: CreateMessageDto): Promise<unknown> {
     try {
-      const userholder = await this.findUser(_token);
-      // check id
-      const chatbox = await this._chatBoxRepository.findOneOrFail({ where: { id: _id } });
-      console.log('chatbox before:: ', chatbox.message);
-      let sender = '';
-      let receiver = '';
-      // check sender and receiver
-      if (userholder.id === chatbox.user1_id) {
-        sender = chatbox.user1_id;
-        receiver = chatbox.user2_id;
-      } else {
-        sender = chatbox.user2_id;
-        receiver = chatbox.user1_id;
-      }
+      const [userholder, chatbox] = await Promise.all([this.findUser(_token), this._chatBoxRepository.findOneOrFail({ where: { id: _id } })]);
 
-      // console.log('checkIDChatbox:: ', checkIDChatbox);
       const saveMessage = await this._messageRepository.create({
         ...payload,
-        senderId: sender,
-        receiverId: receiver,
+        authorId: userholder.id,
         chatBox: chatbox,
       });
-      console.log('saveMessage:: ', saveMessage);
+      // console.log('saveMessage:: ', saveMessage);
       await this._messageRepository.save(saveMessage);
-      // Update user's chat box
 
-      // await this._chatBoxRepository.save(chatbox);
-      // console.log('test:: ', test);
-      // this._appGateway.server.emit('newMessage', saveMessage);
+      // send message to gateway
+      this.eventGateway.sendMessage(saveMessage, _id);
 
       const metadata = { message: saveMessage };
       const res = this._response.createResponse(200, 'Create message success', metadata);
