@@ -13,22 +13,16 @@ export class MessageEntity extends BaseEntity implements IMessage {
   @PrimaryGeneratedColumn()
   messageId: string;
 
-  @Column({ name: 'sender_id', type: 'varchar' })
-  senderId: string;
-
-  @Column({ name: 'receiver_id', type: 'varchar' })
-  receiverId: string;
-
+  @Column({ name: 'author_id', type: 'uuid' })
+  authorId: string;
+  @Column({ name: 'message_content', type: 'text' })
+  messageContent: string;
   @Column({ name: 'message_type', type: 'varchar' })
   messageType: string;
-
-  @Column({ name: 'content_text', type: 'varchar' })
-  contentMessage: string;
 
   @ManyToOne(() => ChatBoxEntity, (chat) => chat.message)
   @JoinColumn()
   chatBox: ChatBoxEntity;
-
 
   // @OneToMany(() => ChatGroupEntity, (chat) => chat.message)
   // @JoinColumn()
