@@ -7,10 +7,12 @@ import { ChatBoxService } from './chat-box.service';
 import { ResponseService } from 'src/common/res';
 import { MessageService } from '../messages/message.service';
 import { ChatBoxController } from './chat-box.controller';
+import { GatewayModule } from '../gateways/gateway.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([...entities])],
+  imports: [TypeOrmModule.forFeature([...entities]), GatewayModule],
   providers: [ChatBoxService, ResponseService, MessageService],
   controllers: [ChatBoxController],
+  exports: [ChatBoxService],
 })
 export class ChatBoxModule {}

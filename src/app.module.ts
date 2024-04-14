@@ -1,8 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from './common/entities/entity.provider';
-import { DatabaseModule } from './common/database/postgres.database.module';
+import { PostgresDatabaseModule } from './common/database/postgres/postgres.database.module';
 import { LoggerMiddleware } from './middlewares/app.middleware';
 import { AuthModule } from './apps/auth/auth.module';
 import { KeyModule } from './apps/auth/keys/key.module';
@@ -11,12 +9,12 @@ import { OtpModule } from './apps/otp/otp.module';
 import { AccountModule } from './apps/accounts/account.module';
 import { MessageModule } from './apps/messages/message.module';
 import { ChatBoxModule } from './apps/chat-box/chat-box.module';
-
+import { GatewayModule } from './apps/gateways/gateway.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    DatabaseModule,
+    GatewayModule,
     AuthModule,
     KeyModule,
     UserModule,
@@ -24,7 +22,7 @@ import { ChatBoxModule } from './apps/chat-box/chat-box.module';
     AccountModule,
     MessageModule,
     ChatBoxModule,
-    TypeOrmModule.forFeature(entities),
+    PostgresDatabaseModule,
   ],
   controllers: [],
   providers: [],
