@@ -26,7 +26,7 @@ import * as Joi from 'joi';
         password: configService.getOrThrow('DATABASE_PASSWORD'),
         autoLoadEntities: true,
         synchronize: configService.getOrThrow('DATABASE_SYNCHRONIZE'),
-        entities: ['dist/**/*.entity{.ts,.js}'],
+        // entities: [],
         cli: {
           migrationsDir: 'src/migrations',
         },

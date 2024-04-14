@@ -29,6 +29,5 @@ export class CreateUserDto implements ICreateUserDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  // @IsDate()
   birth: Date;
 }

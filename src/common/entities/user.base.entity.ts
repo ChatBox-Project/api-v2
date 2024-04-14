@@ -26,7 +26,7 @@ export class UserEntity extends BaseEntity implements IUserEntity {
   @IsString()
   avatarUrl: string;
 
-  @Column({ name: 'birth', type: 'date', default: new Date() })
+  @Column({ name: 'birth', type: 'date' })
   birth: Date;
 
   @Index('IX_USER_FRIEND')
