@@ -27,7 +27,7 @@ export class CreateUserDto implements ICreateUserDto {
   @ApiProperty()
   avatarUrl: string;
 
-  @IsNotEmpty()
+  // @IsNotEmpty()
   @ApiProperty()
   birth: Date;
 }
