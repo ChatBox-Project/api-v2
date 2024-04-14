@@ -5,12 +5,14 @@ import { entities } from 'src/common/entities/entity.provider';
 import { MessageService } from './message.service';
 import { ResponseService } from 'src/common/res';
 import { ChatBoxService } from '../chat-box/chat-box.service';
+import { GatewayModule } from '../gateways/gateway.module';
+import { ChatBoxModule } from '../chat-box/chat-box.module';
 
 // import { AppGateWayModule } from '../gateway';
 
 @Module({
-  imports: [TypeOrmModule.forFeature(entities)],
+  imports: [TypeOrmModule.forFeature(entities), ChatBoxModule, GatewayModule],
   controllers: [MessageController],
-  providers: [MessageService, ResponseService, ChatBoxService],
+  providers: [MessageService, ResponseService],
 })
 export class MessageModule {}
