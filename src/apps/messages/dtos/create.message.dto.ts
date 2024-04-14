@@ -8,5 +8,5 @@ export class CreateMessageDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  contentMessage: string;
+  messageContent: string;
 }
