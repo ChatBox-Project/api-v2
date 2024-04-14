@@ -13,6 +13,7 @@ export class Gateway implements OnModuleInit, OnGatewayConnection, OnGatewayDisc
 
   sendMessage(message: MessageEntity, to: string) {
     try {
+      console.log(to)
       this.server.emit('message', message);
     } catch (error) {
       this.logger.error(`Error sending message: ${error.message}`);
