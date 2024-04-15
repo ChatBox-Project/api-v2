@@ -3,8 +3,5 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { ErrorResponse } from 'src/errors';
 
-
 @Injectable()
-export class MessageService {
-  
-}
+export class ChatGroupService {}
