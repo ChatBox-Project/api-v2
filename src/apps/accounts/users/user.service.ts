@@ -20,12 +20,10 @@ export class UserService {
   public async createUser(_userDto: CreateUserDto, token: string): Promise<unknown> {
     try {
       const holderAccount = await this.findAccountByToken(token);
-      console.log('holderAccount:: ', holderAccount);
 
       const createUser = this._userRepository.create({
         ..._userDto,
-
-        // accounts: holderAccount,
+        accounts: holderAccount,
       });
       console.log('createUser:: ', createUser);
       if (!createUser) {
