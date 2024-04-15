@@ -11,5 +11,5 @@ export class UpdateUserDto {
   avatarUrl: string;
   // @IsDate()
   @ApiProperty()
-  birth: Date;
+  birth: string;
 }

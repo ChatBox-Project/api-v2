@@ -26,12 +26,12 @@ export class UserEntity extends BaseEntity implements IUserEntity {
   @IsString()
   avatarUrl: string;
 
-  @Column({ name: 'birth', type: 'date' })
-  birth: Date;
+  @Column({ name: 'birth', type: 'varchar' , default: ''})
+  birth: string;
 
   @Index('IX_USER_FRIEND')
-  @Column('jsonb', { array: true, default: [] })
-  listFriend: IListFriend[];
+  @Column('jsonb', { array: true, default: {} })
+  listFriend: IListFriend;
 
   @OneToOne(() => AccountEntity, (account) => account.user)
   accounts: AccountEntity;

@@ -10,6 +10,6 @@ export interface IUserEntity extends IBaseEntity {
   name: string;
   gender: EGender;
   avatarUrl: string;
-  birth: Date;
-  listFriend: IListFriend[];
+  birth: string;
+  listFriend: IListFriend;
 }

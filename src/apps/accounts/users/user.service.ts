@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountEntity } from 'src/common/entities/account.entity';
 import { ErrorResponse } from 'src/errors';
@@ -19,13 +19,15 @@ export class UserService {
 
   public async createUser(_userDto: CreateUserDto, token: string): Promise<unknown> {
     try {
-      const foundAccount = await this.findAccountByToken(token);
+      const holderAccount = await this.findAccountByToken(token);
+      console.log('holderAccount:: ', holderAccount);
 
       const createUser = this._userRepository.create({
         ..._userDto,
-        accounts: foundAccount,
-      });
 
+        // accounts: holderAccount,
+      });
+      console.log('createUser:: ', createUser);
       if (!createUser) {
         throw new ErrorResponse({
           ...new BadRequestException('User not created'),
@@ -34,7 +36,7 @@ export class UserService {
       }
 
       const savedUser = await this._userRepository.save(createUser);
-
+      console.log('savedUser:: ', savedUser);
       const metadata = { user: savedUser };
       const res = this._response.createResponse(200, 'update success', metadata);
       return res;
@@ -130,70 +132,6 @@ export class UserService {
     }
   }
 
-  // add friend
-  // public async addFriend(token: string, friendId: string): Promise<unknown> {
-  //   try {
-  //     // check token
-  //     if (!token) {
-  //       throw new ErrorResponse({
-  //         ...new BadRequestException('Invalid token'),
-  //         errorCode: 'INVALID_TOKEN',
-  //       });
-  //     }
-  //     // check friendId
-  //     if (!isUUID(friendId)) {
-  //       throw new Error('Invalid friendId');
-  //     }
-
-  //     // find account
-  //     const holderAccount = await this._accountRepository.findOne({ where: { accessToken: token } });
-  //     // console.log('holderAccount:: ', holderAccount)
-  //     if (!holderAccount) {
-  //       throw new ErrorResponse({
-  //         ...new BadRequestException('Account not found'),
-  //         errorCode: 'ACCOUNT_NOT_FOUND',
-  //       });
-  //     }
-  //     // console.log('holderAccount:: ', holderAccount)
-  //     // console.log('friendId:: ', friendId)
-
-  //     // find user
-  //     const holderUser = await this._userRepository.findOne({ where: { id: holderAccount.userId } });
-  //     // console.log('holderUser:: ', holderUser)
-
-  //     if (!holderUser) {
-  //       throw new ErrorResponse({
-  //         ...new BadRequestException('User not found'),
-  //         errorCode: 'USER_NOT_FOUND',
-  //       });
-  //     }
-
-  //     // check friend
-
-  //     // console.log('friendUser:: ', friendUser);
-
-  //     // add friend
-
-  //     if (!friendUser) {
-  //       throw new ErrorResponse({
-  //         ...new BadRequestException('Add friend failed'),
-  //         errorCode: 'ADD_FRIEND_FAILED',
-  //       });
-  //     }
-
-  //     // const metadata = { user: addedFriend };
-  //     // const res = this._response.createResponse(200, 'Add friend success', metadata);
-  //     // return res;
-
-  //     return;
-  //   } catch (error) {
-  //     throw new ErrorResponse({
-  //       ...new BadRequestException(error.message),
-  //       errorCode: 'ADD_FRIEND_FAILED',
-  //     });
-  //   }
-  // }
-
   private async findAccountByToken(token: string): Promise<AccountEntity> {
     // Check token
     if (!token) {
@@ -228,5 +166,59 @@ export class UserService {
       });
     }
     return user;
+  }
+  private async getUserByIdUser(userId: string): Promise<UserEntity> {
+    try {
+      const user = await this._userRepository.findOne({ where: { id: userId } });
+
+      if (!user) {
+        throw new ErrorResponse({
+          ...new BadRequestException('User not found'),
+          errorCode: 'USER_NOT_FOUND',
+        });
+      }
+      return user;
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'USER_NOT_FOUND',
+      });
+    }
+  }
+
+  // friend
+  public async addFriend(token: string, friendId: string): Promise<unknown> {
+    try {
+      const holderAccount = await this.findAccountByToken(token);
+      // console.log('holderAccount:: ', holderAccount)
+      const holderUser = await this.getUserByAccountId(holderAccount.userId);
+      // console.log('holderUser:: ', holderUser)
+      const friendUser = await this.getUserByIdUser(friendId);
+      // console.log('friendUser:: ', friendUser)
+
+      if (!holderUser || !friendUser) {
+        throw new ErrorResponse({
+          ...new NotFoundException('User or friend not found'),
+          errorCode: 'USER_NOT_FOUND',
+        });
+      }
+      // check friend
+
+      // push on list friend
+      // holderUser.listFriend.push({ userid: [friendUser.id] });
+      // friendUser.listFriend.push({ userid: [holderUser.id] });
+
+      console.log('holderUser:: ', holderUser);
+      console.log('friendUser:: ', friendUser);
+      // save
+      await this._userRepository.save([holderUser, friendUser]);
+
+      return this._response.createResponse(200, 'success', { holderUser, friendUser });
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException(error.message),
+        errorCode: 'ADD_FRIEND_FAILED',
+      });
+    }
   }
 }

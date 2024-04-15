@@ -6,7 +6,7 @@ interface ICreateUserDto {
   name: string;
   gender: EGender;
   avatarUrl: string;
-  birth: Date;
+  birth: string;
 }
 export class CreateUserDto implements ICreateUserDto {
   @IsNotEmpty()
@@ -27,7 +27,7 @@ export class CreateUserDto implements ICreateUserDto {
   @ApiProperty()
   avatarUrl: string;
 
-  // @IsNotEmpty()
+  @IsNotEmpty()
   @ApiProperty()
-  birth: Date;
+  birth: string;
 }

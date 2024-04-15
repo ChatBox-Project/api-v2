@@ -6,6 +6,7 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ResponseService } from 'src/common/res';
 
+
 @Module({
   imports: [TypeOrmModule.forFeature(entities)],
   controllers: [UserController],

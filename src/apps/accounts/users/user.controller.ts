@@ -1,10 +1,10 @@
 import { Body, Controller, Post, Headers, Get, Patch, Put, Param } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 
-
 import * as _ from 'underscore';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto';
+
 @Controller('users')
 export class UserController {
   constructor(private readonly _userService: UserService) {}
@@ -34,9 +34,10 @@ export class UserController {
     const user = await this._userService.getUserById(_header.token, _id);
     return _.omit(user);
   }
-  // @Put('friends/:id')
-  // public async addFriend(@Headers() _header: any, @Param('id') friendId: string): Promise<unknown> {
-  //   const addFriend = await this._userService.addFriend(_header.token, friendId);
-  //   return _.omit(addFriend);
-  // }
+  @Put('friends/:id')
+  public async addFriend(@Headers() _header: any, @Param('id') friendId: string): Promise<unknown> {
+    const addFriend = await this._userService.addFriend(_header.token, friendId);
+    console.log('addFriend', friendId);
+    return;
+  }
 }
