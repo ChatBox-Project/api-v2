@@ -8,7 +8,7 @@ import { UserModule } from './apps/accounts/users/user.module';
 import { OtpModule } from './apps/otp/otp.module';
 import { AccountModule } from './apps/accounts/account.module';
 import { MessageModule } from './apps/messages/message.module';
-import { ChatBoxModule } from './apps/chat-box/chat-box.module';
+
 // import { GatewayModule } from './apps/gateways/gateway.module';
 import { ChatGroupModule } from './apps/chat-groups';
 import { MongooseDatabaseModule } from './common/database/mongooses/mongoose.database.module';
@@ -24,7 +24,6 @@ import { MongooseDatabaseModule } from './common/database/mongooses/mongoose.dat
     OtpModule,
     AccountModule,
     MessageModule,
-    ChatBoxModule,
     ChatGroupModule,
     PostgresDatabaseModule,
     MongooseDatabaseModule,
