@@ -34,7 +34,7 @@ export class UserService {
       }
 
       const savedUser = await this._userRepository.save(createUser);
-      console.log('savedUser:: ', savedUser);
+      // console.log('savedUser:: ', savedUser);
       const metadata = { user: savedUser };
       const res = this._response.createResponse(200, 'update success', metadata);
       return res;
