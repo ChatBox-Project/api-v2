@@ -50,6 +50,9 @@ dependencies:
   body-parser:
     specifier: ^1.20.2
     version: 1.20.2
+  bson:
+    specifier: ^6.6.0
+    version: 6.6.0
   class-transformer:
     specifier: ^0.5.1
     version: 0.5.1
@@ -112,6 +115,9 @@ devDependencies:
   '@types/bcrypt':
     specifier: ^5.0.2
     version: 5.0.2
+  '@types/bson':
+    specifier: ^4.2.0
+    version: 4.2.0
   '@types/express':
     specifier: ^4.17.21
     version: 4.17.21
@@ -1436,6 +1442,13 @@ packages:
       '@types/node': 20.12.7
     dev: true
 
+  /@types/bson@4.2.0:
+    resolution: {integrity: sha512-ELCPqAdroMdcuxqwMgUpifQyRoTpyYCNr1V9xKyF40VsBobsj+BbWNRvwGchMgBPGqkw655ypkjj2MEF5ywVwg==}
+    deprecated: This is a stub types definition. bson provides its own type definitions, so you do not need this installed.
+    dependencies:
+      bson: 6.6.0
+    dev: true
+
   /@types/connect@3.4.38:
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
     dependencies:
@@ -2291,7 +2304,6 @@ packages:
   /bson@6.6.0:
     resolution: {integrity: sha512-BVINv2SgcMjL4oYbBuCQTpE3/VKOSxrOA8Cj/wQP7izSzlBGVomdm+TcUd0Pzy0ytLSSDweCKQ6X3f5veM5LQA==}
     engines: {node: '>=16.20.1'}
-    dev: false
 
   /buffer-equal-constant-time@1.0.1:
     resolution: {integrity: sha512-zRpUiDwd/xk6ADqPMATG8vc9VPrkck7T07OIx0gnjmJAnHnTVXNQG3vfvWNuiZIkwu9KrKdA1iJKfsfTVxE6NA==}
