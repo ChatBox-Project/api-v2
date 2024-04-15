@@ -9,12 +9,15 @@ import { OtpModule } from './apps/otp/otp.module';
 import { AccountModule } from './apps/accounts/account.module';
 import { MessageModule } from './apps/messages/message.module';
 import { ChatBoxModule } from './apps/chat-box/chat-box.module';
-import { GatewayModule } from './apps/gateways/gateway.module';
+// import { GatewayModule } from './apps/gateways/gateway.module';
+import { ChatGroupModule } from './apps/chat-groups';
+import { MongooseDatabaseModule } from './common/database/mongooses/mongoose.database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    GatewayModule,
+
+    // GatewayModule,
     AuthModule,
     KeyModule,
     UserModule,
@@ -22,7 +25,9 @@ import { GatewayModule } from './apps/gateways/gateway.module';
     AccountModule,
     MessageModule,
     ChatBoxModule,
+    ChatGroupModule,
     PostgresDatabaseModule,
+    MongooseDatabaseModule,
   ],
   controllers: [],
   providers: [],
