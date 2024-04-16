@@ -4,16 +4,13 @@ import { MessageController } from './message.controller';
 import { entities } from 'src/common/entities/entity.provider';
 import { MessageService } from './message.service';
 import { ResponseService } from 'src/common/res';
-import { ChatBoxService } from '../chat-box/chat-box.service';
-// import { GatewayModule } from '../gateways/gateway.module';
-import { ChatBoxModule } from '../chat-box/chat-box.module';
-
-
-// import { AppGateWayModule } from '../gateway';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Messages, MessagesSchema } from 'src/common/models/message.model';
+import { MessagesRepository } from 'src/common';
 
 @Module({
-  imports: [TypeOrmModule.forFeature(entities), ChatBoxModule],
+  imports: [TypeOrmModule.forFeature(entities), MongooseModule.forFeature([{ name: Messages.name, schema: MessagesSchema }])],
   controllers: [MessageController],
-  providers: [MessageService, ResponseService],
+  providers: [MessageService, ResponseService, MessagesRepository],
 })
 export class MessageModule {}
