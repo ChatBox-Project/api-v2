@@ -9,27 +9,30 @@ import { OtpModule } from './apps/otp/otp.module';
 import { AccountModule } from './apps/accounts/account.module';
 import { MessageModule } from './apps/messages/message.module';
 
-// import { GatewayModule } from './apps/gateways/gateway.module';
-import { ChatGroupModule } from './apps/chat-groups';
 import { MongooseDatabaseModule } from './common/database/mongooses/mongoose.database.module';
+import { ConversationModule } from './apps/conversations/conversation.module';
+import { ResponseService } from './common/res';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from './common/models/user.model';
+import { Conversation, ConversationSchema } from './common/models/conversation.model';
+import { Room, RoomChatSchema } from './common/models/room.model';
+import { Messages } from './common/models/message.model';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-
-    // GatewayModule,
     AuthModule,
     KeyModule,
     UserModule,
     OtpModule,
     AccountModule,
     MessageModule,
-    ChatGroupModule,
+    ConversationModule,
     PostgresDatabaseModule,
     MongooseDatabaseModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [ResponseService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
