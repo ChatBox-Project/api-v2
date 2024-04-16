@@ -45,7 +45,12 @@ export class UserController {
   @Get('search/:phone')
   @ApiOkResponse({ description: 'Search user by phone' })
   public async search(@Param('phone') phone: string, @Headers() _headers: any) {
-    
     return await this.userService.search(_headers.token, phone);
+  }
+
+  @Get('friends/list')
+  @ApiOkResponse({ description: 'List friend' })
+  public async getListFriends(@Headers() _headers: any) {
+    return await this.userService.getListFriends(_headers.token);
   }
 }

@@ -48,7 +48,7 @@ export class UserService {
         accountId: holderAccount.id,
       });
 
-      console.log('user', user);
+      // console.log('user', user);
       const metadata = { user };
       const res = this._response.createResponse(200, 'update success', metadata);
       return res;
@@ -191,15 +191,30 @@ export class UserService {
           errorCode: 'ACCOUNT_NOT_EXISTS',
         });
       }
-      const holderUser = await this.userModel.findOne({ accountId: holderAccount.id });
-      console.log('holderUser', holderUser);
-
-      // check friend is exists in holderUser array
-      const isFriendExists = holderUser.friends.find((fr) => fr.user_id === friendId);
-      console.log('isFriendExists', isFriendExists);
-
+      const user = await this.findUserByAccountId(holderAccount.id);
       // accept friend
+      const friend = await this.userModel.findById(friendId);
+      console.log('friend', friend);
 
+      const acpUser = await this.userModel.findByIdAndUpdate(
+        user.id,
+        {
+          $push: { friends: { user_id: friend.id, status: 'ACCEPTED' } },
+        },
+        { new: true },
+      );
+      const acpFriend = await this.userModel.findByIdAndUpdate(
+        friend.id,
+        {
+          $push: { friends: { user_id: user.id, status: 'ACCEPTED' } },
+        },
+        {
+          new: true,
+        },
+      );
+      console.log('acpUser', acpUser);
+      console.log('acpFriend', acpFriend);
+      const metadata = { acpUser, acpFriend };
       return;
     } catch (error) {
       throw new ErrorResponse({
@@ -245,6 +260,40 @@ export class UserService {
       throw new ErrorResponse({
         ...new BadRequestException('Search failed'),
         errorCode: 'SEARCH_FAILED',
+      });
+    }
+  }
+
+  public async getListFriends(token: string) {
+    try {
+      const account = await this.findAccountByToken(token);
+      if (!account) {
+        throw new ErrorResponse({
+          ...new BadRequestException('Account is not exists'),
+          errorCode: 'ACCOUNT_NOT_EXISTS',
+        });
+      }
+      const user = await this.findUserByAccountId(account.id);
+      // console.log('user', user);
+
+      if (!user) {
+        new ErrorResponse({
+          ...new BadRequestException('User is not exists'),
+          errorCode: 'USER_NOT_EXISTS',
+        });
+        const metadata = { user: null };
+        return this._response.createResponse(400, 'User is not exists', metadata);
+      }
+
+      //
+      const listFriend = user.friends.filter((fr) => fr.status === 'PENDING');
+      // console.log('listFriend', listFriend);
+      const metadata = { listFriend };
+      return this._response.createResponse(200, 'success', metadata);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException('Get list friends failed'),
+        errorCode: 'GET_LIST_FRIENDS_FAILED',
       });
     }
   }
