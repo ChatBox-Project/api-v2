@@ -153,12 +153,6 @@ export class ConversationService {
   public async getAllByUser(userId: string) {
     try {
       console.log('userId:::', userId);
-      const conversations_document = await this.conversationModel.aggregate([
-        {
-          $match: { 'members.userId': userId },
-        },
-      ]);
-      console.log('conversations_document:::', conversations_document);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Get all by user failed'),
