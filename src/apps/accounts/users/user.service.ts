@@ -44,8 +44,9 @@ export class UserService {
         birth_day: createUserDto.birth_day,
         accountId: holderAccount.id,
       });
+
       console.log('user', user);
-      const metadata = { user: user };
+      const metadata = { user };
       const res = this._response.createResponse(200, 'update success', metadata);
       return res;
     } catch (error) {
@@ -68,8 +69,9 @@ export class UserService {
 
       const user = await this.userModel.findOne({ accountId: holderAccount.id });
       // console.log('user', user)
+      const metadata = { user };
 
-      return this._response.createResponse(200, 'success', user);
+      return this._response.createResponse(200, 'success', metadata);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Token is not exists'),
