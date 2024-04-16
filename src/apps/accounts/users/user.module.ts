@@ -13,5 +13,6 @@ import { UserRepository } from 'src/common';
   imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), TypeOrmModule.forFeature(entities)],
   controllers: [UserController],
   providers: [UserService, ResponseService, UserRepository],
+  exports: [UserService],
 })
 export class UserModule {}
