@@ -3,13 +3,14 @@ import { EGender } from 'src/configs';
 
 export class UpdateUserDto {
   @ApiProperty()
-  name: string;
+  name?: string;
+  
   @ApiProperty()
-  gender: EGender;
+  gender?: string;
   // @IsUrl()
   @ApiProperty()
-  avatarUrl: string;
+  avatarUrl?: string;
   // @IsDate()
   @ApiProperty()
-  birth: string;
+  birth_day?: string;
 }
