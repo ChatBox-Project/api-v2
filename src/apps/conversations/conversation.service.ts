@@ -130,4 +130,21 @@ export class ConversationService {
       });
     }
   }
+
+  public async getAllByUser(userId: string) {
+    try {
+      const conversations_document = await this.conversationModel.aggregate([
+        {
+          $match: { 'members.userId': userId },
+        },
+      ]);
+
+      console.log('conversations_document', conversations_document);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException('Get all by user failed'),
+        errorCode: 'GET_ALL_BY_USER_FAILED',
+      });
+    }
+  }
 }
