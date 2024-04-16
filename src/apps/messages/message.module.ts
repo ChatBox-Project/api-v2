@@ -7,9 +7,10 @@ import { ResponseService } from 'src/common/res';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Messages, MessagesSchema } from 'src/common/models/message.model';
 import { MessagesRepository } from 'src/common';
+import { UserModule } from '../accounts/users/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature(entities), MongooseModule.forFeature([{ name: Messages.name, schema: MessagesSchema }])],
+  imports: [TypeOrmModule.forFeature(entities), MongooseModule.forFeature([{ name: Messages.name, schema: MessagesSchema }]), UserModule],
   controllers: [MessageController],
   providers: [MessageService, ResponseService, MessagesRepository],
 })
