@@ -10,6 +10,11 @@ export class ConversationController {
     return await this.conversationService.getAllByUser(_headers.token);
   }
 
+  @Get(':id')
+  async getConversation(@Param('id') _id: string, @Headers() _headers: any) {
+    return await this.conversationService.getConversation(_id, _headers.token);
+  }
+  
   @Post()
   async create(@Body() userId: string[], @Headers() _headers: any) {
     return await this.conversationService.createConversation(userId);

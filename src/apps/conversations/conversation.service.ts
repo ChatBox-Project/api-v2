@@ -169,14 +169,35 @@ export class ConversationService {
       const holderAccount = await this.findAccountByToken(token);
       // console.log('holderAccount', holderAccount);
       const holderUser = await this.getUserByAccountId(holderAccount.id);
-      console.log('holderUser', holderUser);
+      // console.log('holderUser', holderUser);
 
       const conversations = await this.findConversationByUserId(holderUser._id);
-      console.log('conversations', conversations);
+      // console.log('conversations', conversations);
+      if (!conversations) {
+        return this._res.createResponse(200, 'No conversations found', null);
+      }
+
+      const metadata = { conversations };
+      return this._res.createResponse(200, 'success', metadata);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Get all by user failed'),
         errorCode: 'GET_ALL_BY_USER_FAILED',
+      });
+    }
+  }
+
+  public async getConversation(conversationId: string, token: string): Promise<unknown> {
+    try {
+      await this.findAccountByToken(token);
+      const conversation = await this.conversationModel.findById(conversationId).lean();
+      // console.log('conversation', conversation);
+      const metadata = { conversation };
+      return this._res.createResponse(200, 'success', metadata);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException('Get conversation failed'),
+        errorCode: 'GET_CONVERSATION_FAILED',
       });
     }
   }
