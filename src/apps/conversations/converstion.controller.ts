@@ -5,9 +5,9 @@ import { CreateGroupDto } from './dto/create-group.dto';
 @Controller('conversations')
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
-  @Get(':id')
-  async getAllByUser(@Param('id') id: string, @Headers() _headers: any) {
-    return await this.conversationService.getAllByUser(id);
+  @Get('')
+  async getAllByUser(@Headers() _headers: any) {
+    return await this.conversationService.getAllByUser(_headers.token);
   }
 
   @Post()
