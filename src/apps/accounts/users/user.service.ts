@@ -20,11 +20,14 @@ export class UserService {
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly _response: ResponseService,
   ) {}
-  private async findAccountByToken(token: string) {
+  public async findAccountByToken(token: string) {
     // console.log('token', token)
     const account = await this.accountRepository.findOne({ where: { accessToken: token } });
     // console.log('account', account)
     return account;
+  }
+  public async findUserByAccountId(id: string): Promise<UserDocument> {
+    return this.userModel.findOne({ accountId: id });
   }
 
   public async create(token: string, createUserDto: CreateUserDto) {
