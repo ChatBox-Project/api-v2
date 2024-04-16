@@ -18,7 +18,6 @@ export class Conversation {
         nick_name: String,
         joinedDate: Date,
         is_removed: { type: Boolean, default: false },
-        _id: false,
       },
     ],
   })
