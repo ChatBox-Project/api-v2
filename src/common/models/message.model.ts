@@ -8,7 +8,7 @@ export class Messages extends Document {
   authorId: string;
 
   @Prop({ required: true, type: String })
-  content_type?: string;
+  contentType?: string;
 
   @Prop({ default: '', required: true, type: String })
   content?: string;
