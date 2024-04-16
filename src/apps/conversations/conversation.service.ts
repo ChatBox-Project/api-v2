@@ -24,9 +24,7 @@ export class ConversationService {
     private readonly _res: ResponseService,
   ) {}
   private async getUsers(userIds: string[]) {
-    // console.log(userIds);
     const users = await this.userModel.find({ _id: { $in: userIds } });
-    // console.log(users);
     return users;
   }
 
@@ -43,14 +41,34 @@ export class ConversationService {
     return groupName + ',...';
   }
 
-  public async createConversation(userIds: string[]): Promise<ConversationDocument> {
+  public async createConversation(userIds: string[]): Promise<unknown> {
     // console.log(userIds)
-    const users = await this.getUsers([...userIds]);
-    // console.log(users);
-    const members = users.map((user) => ({ user_id: user._id, nick_name: user.name }));
-    // console.log(members);
-    const conversation = await this.conversationModel.create({ members, is_group: false });
-    return conversation;
+    // const users = await this.getUsers([...userIds]);
+    // console.log('userr::', users);
+    // const members = users.map((user) => ({ user_id: user._id, nick_name: user.name }));
+    // console.log('member::', members);
+    // const conversation = await this.conversationModel.create({ ...members, is_group: false });
+    // return conversation;
+    try {
+      const users = await this.getUsers([...userIds]);
+      // console.log('users:::', users);
+
+      const conversation = await this.conversationModel.create({
+        members: users.map((user) => ({
+          userId: users.map((user) => user._id),
+          nick_name: user.name,
+        })),
+        is_group: false,
+      });
+      console.log('conversation:::', conversation);
+      const metadata = { conversation };
+      return this._res.createResponse(200, 'success', metadata);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException('Create conversation failed'),
+        errorCode: 'CREATE_CONVERSATION_FAILED',
+      });
+    }
   }
 
   public async createGroup(adminId: string, userId: string[], groupName: string) {
@@ -91,7 +109,7 @@ export class ConversationService {
         content: `Welcome to ${groupChat.nick_name}`,
         content_type: 'notification',
       });
-
+      console.log('member:::', members);
       // console.log('message::', message);
       const conversation = await this.conversationModel.create({
         members,
@@ -109,7 +127,8 @@ export class ConversationService {
       message.conversation = conversation._id;
       message.save();
 
-      return this._res.createResponse(200, 'success', conversation);
+      const metadata = { conversation };
+      return this._res.createResponse(200, 'success', metadata);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Create group chat failed'),
@@ -122,7 +141,8 @@ export class ConversationService {
       // console.log('conversationId', conversationId)
       const reqList = await this.conversationModel.findById(conversationId).lean();
       // console.log('reqList', reqList)
-      return this._res.createResponse(200, 'success', reqList);
+      const metadata = { reqList };
+      return this._res.createResponse(200, 'success', metadata);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Get request list failed'),
@@ -133,13 +153,13 @@ export class ConversationService {
 
   public async getAllByUser(userId: string) {
     try {
+      console.log('userId:::', userId);
       const conversations_document = await this.conversationModel.aggregate([
         {
           $match: { 'members.userId': userId },
         },
       ]);
-
-      console.log('conversations_document', conversations_document);
+      console.log('conversations_document:::', conversations_document);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Get all by user failed'),
