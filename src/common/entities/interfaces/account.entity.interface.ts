@@ -1,6 +1,5 @@
 import { UUID } from 'crypto';
-import { RoleEntity } from '../role.entity';
-import { UserEntity } from '../user.base.entity';
+
 import { IIdEntity } from './id.entity.interface';
 
 export interface IAccountEntity extends IIdEntity {
