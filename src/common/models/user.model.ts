@@ -7,7 +7,7 @@ export class User extends Document {
   // @Prop({ auto: true, required: false })
   // _id: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', type: String })
   name: string;
 
   @Prop({ enum: ['FEMALE', 'MALE', 'OTHER'], default: 'OTHER' })
