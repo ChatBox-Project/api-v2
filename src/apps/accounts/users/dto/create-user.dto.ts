@@ -4,9 +4,9 @@ import { EGender } from 'src/configs';
 
 interface ICreateUserDto {
   name: string;
-  gender: EGender;
+  gender: string;
   avatarUrl: string;
-  birth: string;
+  birth_day: string;
 }
 export class CreateUserDto implements ICreateUserDto {
   @IsNotEmpty()
@@ -18,7 +18,7 @@ export class CreateUserDto implements ICreateUserDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  gender: EGender;
+  gender: string;
 
   // @IsNotEmpty()
   // @MinLength(5)
@@ -29,5 +29,7 @@ export class CreateUserDto implements ICreateUserDto {
 
   @IsNotEmpty()
   @ApiProperty()
-  birth: string;
+  birth_day: string;
+
+ 
 }
