@@ -4,8 +4,8 @@ import { Document, Types } from 'mongoose';
 export type UserDocument = User & Document;
 @Schema({ timestamps: true })
 export class User extends Document {
-  @Prop({ auto: true })
-  _id: string;
+  // @Prop({ auto: true, required: false })
+  // _id: string;
 
   @Prop({ default: '' })
   name: string;
