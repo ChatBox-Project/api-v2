@@ -4,7 +4,7 @@ import { ApiOkResponse } from '@nestjs/swagger';
 import * as _ from 'underscore';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
-
+import * as under from 'underscore';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -12,8 +12,9 @@ export class UserController {
   @Post()
   @ApiOkResponse({ description: 'Create user' })
   public async create(@Body() createUserDto: any, @Headers() _headers: any) {
-    console.log('createUserDto', createUserDto)
-    return await this.userService.create(_headers.token, createUserDto);
+    console.log('createUserDto', createUserDto);
+    const create = await this.userService.create(_headers.token, createUserDto);
+    return under.omit(create, 'create');
   }
   @Get()
   @ApiOkResponse({ description: 'Get user' })
