@@ -10,9 +10,6 @@ interface ICreateUserDto {
 }
 export class CreateUserDto implements ICreateUserDto {
   @IsNotEmpty()
-  @MinLength(5)
-  @MaxLength(50)
-  @IsString()
   @ApiProperty()
   name: string;
 
@@ -20,16 +17,10 @@ export class CreateUserDto implements ICreateUserDto {
   @IsNotEmpty()
   gender: string;
 
-  // @IsNotEmpty()
-  // @MinLength(5)
-  // @MaxLength(255)
-  // @IsUrl()
   @ApiProperty()
   avatarUrl: string;
 
   // @IsNotEmpty()
   @ApiProperty()
   birth_day: string;
-
- 
 }

@@ -12,9 +12,7 @@ export class UserController {
   @Post()
   @ApiOkResponse({ description: 'Create user' })
   public async create(@Body() createUserDto: any, @Headers() _headers: any) {
-    console.log('createUserDto', createUserDto);
-
-    return await this.userService.create(_headers.token, createUserDto);
+    return  await this.userService.create(_headers.token, createUserDto);
   }
   @Get()
   @ApiOkResponse({ description: 'Get user' })
