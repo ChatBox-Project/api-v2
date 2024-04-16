@@ -33,16 +33,20 @@ export class UserService {
       // console.log('holderAccount', holderAccount)
       if (!holderAccount) {
         throw new ErrorResponse({
-          ...new NotFoundException('Account is not exists'),
+          ...new BadRequestException('Account is not exists'),
           errorCode: 'ACCOUNT_NOT_EXISTS',
         });
       }
+      console.log('user::', createUserDto);
 
       const user = await this.userModel.create({
-        ...createUserDto,
+        name: createUserDto.name,
+        gender: createUserDto.gender,
+        avatarUrl: createUserDto.avatarUrl,
+        birth_day: createUserDto.birth_day,
         accountId: holderAccount.id,
       });
-      console.log('user', user)
+      console.log('user', user);
 
       return this._response.createResponse(200, 'success', user);
     } catch (error) {
@@ -87,7 +91,6 @@ export class UserService {
       }
 
       const user = await this.userRepository.findOneAndUpdate(holderAccount.id, { ...updateUserDto });
-
 
       return this._response.createResponse(200, 'success', user);
     } catch (error) {
