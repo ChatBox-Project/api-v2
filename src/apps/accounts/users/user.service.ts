@@ -45,8 +45,9 @@ export class UserService {
         accountId: holderAccount.id,
       });
       console.log('user', user);
-      const metatdata = { data: { user } };
-      return this._response.createResponse(200, 'success', metatdata);
+      const metadata = { user: user };
+      const res = this._response.createResponse(200, 'update success', metadata);
+      return res;
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Token is not exists'),
