@@ -45,7 +45,7 @@ export class UserService {
         accountId: holderAccount.id,
       });
       console.log('user', user);
-      const metatdata = { data: user };
+      const metatdata = { data: { user } };
       return this._response.createResponse(200, 'success', metatdata);
     } catch (error) {
       throw new ErrorResponse({
