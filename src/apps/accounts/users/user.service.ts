@@ -60,18 +60,18 @@ export class UserService {
   public async getUserByToken(token: string) {
     try {
       const account = await this.findAccountByToken(token);
+
       if (!account) {
-        throw new ErrorResponse({
+        return new ErrorResponse({
           ...new BadRequestException('Account is not exists'),
           errorCode: 'ACCOUNT_NOT_EXISTS',
         });
       }
       const user = await this.userModel.findOne({ accountId: account.id });
-      if (!user) {
-        throw new ErrorResponse({
-          ...new BadRequestException('User is not exists'),
-          errorCode: 'USER_NOT_EXISTS',
-        });
+      console.log('user', user);
+      if (user === null) {
+        const metadata = { user: null };
+        return this._response.createResponse(400, 'Dont update userprofile', metadata);
       }
       const metadata = { user };
       return this._response.createResponse(200, 'success', metadata);

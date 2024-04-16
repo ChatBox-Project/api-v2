@@ -155,6 +155,8 @@ export class ConversationService {
     try {
       const holderAccount = await this.findAccountByToken(token);
       console.log('holderAccount', holderAccount);
+      const holderUser = await this.getUserByAccountId(holderAccount.id); 
+      console.log('holderUser', holderUser);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Get all by user failed'),
