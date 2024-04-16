@@ -18,7 +18,6 @@ export class ConversationController {
   }
   @Get('groups/:id')
   async getGroup(@Param('id') id: string, @Headers() _headers: any) {
-    console.log('id', id)
     return await this.conversationService.getReqList(id);
   }
 }
