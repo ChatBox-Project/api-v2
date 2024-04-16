@@ -28,6 +28,14 @@ export class ConversationService {
     return users;
   }
 
+  private getUserByAccountId(accountId: string) {
+    return this.userModel.findOne({ accountId: accountId });
+  }
+  private async findAccountByToken(token: string) {
+    const account = await this.accountRepository.findOne({ where: { accessToken: token } });
+    return account;
+  }
+
   private generateRoomName(members: any[]) {
     let groupName = members[0].nick_name.split(' ').slice(-1).join('');
     if ((members.length = 1)) {
@@ -42,13 +50,6 @@ export class ConversationService {
   }
 
   public async createConversation(userIds: string[]): Promise<unknown> {
-    // console.log(userIds)
-    // const users = await this.getUsers([...userIds]);
-    // console.log('userr::', users);
-    // const members = users.map((user) => ({ user_id: user._id, nick_name: user.name }));
-    // console.log('member::', members);
-    // const conversation = await this.conversationModel.create({ ...members, is_group: false });
-    // return conversation;
     try {
       const users = await this.getUsers([...userIds]);
       // console.log('users:::', users);
@@ -150,9 +151,10 @@ export class ConversationService {
     }
   }
 
-  public async getAllByUser(userId: string) {
+  public async getAllByUser(token: string) {
     try {
-      console.log('userId:::', userId);
+      const holderAccount = await this.findAccountByToken(token);
+      console.log('holderAccount', holderAccount);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Get all by user failed'),
