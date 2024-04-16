@@ -1,29 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-export interface MessagesDocument extends Document {
-  _id: string;
-  authorId: string;
-  content: string;
-  delete: boolean;
-  conversation: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+export type MessagesDocument = Messages & Document;
 @Schema({ timestamps: true })
 export class Messages extends Document {
-  @Prop({ auto: true })
-  _id: string;
 
   @Prop({ required: true, type: String })
   authorId: string;
 
+  @Prop({ required: true, type: String })
+  content_type?: string;
+
   @Prop({ default: '', required: true, type: String })
-  content: string;
+  content?: string;
 
   @Prop({ type: Boolean, default: false })
-  delete: boolean;
-  @Prop({ type: Types.ObjectId, ref: 'Conversation', required: true })
-  conversation: string;
+  delete?: boolean;
+
+  @Prop({ type: Types.ObjectId, ref: 'Conversation' })
+  conversation?: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;
