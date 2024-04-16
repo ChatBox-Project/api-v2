@@ -53,6 +53,8 @@ export class ConversationService {
       .find({
         members: { $elemMatch: { user_id: userId } },
       })
+      .sort({ updatedAt: -1 })
+      .limit(20)
       .exec();
   }
 
@@ -89,13 +91,16 @@ export class ConversationService {
     try {
       // console.log("groupname::", groupName)
       const users = await this.getUsers([adminId, ...userId]);
-      // console.log('user::', users);
+      console.log('user::', users);
+      const members = [];
+      users.forEach((user) => {
+        members.push({
+          user_id: user._id,
+          nick_name: user.name,
+          is_removed: false,
+        });
+      });
 
-      const members = users.map((user) => ({
-        userId: user._id,
-        nick_name: user.name,
-        is_removed: false,
-      }));
       // console.log('member::', members);
 
       const nameGroupChat = this.generateRoomName(members);
@@ -115,11 +120,16 @@ export class ConversationService {
       });
       // console.log('createMessage::', createMessage);
 
-      const createConversation = await this.conversationModel.create({
-        members: users.map((user) => ({
-          userId: user._id,
+      users.forEach((user) => {
+        members.push({
+          user_id: user._id,
           nick_name: user.name,
-        })),
+          is_removed: false,
+        });
+      });
+      // console.log('memmber', members);
+      const createConversation = await this.conversationModel.create({
+        members: members,
         receiver: groupChat._id,
         is_group: true,
         last_message: createMessage._id,
@@ -134,7 +144,7 @@ export class ConversationService {
         is_secret: false,
         requests: [],
       });
-      console.log('createConversation::', createConversation);
+      // console.log('createConversation::', createConversation);
       // // console.log('conversation::', conversation);
       createMessage.conversation = createConversation._id;
       await createMessage.save();
