@@ -14,7 +14,6 @@ export class KeyTokenService {
       const publicKeyString = publicKey.toString();
       // console.log(publicKey)
       const tokens = await this._accountRepository.create({
-        user: accountId,
         keyToken: publicKeyString,
       });
       return tokens ? publicKey : null;
