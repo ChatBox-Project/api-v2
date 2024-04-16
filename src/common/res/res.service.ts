@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConversationDocument } from '../models/conversation.model';
 interface IResponseService {
   status: number;
   message: string;
