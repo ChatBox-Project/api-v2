@@ -91,7 +91,7 @@ export class ConversationService {
     try {
       // console.log("groupname::", groupName)
       const users = await this.getUsers([adminId, ...userId]);
-      console.log('user::', users);
+      // console.log('user::', users);
       const members = [];
       users.forEach((user) => {
         members.push({
@@ -116,7 +116,7 @@ export class ConversationService {
       const createMessage = await this.messageModel.create({
         authorId: adminId,
         content: `Welcome to ${groupChat.nick_name}`,
-        content_type: 'notification',
+        contentType: 'notification',
       });
       // console.log('createMessage::', createMessage);
 
@@ -144,7 +144,7 @@ export class ConversationService {
         is_secret: false,
         requests: [],
       });
-      // console.log('createConversation::', createConversation);
+      console.log('createConversation::', createConversation);
       // // console.log('conversation::', conversation);
       createMessage.conversation = createConversation._id;
       await createMessage.save();
