@@ -34,19 +34,16 @@ export class UserController {
   @Put('add-friend/:id')
   @ApiOkResponse({ description: 'Add friend' })
   public async addFriend(@Param('id') _id: string, @Headers() _headers: any) {
-    // console.log('id', _id, 'headers', _headers.token)
     return await this.userService.addFriend(_headers.token, _id);
   }
   @Put('acp-friend/:id')
   public async acceptFriend(@Param('id') _id: string, @Headers() _headers: any) {
-    // console.log('id', _id, 'headers', _headers.token)
     return await this.userService.acceptFriend(_headers.token, _id);
   }
 
   @Get('search/:phone')
   @ApiOkResponse({ description: 'Search user by phone' })
   public async search(@Param('phone') phone: string, @Headers() _headers: any) {
-    // console.log('phone', phone, 'headers', _headers.token)
     return await this.userService.search(_headers.token, phone);
   }
 }
