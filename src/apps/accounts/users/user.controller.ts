@@ -38,12 +38,14 @@ export class UserController {
   }
   @Put('acp-friend/:id')
   public async acceptFriend(@Param('id') _id: string, @Headers() _headers: any) {
+    
     return await this.userService.acceptFriend(_headers.token, _id);
   }
 
   @Get('search/:phone')
   @ApiOkResponse({ description: 'Search user by phone' })
   public async search(@Param('phone') phone: string, @Headers() _headers: any) {
+    
     return await this.userService.search(_headers.token, phone);
   }
 }

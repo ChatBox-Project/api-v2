@@ -218,10 +218,12 @@ export class UserService {
       // console.log('foundAccount', foundAccount);
 
       if (!foundAccount) {
-        throw new ErrorResponse({
+        new ErrorResponse({
           ...new BadRequestException('Account is not exists'),
           errorCode: 'ACCOUNT_NOT_EXISTS',
         });
+        const metadata = { foundUser: {} };
+        return this._response.createResponse(400, 'Account is not exists', metadata);
       }
 
       const foundUser = await this.userModel.findOne({ accountId: foundAccount.id });

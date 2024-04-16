@@ -48,20 +48,33 @@ export class ConversationService {
     }
     return groupName + ',...';
   }
+  private async findConversationByUserId(userId: string): Promise<ConversationDocument[]> {
+    return this.conversationModel
+      .find({
+        members: { $elemMatch: { user_id: userId } },
+      })
+      .exec();
+  }
 
   public async createConversation(userIds: string[]): Promise<unknown> {
     try {
       const users = await this.getUsers([...userIds]);
       // console.log('users:::', users);
+      const members = [];
+      users.forEach((user) => {
+        members.push({
+          user_id: user._id,
+          nick_name: user.name,
+          is_removed: false,
+        });
+      });
+      // console.log('members:::', members);
 
       const conversation = await this.conversationModel.create({
-        members: users.map((user) => ({
-          userId: users.map((user) => user._id),
-          nick_name: user.name,
-        })),
+        members: members,
         is_group: false,
       });
-      console.log('conversation:::', conversation);
+      // console.log('conversation:::', conversation);
       const metadata = { conversation };
       return this._res.createResponse(200, 'success', metadata);
     } catch (error) {
@@ -154,9 +167,12 @@ export class ConversationService {
   public async getAllByUser(token: string) {
     try {
       const holderAccount = await this.findAccountByToken(token);
-      console.log('holderAccount', holderAccount);
-      const holderUser = await this.getUserByAccountId(holderAccount.id); 
+      // console.log('holderAccount', holderAccount);
+      const holderUser = await this.getUserByAccountId(holderAccount.id);
       console.log('holderUser', holderUser);
+
+      const conversations = await this.findConversationByUserId(holderUser._id);
+      console.log('conversations', conversations);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Get all by user failed'),
