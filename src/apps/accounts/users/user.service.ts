@@ -30,6 +30,33 @@ export class UserService {
     return this.userModel.findOne({ accountId: id });
   }
 
+  private async updateFriendStatus(user: UserDocument, friendId: string, status: string): Promise<UserDocument> {
+    const updatedUser = await this.userModel.aggregate([
+      {
+        $match: { _id: user._id },
+      },
+      {
+        $project: {
+          friends: {
+            $map: {
+              input: '$friends',
+              as: 'friend',
+              in: {
+                $cond: [{ $eq: ['$$friend.user_id', friendId] }, { $mergeObjects: ['$$friend', { status: status }] }, '$$friend'],
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          friends: 1,
+        },
+      },
+    ]);
+    return updatedUser[0];
+  }
   public async create(token: string, createUserDto: CreateUserDto) {
     try {
       const holderAccount = await this.findAccountByToken(token);
@@ -179,7 +206,11 @@ export class UserService {
       });
     }
   }
-  // bug
+  /* The `// bug` comment is used to indicate that there is a potential bug or issue in the code that
+  needs to be addressed. It serves as a marker for the developer to come back and investigate or fix
+  the problem at a later time. In this case, it seems like there are identified bugs in the
+  `updateUser` and `acceptFriend` methods that need to be resolved. */
+  // bug  
   public async acceptFriend(token: string, friendId: string): Promise<unknown> {
     try {
       const holderAccount = await this.findAccountByToken(token);
@@ -194,27 +225,13 @@ export class UserService {
       const user = await this.findUserByAccountId(holderAccount.id);
       // accept friend
       const friend = await this.userModel.findById(friendId);
-      console.log('friend', friend);
 
-      const acpUser = await this.userModel.findByIdAndUpdate(
-        user.id,
-        {
-          $push: { friends: { user_id: friend.id, status: 'ACCEPTED' } },
-        },
-        { new: true },
-      );
-      const acpFriend = await this.userModel.findByIdAndUpdate(
-        friend.id,
-        {
-          $push: { friends: { user_id: user.id, status: 'ACCEPTED' } },
-        },
-        {
-          new: true,
-        },
-      );
-      console.log('acpUser', acpUser);
-      console.log('acpFriend', acpFriend);
-      const metadata = { acpUser, acpFriend };
+      const updateUser = await this.updateFriendStatus(user, friendId, 'ACCEPTED');
+      const updateFriend = await this.updateFriendStatus(friend, user.id, 'ACCEPTED');
+
+      console.log('updateUser', updateUser);
+      console.log('updateFriend', updateFriend);
+
       return;
     } catch (error) {
       throw new ErrorResponse({

@@ -143,6 +143,7 @@ export class ConversationService {
         },
         is_secret: false,
         requests: [],
+        groupName: groupName || nameGroupChat,
       });
       console.log('createConversation::', createConversation);
       // // console.log('conversation::', conversation);
@@ -211,4 +212,6 @@ export class ConversationService {
       });
     }
   }
+
+  public async getAllGroups(token: string) {}
 }

@@ -109,7 +109,7 @@ export class MessageService {
       const newMessage = await this.messageModel.create({
         authorId: user.id,
         content: message.content,
-        content_type: message.contentType,
+        contentType: message.contentType,
         conversation: conversationId,
       });
       console.log('newMessage', newMessage);

@@ -14,7 +14,7 @@ export class ConversationController {
   async getConversation(@Param('id') _id: string, @Headers() _headers: any) {
     return await this.conversationService.getConversation(_id, _headers.token);
   }
-  
+
   @Post()
   async create(@Body() userId: string[], @Headers() _headers: any) {
     return await this.conversationService.createConversation(userId);
@@ -32,4 +32,9 @@ export class ConversationController {
 
   @Put('groups/:id')
   async updateGroup(@Param('id') id: string, @Body() req: any, @Headers() _headers: any) {}
+
+  @Get('groups/list')
+  async getAllGroups(@Headers() _headers: any) {
+    return await this.conversationService.getAllGroups(_headers.token);
+  }
 }

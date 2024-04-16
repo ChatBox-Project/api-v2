@@ -38,8 +38,12 @@ export class Conversation {
   @Prop({ type: Boolean })
   is_blocked: boolean;
 
+  @Prop({type: String, default:''})
+  groupName?: string;
+
   @Prop({ type: String, ref: 'User' })
   admin: string;
+  
 
   @Prop({
     type: {
