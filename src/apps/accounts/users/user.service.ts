@@ -222,7 +222,7 @@ export class UserService {
           ...new BadRequestException('Account is not exists'),
           errorCode: 'ACCOUNT_NOT_EXISTS',
         });
-        const metadata = { foundUser: {} };
+        const metadata = { foundAccount: null };
         return this._response.createResponse(400, 'Account is not exists', metadata);
       }
 
