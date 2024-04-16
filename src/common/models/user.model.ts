@@ -13,13 +13,13 @@ export class User extends Document {
   @Prop({ enum: ['FEMALE', 'MALE', 'OTHER'], default: 'OTHER' })
   gender: string;
 
-  @Prop()
-  avatar: string;
+  @Prop({ default: '', type: String })
+  avatarUrl: string;
 
-  @Prop({ default: Date.now })
-  birth_day: Date;
+  @Prop({ default: '', type: String })
+  birth_day: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', type: String })
   accountId: string;
 
   @Prop([
