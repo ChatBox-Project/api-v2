@@ -3,11 +3,8 @@ import { IdEntity } from './bases/id.entity';
 import { IAccountEntity } from './interfaces/account.entity.interface';
 
 import { IsEmail, IsNotEmpty } from 'class-validator';
-import { RoleEntity } from './role.entity';
 
 import { BaseEntity } from './bases/base.entity';
-import { UserEntity } from './user.base.entity';
-import { UUID } from 'crypto';
 
 @Entity({ name: 'account' })
 export class AccountEntity extends BaseEntity implements IAccountEntity {
@@ -55,12 +52,4 @@ export class AccountEntity extends BaseEntity implements IAccountEntity {
   })
   blockExpires: Date;
   publicKey?: string;
-
-  @OneToOne(() => RoleEntity)
-  @JoinColumn()
-  role?: RoleEntity;
-
-  @OneToOne(() => UserEntity, (user) => user.accounts)
-  @JoinColumn({ name: 'user_id' }) // Specify the join column explicitly
-  user: UserEntity;
 }
