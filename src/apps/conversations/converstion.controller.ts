@@ -5,6 +5,10 @@ import { CreateGroupDto } from './dto/create-group.dto';
 @Controller('conversations')
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
+  @Get(':id')
+  async getAllByUser(@Param('id') id: string, @Headers() _headers: any) {
+    return await this.conversationService.getAllByUser(id);
+  }
 
   @Post()
   async create(@Body() userId: string[], @Headers() _headers: any) {
@@ -23,9 +27,4 @@ export class ConversationController {
 
   @Put('groups/:id')
   async updateGroup(@Param('id') id: string, @Body() req: any, @Headers() _headers: any) {}
-
-  @Get('users/:id')
-  async getAllByUser(@Param('id') id: string, @Headers() _headers: any) {
-    return await this.conversationService.getAllByUser(id);
-  }
 }
