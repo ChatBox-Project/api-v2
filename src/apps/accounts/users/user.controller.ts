@@ -9,7 +9,12 @@ import { CreateUserDto, UpdateUserDto } from './dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Get('')
+  public async getUserByToken(@Headers() _headers: any) {
+    return await this.userService.getUserByToken(_headers.token);
+  }
+
+  @Post('')
   @ApiOkResponse({ description: 'Create user' })
   public async create(@Body() createUserDto: any, @Headers() _headers: any) {
     return await this.userService.create(_headers.token, createUserDto);
@@ -19,7 +24,8 @@ export class UserController {
   public async getUserId(@Param('id') _id: string) {
     return await this.userService.getUserId(_id);
   }
-  @Put()
+
+  @Put('')
   @ApiOkResponse({ description: 'Update user' })
   public async update(@Body() updateUserDto: UpdateUserDto, @Headers() _headers: any) {
     return await this.userService.updateUser(_headers.token, updateUserDto);
