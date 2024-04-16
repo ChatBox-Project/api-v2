@@ -10,6 +10,7 @@ import { Room, RoomChatDocument } from 'src/common/models/room.model';
 import { User, UserDocument } from 'src/common/models/user.model';
 import { ErrorResponse } from 'src/errors';
 import { AccountRepository } from '../accounts/account.repository';
+import { ResponseService } from 'src/common/res';
 
 @Injectable()
 export class ConversationService {
@@ -20,6 +21,7 @@ export class ConversationService {
     @InjectModel(Messages.name) private readonly messageModel: Model<MessagesDocument>,
     @InjectRepository(AccountEntity) private readonly accountRepository: AccountRepository,
     private readonly conversationRepository: ConversationRepository,
+    private readonly _res: ResponseService,
   ) {}
   private async getUsers(userIds: string[]) {
     // console.log(userIds);
@@ -107,11 +109,24 @@ export class ConversationService {
       message.conversation = conversation._id;
       message.save();
 
-      return conversation;
+      return this._res.createResponse(200, 'success', conversation);
     } catch (error) {
       throw new ErrorResponse({
         ...new BadRequestException('Create group chat failed'),
         errorCode: 'CREATE_GROUP_CHAT_FAILED',
+      });
+    }
+  }
+  public async getReqList(conversationId: string) {
+    try {
+      // console.log('conversationId', conversationId)
+      const reqList = await this.conversationModel.findById(conversationId).lean();
+      // console.log('reqList', reqList)
+      return this._res.createResponse(200, 'success', reqList);
+    } catch (error) {
+      throw new ErrorResponse({
+        ...new BadRequestException('Get request list failed'),
+        errorCode: 'GET_REQUEST_LIST_FAILED',
       });
     }
   }
