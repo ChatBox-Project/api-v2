@@ -73,61 +73,60 @@ export class ConversationService {
 
   public async createGroup(adminId: string, userId: string[], groupName: string) {
     try {
-      //
-
+      // console.log("groupname::", groupName)
       const users = await this.getUsers([adminId, ...userId]);
       // console.log('user::', users);
-      const members = [];
 
-      users.forEach((user) => {
-        if (
-          members.length === 0 ||
-          members.filter(function (e) {
-            return e.userId === user._id;
-          }).length === 0
-        ) {
-          members.push({ userId: user._id, nick_name: user.name });
-        }
-      });
+      const members = users.map((user) => ({
+        userId: user._id,
+        nick_name: user.name,
+        is_removed: false,
+      }));
       // console.log('member::', members);
-      let groupChat = null;
 
-      if (members.length > 1) {
-        const nameGroupChat = this.generateRoomName(members);
-        groupChat = await this.roomModel.create({
-          nick_name: groupName || nameGroupChat,
-          avatar: '',
-        });
-      } else {
-        throw new Error('Group chat must have at least 2 members');
-      }
+      const nameGroupChat = this.generateRoomName(members);
+      // console.log('nameGroupChat::', nameGroupChat);
+
+      // genenate room
+      const groupChat = await this.roomModel.create({
+        nick_name: groupName || nameGroupChat,
+        avatar: '',
+      });
       // console.log('groupChat::', groupChat);
 
-      // console.log(members[0].userId)
-      const message = await this.messageModel.create({
-        authorId: members[0].userId,
+      const createMessage = await this.messageModel.create({
+        authorId: adminId,
         content: `Welcome to ${groupChat.nick_name}`,
         content_type: 'notification',
       });
-      console.log('member:::', members);
-      // console.log('message::', message);
-      const conversation = await this.conversationModel.create({
-        members,
+      // console.log('createMessage::', createMessage);
+
+      const createConversation = await this.conversationModel.create({
+        members: users.map((user) => ({
+          userId: user._id,
+          nick_name: user.name,
+        })),
+        receiver: groupChat._id,
         is_group: true,
-        receiver: groupChat || undefined,
-        last_message: message._id,
+        last_message: createMessage._id,
+        seen_last_messages: false,
+        is_blocked: false,
         admin: adminId,
-        settings: {
+        setting: {
           isFreeEnter: false,
           isFreeKickMem: false,
           isFreeEdit: false,
         },
+        is_secret: false,
+        requests: [],
       });
-      // console.log('conversation::', conversation);
-      message.conversation = conversation._id;
-      message.save();
+      console.log('createConversation::', createConversation);
+      // // console.log('conversation::', conversation);
+      createMessage.conversation = createConversation._id;
+      await createMessage.save();
+      // console.log('saveMessage::', saveMessage);
 
-      const metadata = { conversation };
+      const metadata = { createConversation };
       return this._res.createResponse(200, 'success', metadata);
     } catch (error) {
       throw new ErrorResponse({
