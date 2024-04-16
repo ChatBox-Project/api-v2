@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, Param, Post, Put } from '@nestjs/common';
 import { ConversationService } from './conversation.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 
@@ -19,5 +19,13 @@ export class ConversationController {
   @Get('groups/:id')
   async getGroup(@Param('id') id: string, @Headers() _headers: any) {
     return await this.conversationService.getReqList(id);
+  }
+
+  @Put('groups/:id')
+  async updateGroup(@Param('id') id: string, @Body() req: any, @Headers() _headers: any) {}
+
+  @Get('users/:id')
+  async getAllByUser(@Param('id') id: string, @Headers() _headers: any) {
+    return await this.conversationService.getAllByUser(id);
   }
 }
