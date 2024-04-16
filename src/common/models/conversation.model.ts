@@ -15,13 +15,13 @@ export class Conversation {
     type: [
       {
         user_id: { type: String, ref: 'User' },
-        nick_name: String,
-        joinedDate: Date,
+        nick_name: { type: String, default: '' },
+        joinedDate: { type: Date, default: Date.now() },
         is_removed: { type: Boolean, default: false },
       },
     ],
   })
-  members: { user_id: string; nick_name?: string; joinedDate?: Date; is_removed?: boolean }[];
+  members: [{ user_id: string; nick_name?: string; joinedDate?: string; is_removed?: boolean }];
 
   @Prop({ type: String, ref: 'GroupChat' })
   receiver: string;
