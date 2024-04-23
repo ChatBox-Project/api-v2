@@ -8,7 +8,7 @@ import { User, UserSchema } from 'src/common/models/user.model';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.n5xhbw0.mongodb.net/message', {}),
+    MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.n5xhbw0.mongodb.net/messages', {}),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: Conversation.name, schema: ConversationSchema },

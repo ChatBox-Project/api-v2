@@ -145,11 +145,11 @@ export class ConversationService {
         requests: [],
         groupName: groupName || nameGroupChat,
       });
-      console.log('createConversation::', createConversation);
-      // // console.log('conversation::', conversation);
+      // console.log('createConversation::', createConversation);
+      // // console.log('conversation::', conversation);pnpm 
       createMessage.conversation = createConversation._id;
       await createMessage.save();
-      // console.log('saveMessage::', saveMessage);
+      // console.log('saveMessage::', saveMessage);pn
 
       const metadata = { createConversation };
       return this._res.createResponse(200, 'success', metadata);
